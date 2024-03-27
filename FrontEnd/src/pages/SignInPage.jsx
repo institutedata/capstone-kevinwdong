@@ -1,8 +1,9 @@
+import SignInSide from "../components/SignInForm"
 
 
 const SignInPage = () => {
   return (
-    <div>SignInPage</div>
+    <SignInSide />
   )
 }
 
