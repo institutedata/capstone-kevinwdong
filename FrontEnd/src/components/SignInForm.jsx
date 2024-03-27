@@ -40,23 +40,8 @@ const SignInSide = () => {
 
   return (
     <ThemeProvider theme={defaultTheme}>
-      <Grid container component="main"  sx={{ borderRadius: '20px',overflow: 'hidden'}}>
-        <CssBaseline />
-        <Grid
-          item
-          xs={false}
-          sm={4}
-          md={7}
-          sx={{
-            backgroundImage: {landingPageBgImage},
-            backgroundRepeat: 'no-repeat',
-            backgroundColor: (t) =>
-              t.palette.mode === 'light' ? t.palette.grey[50] : t.palette.grey[900],
-            backgroundSize: 'cover',
-            backgroundPosition: 'center',
-          }}
-        />
-        <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
+      <Grid container component="main" >
+        <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square borderRadius={5}>
           <Box
             sx={{
               my: 8,
