@@ -37,43 +37,37 @@ const Copyright = (props) => {
 const defaultTheme = createTheme();
 
 const ProfileForm = () => {
-  const [newUser, setNewUser] = useState({
-    userName: "",
-    email: "",
-    password: "",
-  });
+  const [user, setUser] = useState();
+  const [error, setError] = useState(null);
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
-    setNewUser({ ...newUser, [name]: value });
+    setUser({ ...user, [name]: value });
   };
 
-  const handleSubmit = async (event) => {
+  const handleUpdate = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    setNewUser({
+    const updatedUser = {
+      firstName: data.get("firstName"),
+      lastName: data.get("lastName"),
       userName: data.get("userName"),
       email: data.get("email"),
       password: data.get("password"),
-    });
-    console.log({ newUser });
+      bio: data.get("bio"),
+    };
 
     try {
-      const response = await axios.post(
-        "http://localhost:8080/api/user/create",
-        newUser
+      const response = await axios.put(
+        "http://localhost:8080/api/user/update",
+        updatedUser
       );
-      console.log("Response: ", response.data);
+      console.log("Profile Updated: ", response.data);
     } catch (error) {
+      setError(error.message);
       console.log("Error: ", error);
     }
-
-    setNewUser({
-      userName: "",
-      email: "",
-      password: "",
-    });
-  };
+  }
 
   return (
     <ThemeProvider theme={defaultTheme}>
@@ -108,7 +102,7 @@ const ProfileForm = () => {
           <Box
             component="form"
             noValidate
-            onSubmit={handleSubmit}
+            // onSubmit={handleSubmit}
             sx={{ mt: 3 }}
           >
             <Grid container spacing={2}>
@@ -187,7 +181,12 @@ const ProfileForm = () => {
                   alignItems: "center",
                 }}
               >
-                <Button type="submit" variant="contained" sx={{ mt: 3, mb: 2 }} onClick={handleUpdate}>
+                <Button
+                  type="submit"
+                  variant="contained"
+                  sx={{ mt: 3, mb: 2 }}
+                  onClick={handleUpdate}
+                >
                   update
                 </Button>
                 <Button
@@ -195,7 +194,7 @@ const ProfileForm = () => {
                   color="error"
                   variant="contained"
                   sx={{ mt: 3, mb: 2, ml: 3 }}
-                  onClick={handleDelete}
+                  // onClick={handleDelete}
                 >
                   delete
                 </Button>
