@@ -1,8 +1,9 @@
+import ProfileForm from "../components/ProfileForm"
 
 
 const UserPage = () => {
   return (
-    <div><h1>This is User Page</h1></div>
+    <ProfileForm /> 
   )
 }
 
