@@ -211,17 +211,6 @@ const NavBar = () => {
           </MenuItem>
         </Menu>
       </Grid>
-      {/* <Grid item lg={2} md={6} sm={12}>
-      <Search>
-            <SearchIconWrapper>
-              <SearchIcon />
-            </SearchIconWrapper>
-            <StyledInputBase
-              placeholder="Search…"
-              inputProps={{ 'aria-label': 'search' }}
-            />
-          </Search>
-      </Grid> */}
     </Grid>
   );
 };

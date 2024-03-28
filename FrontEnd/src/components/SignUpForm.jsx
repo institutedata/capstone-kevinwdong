@@ -1,4 +1,7 @@
-import { NavLink } from "react-router-dom";
+import PropTypes from "prop-types";
+import { useState } from "react";
+import axios from "axios";
+import { NavLink} from "react-router-dom";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -34,13 +37,44 @@ const Copyright = (props) => {
 const defaultTheme = createTheme();
 
 const SignUpForm = () => {
-  const handleSubmit = (event) => {
+
+  const [newUser, setNewUser] = useState({
+    userName: "",
+    email: "",
+    password: "",
+  });
+
+  const handleInputChange = (event) => {
+    const { name, value } = event.target;
+    setNewUser({ ...newUser, [name]: value });
+  };
+
+  const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log({
+    setNewUser({
+      userName: data.get("userName"),
       email: data.get("email"),
       password: data.get("password"),
     });
+    console.log({ newUser });
+
+    try {
+      const response = await axios.post(
+        "http://localhost:8080/api/user/create",
+        newUser
+      );
+      console.log("Response: ", response.data);
+    } catch (error) {
+      console.log("Error: ", error);
+    }
+
+    setNewUser({
+      userName: "",
+      email: "",
+      password: "",
+    });
+
   };
 
   return (
@@ -81,10 +115,22 @@ const SignUpForm = () => {
                 <TextField
                   required
                   fullWidth
+                  id="userName"
+                  label="User Name"
+                  name="userName"
+                  autoComplete="userName"
+                  onChange={handleInputChange}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  required
+                  fullWidth
                   id="email"
                   label="Email Address"
                   name="email"
                   autoComplete="email"
+                  onChange={handleInputChange}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -96,17 +142,19 @@ const SignUpForm = () => {
                   type="password"
                   id="password"
                   autoComplete="new-password"
+                  onChange={handleInputChange}
                 />
               </Grid>
               <Grid item xs={12}>
                 <TextField
                   required
                   fullWidth
-                  name="password"
+                  name="confirm password"
                   label="Confirm Password"
                   type="password"
-                  id="password"
+                  id="confirm password"
                   autoComplete="new-password"
+                  onChange={handleInputChange}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -124,7 +172,7 @@ const SignUpForm = () => {
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
             >
-              Sign Up
+              <NavLink to='/home'>Sign Up</NavLink>
             </Button>
             <Grid container justifyContent="flex-end">
               <Grid item>
@@ -146,6 +194,12 @@ const SignUpForm = () => {
       </Container>
     </ThemeProvider>
   );
+};
+
+SignUpForm.propTypes = {
+  handleSubmit: PropTypes.func,
+  handleInputChange: PropTypes.func,
+  setNewUser: PropTypes.func,
 };
 
 export default SignUpForm;

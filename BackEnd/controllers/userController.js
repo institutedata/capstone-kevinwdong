@@ -1,90 +1,80 @@
-
 import { User } from "../models/index.js";
 
 //@desc     Get a user by userName or email, and all users by no query
 //@route    GET /aip/user/getUser
 const getUser = async (req, res) => {
   try {
-    let query = {};
-    if (req.query.userName) {
-      query = { userName: req.query.userName };
-      const searchedUser = await User.findOne(query);
-      if (!searchedUser) {
-        res
-          .status(400)
-          .send({
-            message: "User is not in the database. Username or emailId may be incorrect!",
-          });
-        console.log(
-          "User is not in the database or username is incorrect!".yellow
-        );
-      } else {
-        res.status(200).send({
-          message: "User found by userName successfully!",
-          data: searchedUser,
-        });
-        console.log("User found  successfully!".bgMagenta);
-        return searchedUser;
-      }
-    } else if (req.query.emailId) {
-      query = { emailId: req.query.emailId };
-      const searchedUser = await User.findOne(query);
-      if (!searchedUser) {
-        res
-          .status(400)
-          .send({
-            message: "User is not in the database. Username or emailId may be incorrect!",
-          });
-        console.log(
-          "User is not in the database or username is incorrect!".yellow
-        );
-      } else {
-        res.status(200).send({
-          message: "User found by emailId successfully!",
-          data: searchedUser,
-        });
-        console.log("User found  successfully!".bgMagenta);
-        return searchedUser;
-      }
-    } else {
-      query = {};
-      const searchedUser = await User.find(query);
-      res.status(200).send({ data: searchedUser });
-      console.log("User found  successfully!".bgMagenta);
-      return searchedUser;
-    }
+    // let query = {};
+    // if (req.query.userName) {
+    //   query = { userName: req.query.userName };
+    //   const searchedUser = await User.findOne(query);
+    //   if (!searchedUser) {
+    //     res
+    //       .status(400)
+    //       .send({
+    //         message: "User is not in the database. Username or emailId may be incorrect!",
+    //       });
+    //     console.log(
+    //       "User is not in the database or username is incorrect!".yellow
+    //     );
+    //   } else {
+    //     res.status(200).send({
+    //       message: "User found by userName successfully!",
+    //       data: searchedUser,
+    //     });
+    //     console.log("User found  successfully!".bgMagenta);
+    //     return searchedUser;
+    //   }
+    // } else if (req.query.emailId) {
+    //   query = { emailId: req.query.emailId };
+    //   const searchedUser = await User.findOne(query);
+    //   if (!searchedUser) {
+    //     res
+    //       .status(400)
+    //       .send({
+    //         message: "User is not in the database. Username or emailId may be incorrect!",
+    //       });
+    //     console.log(
+    //       "User is not in the database or username is incorrect!".yellow
+    //     );
+    //   } else {
+    //     res.status(200).send({
+    //       message: "User found by emailId successfully!",
+    //       data: searchedUser,
+    //     });
+    //     console.log("User found  successfully!".bgMagenta);
+    //     return searchedUser;
+    //   }
+    // } else {
+    // query = {};
+    const searchedUser = await User.find({});
+    console.log("User found  successfully!".bgMagenta);
+    res.status(200).send({ data: searchedUser });
+    //return searchedUser;
+    // }
   } catch (error) {
     console.error("User found  unsuccessfully:".bgRed, error.message);
   }
 };
 
-
-
-
-
-
 //@desc     Create a user and save in database.
 //@route    POST /aip/user/create
 const createUser = async (req, res) => {
   try {
-    const searchedByUserName = await User.findOne({userName: req.body.userName});
-    const searchedByemailId = await User.findOne({emailId: req.body.emailId});
-    if (searchedByUserName || searchedByemailId) {
-      res.status(400).send({message: "UserName or emaidId has been used! Please choose a different one."})
-    } else {
+    // const searchedByUserName = await User.findOne({userName: req.body.userName});
+    // const searchedByemailId = await User.findOne({emailId: req.body.emailId});
+    // if (searchedByUserName || searchedByemailId) {
+    //   res.status(400).send({message: "UserName or emaidId has been used! Please choose a different one."})
+    // } else {
     const newUser = await new User(req.body).save();
     res.status(200).send({ data: newUser });
     console.log("New user created successful!".bgMagenta);
-    }
+    // }
   } catch (error) {
     console.error("User created unsuccessful:".bgRed, error.message);
     throw error;
   }
 };
-
-
-
-
 
 //@desc     Update a user detailes
 //@route    PUT /aip/user/update
@@ -92,20 +82,18 @@ const updateUser = async (req, res) => {
   try {
     const searchedUser = await User.findOne({ userName: req.query.userName });
     if (!searchedUser) {
-      res
-        .status(400)
-        .send({
-          message: "User is not in the database or username is incorrect!",
-        });
+      res.status(400).send({
+        message: "User is not in the database or username is incorrect!",
+      });
     } else {
       const user_id = searchedUser._id;
       console.log(user_id);
       const updatedUser = await User.findByIdAndUpdate(user_id, req.body, {
         new: true,
       });
-      res.status(200).send({ 
+      res.status(200).send({
         message: "User updated successfully!",
-        data: updatedUser
+        data: updatedUser,
       });
       console.log("User updated successfully!".bgMagenta);
     }
@@ -115,15 +103,11 @@ const updateUser = async (req, res) => {
   }
 };
 
-
-
-
-
 //@desc     Delete a user
 //@route    DELETE /aip/user/update
 const deleteUser = async (req, res) => {
   try {
-    let query = {}
+    let query = {};
 
     if (req.query.userName) query = { userName: req.query.userName };
 
@@ -132,11 +116,10 @@ const deleteUser = async (req, res) => {
     const searchedUser = await User.findOne(query);
 
     if (!searchedUser) {
-      res
-        .status(400)
-        .send({
-          message: "User is not in the database. Username or emailId may be incorrect!",
-        });
+      res.status(400).send({
+        message:
+          "User is not in the database. Username or emailId may be incorrect!",
+      });
       console.log(
         "User is not in the database or username is incorrect!".yellow
       );
@@ -144,9 +127,9 @@ const deleteUser = async (req, res) => {
       const user_id = searchedUser._id;
       console.log(user_id);
       const updatedUser = await User.findByIdAndDelete(user_id);
-      res.status(200).send({ 
+      res.status(200).send({
         message: "User deleted successfully",
-        data: updatedUser 
+        data: updatedUser,
       });
       console.log("User deleted successfully".bgMagenta);
     }

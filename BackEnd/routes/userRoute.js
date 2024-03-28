@@ -3,7 +3,7 @@ let router = Router();
 import { userController } from "../controllers/index.js";
 
 
-router.get('/getUser', (req, res) => {
+router.get('/get', (req, res) => {
    userController.getUser(req, res);
 })
 
