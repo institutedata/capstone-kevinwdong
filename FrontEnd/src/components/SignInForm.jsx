@@ -1,3 +1,4 @@
+import { NavLink } from "react-router-dom";
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -5,20 +6,19 @@ import TextField from '@mui/material/TextField';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
 import Link from '@mui/material/Link';
-import Paper from '@mui/material/Paper';
-import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
-import SportsBasketballIcon from '@mui/icons-material/SportsBasketball';
+import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
+import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import basketballCourt from '../assets/basketballCourt.jpg'
+import SportsBasketBallIcon from '@mui/icons-material/SportsBasketball';
 
-function Copyright(props) {
+const Copyright = (props) => {
     return (
       <Typography variant="body2" color="text.secondary" align="center" {...props}>
         {'Copyright © '}
         <Link color="inherit" href="https://mui.com/">
-          Your Website
+          IOD
         </Link>{' '}
         {new Date().getFullYear()}
         {'.'}
@@ -36,93 +36,96 @@ const SignInForm = () => {
       email: data.get('email'),
       password: data.get('password'),
     });
-    console.log(data)
   };
 
   return (
     <ThemeProvider theme={defaultTheme}>
-      <Grid container component="main"  justifyContent='center' mt={20} >
-      <CssBaseline />
-        <Grid
-          item
-          xs={false}
-          sm={4}
-          md={7}
+      <Container component="main" maxWidth="xs">
+        <CssBaseline />
+        <Box
           sx={{
-            backgroundImage: 'url(https://source.unsplash.com/random?wallpapers)',
-            backgroundRepeat: 'no-repeat',
-            backgroundColor: (t) =>
-              t.palette.mode === 'light' ? t.palette.grey[50] : t.palette.grey[900],
-            backgroundSize: 'cover',
-            backgroundPosition: 'center',
+            marginTop: 8,
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
           }}
-        />
-        <Grid item xs={12} sm={8} md={4} component={Paper} elevation={6}>
+        >
           <Box
             sx={{
-              my: 8,
-              mx: 4,
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
+              display: "flex",
+              flexDirection: "row",
+              alignItems: "center",
             }}
           >
-            <Avatar sx={{ m: 2, bgcolor: 'brown' }}>
-              <SportsBasketballIcon />
+            <Avatar sx={{ m: 1, bgcolor: "inherit" }}>
+              <SportsBasketBallIcon />
             </Avatar>
             <Typography component="h1" variant="h5">
-              Sign in
+              Sign up
             </Typography>
-            <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 1 }}>
-              <TextField
-                margin="normal"
-                required
-                fullWidth
-                id="email"
-                label="Email Address"
-                name="email"
-                autoComplete="email"
-                autoFocus
-              />
-              <TextField
-                margin="normal"
-                required
-                fullWidth
-                name="password"
-                label="Password"
-                type="password"
-                id="password"
-                autoComplete="current-password"
-              />
-              <FormControlLabel
-                control={<Checkbox value="remember" color="primary" />}
-                label="Remember me"
-              />
-              <Button
-                type="submit"
-                fullWidth
-                variant="contained"
-                sx={{ mt: 3, mb: 2 }}
-              >
-                Sign In
-              </Button>
-              <Grid container>
-                <Grid item xs>
-                  <Link href="#" variant="body2">
-                    Forgot password?
-                  </Link>
-                </Grid>
-                <Grid item>
-                  <Link href="#" variant="body2">
-                    {"Don't have an account? Sign Up"}
-                  </Link>
-                </Grid>
-              </Grid>
-              <Copyright sx={{ mt: 5 }} />
-            </Box>
           </Box>
-        </Grid>
-      </Grid>
+          <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
+            <TextField
+              margin="normal"
+              required
+              fullWidth
+              id="email"
+              label="Email Address"
+              name="email"
+              autoComplete="email"
+              autoFocus
+            />
+            <TextField
+              margin="normal"
+              required
+              fullWidth
+              name="password"
+              label="Password"
+              type="password"
+              id="password"
+              autoComplete="current-password"
+            
+            />
+            <FormControlLabel
+              control={<Checkbox value="remember" color="primary" />}
+              label="Remember me"
+            />
+            <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+              sx={{ mt: 3, mb: 2 }}
+            >
+              Sign In
+            </Button>
+            <Grid container>
+              <Grid item xs>
+                <Link href="#" variant="body2" style={{
+                    textDecoration: "none",
+                    color: "inherit",
+                    fontSize: "inherit",
+                  }}>
+                  Forgot password?
+                </Link>
+              </Grid>
+              <Grid item>
+              <NavLink
+                  to="/signIn"
+                  style={{
+                    textDecoration: "none",
+                    color: "inherit",
+                    fontSize: "inherit",
+                  }}
+                >
+                  Don&apos;t have an account? Sign Up
+                </NavLink>
+              </Grid>
+            </Grid>
+          </Box>
+        </Box>
+        <Copyright sx={{ mt: 8, mb: 4, color: "inherit",
+                    fontSize: "inherit",}} />
+      </Container>
     </ThemeProvider>
   );
 }
