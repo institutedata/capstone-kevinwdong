@@ -72,9 +72,9 @@ const NavBar = () => {
       spacing={{ xs: 1, sm: 2 }}
       justifyContent="space-between"
       alignItems="center"
-      padding="20px"
-      color="orange"
-      fontSize="20px"
+      padding='20px'
+      color="white"
+      fontSize='20px'
     >
       <Grid item onClick={handleClick}>
         <Breadcrumbs aria-label="breadcrumb" color="inherit" fontSize="inherit">
@@ -152,6 +152,7 @@ const NavBar = () => {
           aria-haspopup="true"
           onClick={handleMenu}
           color="inherit"
+          fontSize="inherit"
         >
           <SportsBasketballIcon />
         </IconButton>
@@ -169,8 +170,10 @@ const NavBar = () => {
           }}
           open={Boolean(anchorEl)}
           onClose={handleClose}
+          color="inherit"
+          fontSize="inherit"
         >
-          <MenuItem>
+          <MenuItem onClick={handleClose}>
             <NavLink
               to="/user"
               style={{
@@ -182,7 +185,7 @@ const NavBar = () => {
               My Profile
             </NavLink>
           </MenuItem>
-          <MenuItem color="inherit">
+          <MenuItem onClick={handleClose}>
             <NavLink
               to="/signUp"
               style={{
@@ -194,7 +197,7 @@ const NavBar = () => {
               Sign Up
             </NavLink>
           </MenuItem>
-          <MenuItem>
+          <MenuItem onClick={handleClose}>
             <NavLink
               to="/signIn"
               style={{

@@ -11,7 +11,7 @@ import Grid from '@mui/material/Grid';
 import SportsBasketballIcon from '@mui/icons-material/SportsBasketball';
 import Typography from '@mui/material/Typography';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import landingPageBgImage from '../assets/landingPageBgImage.jpg';
+import basketballCourt from '../assets/basketballCourt.jpg'
 
 function Copyright(props) {
     return (
@@ -28,7 +28,7 @@ function Copyright(props) {
 
 const defaultTheme = createTheme();
 
-const SignInSide = () => {
+const SignInForm = () => {
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -36,12 +36,28 @@ const SignInSide = () => {
       email: data.get('email'),
       password: data.get('password'),
     });
+    console.log(data)
   };
 
   return (
     <ThemeProvider theme={defaultTheme}>
-      <Grid container component="main" >
-        <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square borderRadius={5}>
+      <Grid container component="main"  justifyContent='center' mt={20} >
+      <CssBaseline />
+        <Grid
+          item
+          xs={false}
+          sm={4}
+          md={7}
+          sx={{
+            backgroundImage: 'url(https://source.unsplash.com/random?wallpapers)',
+            backgroundRepeat: 'no-repeat',
+            backgroundColor: (t) =>
+              t.palette.mode === 'light' ? t.palette.grey[50] : t.palette.grey[900],
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+          }}
+        />
+        <Grid item xs={12} sm={8} md={4} component={Paper} elevation={6}>
           <Box
             sx={{
               my: 8,
@@ -51,7 +67,7 @@ const SignInSide = () => {
               alignItems: 'center',
             }}
           >
-            <Avatar sx={{ m: 2, bgcolor: 'secondary.main' }}>
+            <Avatar sx={{ m: 2, bgcolor: 'brown' }}>
               <SportsBasketballIcon />
             </Avatar>
             <Typography component="h1" variant="h5">
@@ -111,4 +127,4 @@ const SignInSide = () => {
   );
 }
 
-export default SignInSide
+export default SignInForm
