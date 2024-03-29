@@ -2,9 +2,12 @@ import PropType from "prop-types"
 import LoginForm from "../components/LoginForm"
 
 
-const SignInPage = ({logStatus, setLogStatus}) => {
+
+const SignInPage = () => {
   return (
-    <LoginForm logStatus={logStatus} setLogStatus={setLogStatus}/>
+
+    <LoginForm />
+
   )
 }
 

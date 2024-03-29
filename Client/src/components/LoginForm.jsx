@@ -1,41 +1,22 @@
-import PropType from "prop-types"
 import { useState } from "react";
 import { NavLink } from "react-router-dom";
-import axios from "axios";
 import ErrorMessage from "./ErrorMessage";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
 import TextField from "@mui/material/TextField";
-import Link from "@mui/material/Link";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import SportsBasketBallIcon from "@mui/icons-material/SportsBasketball";
+import apiClient from "../services/apiClient";
 
-const Copyright = (props) => {
-  return (
-    <Typography
-      variant="body2"
-      color="text.secondary"
-      align="center"
-      {...props}
-    >
-      {"Copyright © "}
-      <Link color="inherit" href="https://mui.com/">
-        IOD
-      </Link>{" "}
-      {new Date().getFullYear()}
-      {"."}
-    </Typography>
-  );
-};
 
 const defaultTheme = createTheme();
 
-const LoginForm = ({logStatus, setLogStatus}) => {
+const LoginForm = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(false);
@@ -50,22 +31,21 @@ const LoginForm = ({logStatus, setLogStatus}) => {
         },
       };
 
-      const { data } = await axios.post(
-        "http://localhost:8080/api/users/login",
+      const { data } = await apiClient.post(
+        "/users/login",
         { email, password },
         config
       );
       console.log(data);
       localStorage.setItem("userInfo", JSON.stringify(data));
-      setLogStatus(!logStatus);
     } catch (error) {
-      setError(error.response.data.message);
+      setError(error.message);
     }
   };
 
   return (
     <ThemeProvider theme={defaultTheme}>
-      <Container component="main" maxWidth="xs">
+      <Container component="main" maxWidth="xs" >
         {error && <ErrorMessage>{error}</ErrorMessage>}
         <CssBaseline />
         <Box
@@ -146,18 +126,11 @@ const LoginForm = ({logStatus, setLogStatus}) => {
             </Grid>
             </Grid>
           </Box>
-        </Box>
-        <Copyright
-          sx={{ mt: 8, mb: 4, color: "inherit", fontSize: "inherit" }}
-        />
+        </Box>     
       </Container>
     </ThemeProvider>
   );
 };
 
-LoginForm.propTypes = {
-  logStatus: PropType.bool,
-  setLogStatus: PropType.func
-}
 
 export default LoginForm;
