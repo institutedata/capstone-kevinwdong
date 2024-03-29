@@ -1,8 +1,9 @@
+import PropType from "prop-types";
 import { useState } from "react";
 import { NavLink } from "react-router-dom";
 import Breadcrumbs from "@mui/material/Breadcrumbs";
 import Link from "@mui/material/Link";
-import Grid from '@mui/material/Grid';
+import Grid from "@mui/material/Grid";
 import IconButton from "@mui/material/IconButton";
 import MenuItem from "@mui/material/MenuItem";
 import Menu from "@mui/material/Menu";
@@ -66,15 +67,20 @@ const NavBar = () => {
     setAnchorEl(null);
   };
 
+  const handleLogout = () => {
+    setAnchorEl(null);
+    localStorage.removeItem("userInfo")
+  }
+
   return (
     <Grid
       container
       spacing={{ xs: 1, sm: 2 }}
       justifyContent="space-between"
       alignItems="center"
-      padding='20px'
+      padding="20px"
       color="white"
-      fontSize='20px'
+      fontSize="20px"
     >
       <Grid item onClick={handleClick}>
         <Breadcrumbs aria-label="breadcrumb" color="inherit" fontSize="inherit">
@@ -143,8 +149,8 @@ const NavBar = () => {
           </Link>
         </Breadcrumbs>
       </Grid>
-      
-      <Grid item justifyContent='end'>
+
+      <Grid item justifyContent="end">
         <IconButton
           size="large"
           aria-label="account of current user"
@@ -187,7 +193,7 @@ const NavBar = () => {
           </MenuItem>
           <MenuItem onClick={handleClose}>
             <NavLink
-              to="/signUp"
+              to="/register"
               style={{
                 textDecoration: "none",
                 color: "inherit",
@@ -198,21 +204,38 @@ const NavBar = () => {
             </NavLink>
           </MenuItem>
           <MenuItem onClick={handleClose}>
-            <NavLink
-              to="/signIn"
-              style={{
-                textDecoration: "none",
-                color: "inherit",
-                fontSize: "inherit",
-              }}
-            >
-              Login
-            </NavLink>
+              <NavLink
+                to="/login"
+                style={{
+                  textDecoration: "none",
+                  color: "inherit",
+                  fontSize: "inherit",
+                }}
+              >
+                Login
+              </NavLink>
+              </MenuItem>
+              <MenuItem onClick={handleLogout}>
+              <NavLink
+                to="/"
+                style={{
+                  textDecoration: "none",
+                  color: "inherit",
+                  fontSize: "inherit",
+                }}
+              >
+                Logout
+              </NavLink>
           </MenuItem>
         </Menu>
       </Grid>
     </Grid>
   );
+};
+
+NavBar.propTypes = {
+  logstatus: PropType.bool,
+  setLogStatus: PropType.func,
 };
 
 export default NavBar;

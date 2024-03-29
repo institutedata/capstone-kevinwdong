@@ -22,8 +22,7 @@ const authenticateUser = asyncHandler(async (req, res) => {
       token: generateToken(user._id),
     });
   } else {
-    res.status(401);
-    throw new Error("Invalid Email or Password");
+    res.status(401).send({ message: "Invalid Email or Password!" });
   }
 });
 
@@ -37,8 +36,7 @@ const registerUser = asyncHandler(async (req, res) => {
     const userExists = await User.findOne({ email });
 
   if (userExists) {
-    res.status(404);
-    throw new Error("User already exists");
+    res.status(404).send({ message: "User already exists!" });
   }
 
   const user = await User.create({
@@ -64,8 +62,7 @@ const registerUser = asyncHandler(async (req, res) => {
       token: generateToken(user._id),
     });
   } else {
-    res.status(400);
-    throw new Error("User not found");
+    res.status(400).send({ message: "Invalid user data!" });
   }
 });
 
@@ -92,8 +89,7 @@ const updateUserProfile = asyncHandler(async (req, res) => {
       token: generateToken(updatedUser._id),
     });
   } else {
-    res.status(404);
-    throw new Error("User Not Found");
+    res.status(404).send({message:"User Not Found" })
   }
 });
 
@@ -247,4 +243,4 @@ export default {
   // createUser,
   // updateUser,
   // deleteUser,
-};
+}; 

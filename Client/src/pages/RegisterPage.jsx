@@ -1,12 +1,12 @@
 
-import SignUpForm from "../components/SignUpForm";
+import RegisterForm from "../components/RegisterForm";
 
 
 const SignUpPage = () => {
 
   return (
     <div>
-      <SignUpForm />
+      <RegisterForm />
     </div>
   );
 };

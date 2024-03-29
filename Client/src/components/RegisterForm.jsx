@@ -1,6 +1,7 @@
 import PropTypes from "prop-types";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
+import ErrorMessage from "./ErrorMessage";
 import { NavLink} from "react-router-dom";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
@@ -36,50 +37,52 @@ const Copyright = (props) => {
 
 const defaultTheme = createTheme();
 
-const SignUpForm = () => {
+const RegisterForm = () => {
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmpassword, setConfirmPassword] = useState("");
+  const [message, setMessage] = useState(null);
+  const [error, setError] =useState(false)
 
-  const [newUser, setNewUser] = useState({
-    userName: "",
-    email: "",
-    password: "",
-  });
-
-  const handleInputChange = (event) => {
-    const { name, value } = event.target;
-    setNewUser({ ...newUser, [name]: value });
-  };
+  // useEffect(() => {
+  //   if (userInfo) {
+  //     history.push("/");
+  //   }
+  // }, [history, userInfo]);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    setNewUser({
-      userName: data.get("userName"),
-      email: data.get("email"),
-      password: data.get("password"),
-    });
-    console.log({ newUser });
 
-    try {
-      const response = await axios.post(
-        "http://localhost:8080/api/user/create",
-        newUser
-      );
-      console.log("Response: ", response.data);
-    } catch (error) {
-      console.log("Error: ", error);
-    }
-
-    setNewUser({
-      userName: "",
-      email: "",
-      password: "",
-    });
-
+    if (password !== confirmpassword) {
+      setMessage("Passwords Do Not Match!");
+    } else {
+      setMessage(null);
+      try {
+        const config = {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        };
+        const { data } = await axios.post(
+          "http://localhost:8080/api/users/register",
+          { firstName, lastName, email, password },
+          config
+        );
+        console.log(data);
+        localStorage.setItem("userInfo", JSON.stringify(data));
+      } catch (error) {
+        setError(error.response.data.message);
+      }
   };
+}
 
   return (
     <ThemeProvider theme={defaultTheme}>
       <Container component="main" maxWidth="xs">
+        {error && <ErrorMessage>{error}</ErrorMessage>}
+        {message && <ErrorMessage>{message}</ErrorMessage>}
         <CssBaseline />
         <Box
           sx={{
@@ -111,17 +114,27 @@ const SignUpForm = () => {
             sx={{ mt: 3 }}
           >
             <Grid container spacing={2}>
-              <Grid item xs={12}>
+            <Grid item xs={12} sm={6}>
                 <TextField
-                  required
+                  autoComplete="given-name"
+                  name="firstName"
                   fullWidth
-                  id="userName"
-                  label="User Name"
-                  name="userName"
-                  autoComplete="userName"
-                  onChange={handleInputChange}
+                  id="firstName"
+                  label="First Name"
+                  autoFocus
+                  onChange={(e) => setFirstName(e.target.value)}
                 />
               </Grid>
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  fullWidth
+                  id="lastName"
+                  label="Last Name"
+                  name="lastName"
+                  autoComplete="family-name"
+                  onChange={(e) => setLastName(e.target.value)}
+                />
+                </Grid>
               <Grid item xs={12}>
                 <TextField
                   required
@@ -130,7 +143,7 @@ const SignUpForm = () => {
                   label="Email Address"
                   name="email"
                   autoComplete="email"
-                  onChange={handleInputChange}
+                  onChange={(e) => setEmail(e.target.value)}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -142,7 +155,7 @@ const SignUpForm = () => {
                   type="password"
                   id="password"
                   autoComplete="new-password"
-                  onChange={handleInputChange}
+                  onChange={(e) => setPassword(e.target.value)}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -154,25 +167,26 @@ const SignUpForm = () => {
                   type="password"
                   id="confirm password"
                   autoComplete="new-password"
-                  onChange={handleInputChange}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
                 />
               </Grid>
-              <Grid item xs={12}>
+              {/* <Grid item xs={12}>
                 <FormControlLabel
                   control={
                     <Checkbox value="allowExtraEmails" color="primary" />
                   }
                   label="I want to receive inspiration, marketing promotions and updates via email."
                 />
-              </Grid>
+              </Grid> */}
             </Grid>
             <Button
               type="submit"
               fullWidth
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
+              onClick={handleSubmit}
             >
-              <NavLink to='/home'>Sign Up</NavLink>
+              Register
             </Button>
             <Grid container justifyContent="flex-end">
               <Grid item>
@@ -184,7 +198,7 @@ const SignUpForm = () => {
                     fontSize: "inherit",
                   }}
                 >
-                  Already have an account? Sign in
+                  Already have an account?
                 </NavLink>
               </Grid>
             </Grid>
@@ -196,10 +210,10 @@ const SignUpForm = () => {
   );
 };
 
-SignUpForm.propTypes = {
+RegisterForm.propTypes = {
   handleSubmit: PropTypes.func,
   handleInputChange: PropTypes.func,
   setNewUser: PropTypes.func,
 };
 
-export default SignUpForm;
+export default RegisterForm;
