@@ -1,7 +1,7 @@
 
 import { Routes } from 'react-router-dom'
 import { Route } from 'react-router-dom'
-import { Box } from '@mui/material'
+import { Grid } from '@mui/material'
 import PageNotFound from '../pages/PageNotFound'
 import HomePage from '../pages/HomePage'
 import LandingPage from '../pages/LandingPage'
@@ -14,7 +14,7 @@ import UserPage from '../pages/UserPage'
 
 const AppRoutes = (props) => {
   return (
-    <Box display='flex' justifyContent='center' >
+    <Grid container height='100vh' backgroundColor="lightblue">
       <Routes>
         <Route index element={<LandingPage {...props} />} />
         <Route path='/home' element={<HomePage {...props} />} />
@@ -25,7 +25,7 @@ const AppRoutes = (props) => {
         <Route path='/user' element={<UserPage {...props} />} />
         <Route path='*' element={<PageNotFound />} />
       </Routes>
-    </Box>
+    </Grid>
   )
 }
 

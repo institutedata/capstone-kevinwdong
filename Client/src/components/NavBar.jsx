@@ -7,11 +7,10 @@ import Grid from "@mui/material/Grid";
 import IconButton from "@mui/material/IconButton";
 import MenuItem from "@mui/material/MenuItem";
 import Menu from "@mui/material/Menu";
-import SportsBasketballIcon from "@mui/icons-material/SportsBasketball";
+import basketball from "../assets/basketball.png";
 
 function handleClick(event) {
   event.preventDefault();
-  console.info("You clicked a breadcrumb.");
 }
 
 // const Search = styled('div')(({ theme }) => ({
@@ -69,8 +68,8 @@ const NavBar = () => {
 
   const handleLogout = () => {
     setAnchorEl(null);
-    localStorage.removeItem("userInfo")
-  }
+    localStorage.removeItem("userInfo");
+  };
 
   return (
     <Grid
@@ -81,6 +80,7 @@ const NavBar = () => {
       padding="20px"
       color="white"
       fontSize="20px"
+      backgroundColor="purple"
     >
       <Grid item onClick={handleClick}>
         <Breadcrumbs aria-label="breadcrumb" color="inherit" fontSize="inherit">
@@ -91,9 +91,8 @@ const NavBar = () => {
             fontSize="inherit"
             to="/home"
           >
-            <SportsBasketballIcon sx={{ mr: 1 }} fontSize="inherit" />
             <NavLink
-              to="/home"
+              to="/home"  
               style={({ isActive }) => {
                 return {
                   fontWeight: isActive ? "bold" : "",
@@ -111,7 +110,6 @@ const NavBar = () => {
             color="inherit"
             fontSize="inherit"
           >
-            <SportsBasketballIcon sx={{ mr: 1 }} fontSize="20px" />
             <NavLink
               to="/game"
               style={({ isActive }) => {
@@ -132,7 +130,6 @@ const NavBar = () => {
             color="inherit"
             fontSize="inherit"
           >
-            <SportsBasketballIcon sx={{ mr: 1 }} fontSize="inherit" />
             <NavLink
               to="/blog"
               style={({ isActive }) => {
@@ -160,7 +157,7 @@ const NavBar = () => {
           color="inherit"
           fontSize="inherit"
         >
-          <SportsBasketballIcon />
+          <img src={basketball} alt="basketball" width={30} />
         </IconButton>
         <Menu
           id="menu-appbar"
@@ -204,28 +201,28 @@ const NavBar = () => {
             </NavLink>
           </MenuItem>
           <MenuItem onClick={handleClose}>
-              <NavLink
-                to="/login"
-                style={{
-                  textDecoration: "none",
-                  color: "inherit",
-                  fontSize: "inherit",
-                }}
-              >
-                Login
-              </NavLink>
-              </MenuItem>
-              <MenuItem onClick={handleLogout}>
-              <NavLink
-                to="/"
-                style={{
-                  textDecoration: "none",
-                  color: "inherit",
-                  fontSize: "inherit",
-                }}
-              >
-                Logout
-              </NavLink>
+            <NavLink
+              to="/login"
+              style={{
+                textDecoration: "none",
+                color: "inherit",
+                fontSize: "inherit",
+              }}
+            >
+              Login
+            </NavLink>
+          </MenuItem>
+          <MenuItem onClick={handleLogout}>
+            <NavLink
+              to="/"
+              style={{
+                textDecoration: "none",
+                color: "inherit",
+                fontSize: "inherit",
+              }}
+            >
+              Logout
+            </NavLink>
           </MenuItem>
         </Menu>
       </Grid>

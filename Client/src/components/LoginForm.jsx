@@ -1,5 +1,5 @@
 import PropType from "prop-types"
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { NavLink } from "react-router-dom";
 import axios from "axios";
 import ErrorMessage from "./ErrorMessage";
@@ -7,8 +7,6 @@ import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
 import TextField from "@mui/material/TextField";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Checkbox from "@mui/material/Checkbox";
 import Link from "@mui/material/Link";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
@@ -45,12 +43,6 @@ const LoginForm = ({logStatus, setLogStatus}) => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    // const data = new FormData(event.currentTarget);
-    // console.log({
-    //   email: data.get('email'),
-    //   password: data.get('password'),
-    // });
-    console.log(email, password);
     try {
       const config = {
         headers: {
@@ -128,29 +120,8 @@ const LoginForm = ({logStatus, setLogStatus}) => {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
             />
-            {/* <FormControlLabel
-              control={<Checkbox value="remember" color="primary" />}
-              label="Remember me"
-            /> */}
-            <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-              sx={{ mt: 3, mb: 2 }}
-            >
-              Sign In
-            </Button>
-            <Grid container justifyContent="end">
-              {/* <Grid item xs>
-                <Link href="#" variant="body2" style={{
-                    textDecoration: "none",
-                    color: "inherit",
-                    fontSize: "inherit",
-                  }}>
-                  Forgot password?
-                </Link>
-              </Grid> */}
-              <Grid item>
+            <Grid container justifyContent='space-between'>
+              <Grid item style={{ display: 'flex', alignItems: 'center' }} >
                 <NavLink
                   to="/register"
                   style={{
@@ -159,9 +130,20 @@ const LoginForm = ({logStatus, setLogStatus}) => {
                     fontSize: "inherit",
                   }}
                 >
-                  Don&apos;t have an account? Sign Up
+                  Don&apos;t have an account?
                 </NavLink>
               </Grid>
+              <Grid item>
+              <Button
+              size="large"
+              type="submit"
+              fullWidth
+              variant="outlined"
+              sx={{ mt: 3, mb: 2 }}
+            >
+              Sign In
+            </Button>
+            </Grid>
             </Grid>
           </Box>
         </Box>

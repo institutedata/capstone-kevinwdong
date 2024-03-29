@@ -2,7 +2,7 @@ import PropTypes from "prop-types";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import ErrorMessage from "./ErrorMessage";
-import { NavLink} from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -44,7 +44,7 @@ const RegisterForm = () => {
   const [password, setPassword] = useState("");
   const [confirmpassword, setConfirmPassword] = useState("");
   const [message, setMessage] = useState(null);
-  const [error, setError] =useState(false)
+  const [error, setError] = useState(false);
 
   // useEffect(() => {
   //   if (userInfo) {
@@ -75,8 +75,8 @@ const RegisterForm = () => {
       } catch (error) {
         setError(error.response.data.message);
       }
+    }
   };
-}
 
   return (
     <ThemeProvider theme={defaultTheme}>
@@ -92,7 +92,7 @@ const RegisterForm = () => {
             alignItems: "center",
           }}
         >
-          <Box
+          {/* <Box
             sx={{
               display: "flex",
               flexDirection: "row",
@@ -105,7 +105,7 @@ const RegisterForm = () => {
             <Typography component="h1" variant="h5">
               Sign up
             </Typography>
-          </Box>
+          </Box> */}
 
           <Box
             component="form"
@@ -114,7 +114,7 @@ const RegisterForm = () => {
             sx={{ mt: 3 }}
           >
             <Grid container spacing={2}>
-            <Grid item xs={12} sm={6}>
+              <Grid item xs={6} sm={6}>
                 <TextField
                   autoComplete="given-name"
                   name="firstName"
@@ -125,7 +125,7 @@ const RegisterForm = () => {
                   onChange={(e) => setFirstName(e.target.value)}
                 />
               </Grid>
-              <Grid item xs={12} sm={6}>
+              <Grid item xs={6} sm={6}>
                 <TextField
                   fullWidth
                   id="lastName"
@@ -134,7 +134,7 @@ const RegisterForm = () => {
                   autoComplete="family-name"
                   onChange={(e) => setLastName(e.target.value)}
                 />
-                </Grid>
+              </Grid>
               <Grid item xs={12}>
                 <TextField
                   required
@@ -170,26 +170,10 @@ const RegisterForm = () => {
                   onChange={(e) => setConfirmPassword(e.target.value)}
                 />
               </Grid>
-              {/* <Grid item xs={12}>
-                <FormControlLabel
-                  control={
-                    <Checkbox value="allowExtraEmails" color="primary" />
-                  }
-                  label="I want to receive inspiration, marketing promotions and updates via email."
-                />
-              </Grid> */}
             </Grid>
-            <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-              sx={{ mt: 3, mb: 2 }}
-              onClick={handleSubmit}
-            >
-              Register
-            </Button>
-            <Grid container justifyContent="flex-end">
-              <Grid item>
+
+            <Grid container justifyContent="space-between">
+              <Grid item style={{ display: 'flex', alignItems: 'center' }} >
                 <NavLink
                   to="/signIn"
                   style={{
@@ -200,6 +184,18 @@ const RegisterForm = () => {
                 >
                   Already have an account?
                 </NavLink>
+              </Grid>
+              <Grid item>
+                <Button
+                  size="large"
+                  type="submit"
+                  fullWidth
+                  variant="outlined"
+                  sx={{ mt: 3, mb: 2 }}
+                  onClick={handleSubmit}
+                >
+                  Register
+                </Button>
               </Grid>
             </Grid>
           </Box>
