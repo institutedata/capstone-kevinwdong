@@ -59,6 +59,9 @@ export const {
   registerStart,
   registerSuccess,
   registerFailure,
+  updateStart,
+  updateSuccess,
+  updateFailure,
 } = userSlice.actions;
 
 export default userSlice.reducer;

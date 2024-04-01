@@ -225,14 +225,6 @@ const ProfilePage = () => {
               name="password"
               sx={{ gridColumn: "span 4" }}
             />
-            <TextField
-              label="Confirm Password"
-              type="password"
-              onChange={handleChange}
-              id="confirmPassword"
-              name="confirmPassword"
-              sx={{ gridColumn: "span 4" }}
-            />
           </Box>
           {errorMessage && <Alert severity="error">{errorMessage}</Alert>}
           {/* BUTTONS */}
