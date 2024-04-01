@@ -5,8 +5,10 @@ import bcrypt from "bcrypt";
 const Schema = _Schema
 const userSchema = new Schema(
   {
-    firstName: { type: String, min: 3, max: 50, required: true},
-    lastName: { type: String, min: 3, max: 50, required: true},
+    firstName: { type: String, min: 3, max: 50},
+    lastName: { type: String, min: 3, max: 50},
+    height: { type: Number},
+    weight: { type: Number},
     email: { type: String,  max: 50, required: true, unique: true },
     password: { type: String, min: 8, required: true },
     userImage: { type: String, default: 'https://icon-library.com/images/anonymous-avatar-icon/anonymous-avatar-icon-25.jpg'},

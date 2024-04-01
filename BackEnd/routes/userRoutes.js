@@ -1,6 +1,5 @@
 import express from "express";
 import {
-  loginUser,
   getUser,
   getUserFriends,
   addRemoveFriend,
@@ -9,8 +8,6 @@ import { verifyToken } from "../middleware/authorisation.js";
 
 const router = express.Router();
 
-//@desc Login user
-router.post("/login", loginUser);
 
 //@desc Get user profile
 router.get("/:id", verifyToken, getUser);

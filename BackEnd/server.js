@@ -9,11 +9,12 @@ import morgan from 'morgan';
 import path from 'path';
 import { fileURLToPath } from 'url';
 // import { userController } from './controllers/index.js';
-import { registerUser }from './controllers/userController.js';
+import { registerUser }from './controllers/authController.js';
 import { createPost } from './controllers/postController.js';
 import { verifyToken } from './middleware/authorisation.js';
 import userRoutes from './routes/userRoutes.js';
 import postRoutes from './routes/postRoutes.js';
+import authRoutes from './routes/authRoutes.js';
 
 //@desc     This is only for injecting dummy data to the database!
 // import User from './models/user.js';
@@ -49,11 +50,12 @@ const storage = multer.diskStorage({
 const upload = multer({ storage });
 
 //@desc     Routes with file upload functionality
-app.post('/users/register', upload.single('picture'), registerUser);
+app.post('/auth/register', upload.single('picture'), registerUser);
 app.post('/posts', verifyToken, upload.single('picture'),createPost);
 
 //@desc     Routes without file upload functionality
 // app.use('/auth', authRoutes);
+app.use('/auth', authRoutes)
 app.use('/users', userRoutes);
 app.use('/posts', postRoutes);
 
@@ -73,3 +75,13 @@ mongoose
 
 })
   .catch((error) => console.log(`${error} did not connect`));
+
+  app.use((err, req, res, next) => {
+    const statusCode = err.statusCode || 500;
+    const message = err.message || 'Internal Server Error';
+    res.status(statusCode).json({
+      success: false,
+      statusCode,
+      message,
+    });
+  });
