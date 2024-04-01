@@ -9,19 +9,15 @@ import {
   useTheme,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import { setLogin } from "../redux/index";
 import { themeSettings } from "../theme";
-import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
-// import { useDispatch } from "react-redux";
-// import { setLogin } from "../state/index";
-import Dropzone from "react-dropzone";
-import FlexBetween from "../components/FlexBetween";
+// import { useDispatch, useSelector } from "react-redux";
 
-const RegisterForm = ({ setErrorMessage }) => {
+const RegisterForm = () => {
   const [formData, setFormData] = useState({});
   const { palette } = useTheme(themeSettings);
-
   const navigate = useNavigate();
+  // const dispatch = useDispatch();
+  // const { error: errorMessage } = useSelector((state) => state.error);
   const isNonMobile = useMediaQuery("(min-width:600px)");
 
   const handleChange = (e) => {
@@ -32,7 +28,7 @@ const RegisterForm = ({ setErrorMessage }) => {
     e.preventDefault();
 
     if (formData.password !== formData.confirmPassword) {
-      return setErrorMessage("Passwords do not match");
+      return ;
     }
 
     try {
@@ -43,17 +39,13 @@ const RegisterForm = ({ setErrorMessage }) => {
       });
       const data = await res.json();
       if (data.success === false) {
-        return setErrorMessage(data.error);
+        return console.log(data.message);
       }
       if (res.ok) {
-        setLogin({
-          user: data.user,
-          token: data.token,
-        });
         navigate("/home");
       }
     } catch (error) {
-      setErrorMessage(error.message);
+      console.log(error.message);
     }
   };
 
