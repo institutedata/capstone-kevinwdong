@@ -4,6 +4,7 @@ import NavBar from "../components/NavBar";
 const HomePage = () => {
   return (
     <Box>
+      {/* HomePage */}
       <NavBar />
     </Box>
   );

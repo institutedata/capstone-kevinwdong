@@ -1,13 +1,13 @@
-import { User } from "../models/index.js";
-import bcrypt from "bcrypt";
-import jwt from "jsonwebtoken";
+import User from "../models/user.js";
+import generateToken from "../utils/generateToken.js";
 
-const registerUser = async (req, res) => {
+//@desc     Register a new user
+//@route    POST /users/register
+export const registerUser = async (req, res) => {
   try {
     const {
       firstName,
       lastName,
-      userName,
       email,
       password,
       userImage,
@@ -17,52 +17,75 @@ const registerUser = async (req, res) => {
       userBio,
     } = req.body;
 
-    const salt = await bcrypt.genSalt();
-    const passwordHash = await bcrypt.hash(password, salt);
+    const exsitUser = await User.findOne({ email });
+
+    if (exsitUser) {
+      res.status(400);
+      throw new Error("User already exists");
+    }
 
     const newUser = new User({
-        firstName,
-        lastName,
-        userName,
-        email,
-        password: passwordHash,
-        userImage,
-        friends,
-        location,
-        position,
-        userBio,
+      firstName,
+      lastName,
+      email,
+      password,
+      userImage,
+      friends,
+      location,
+      position,
+      userBio,
     });
     const savedUser = await newUser.save();
-    res.status(201).json(savedUser);
+    res.status(201).json({
+      _id: savedUser._id,
+      firstName: savedUser.firstName,
+      lastName: savedUser.lastName,
+      email: savedUser.email,
+      userImage: savedUser.userImage,
+      friends: savedUser.friends,
+      location: savedUser.location,
+      position: savedUser.position,
+      userBio: savedUser.userBio,
+      token: generateToken(savedUser._id),
+    });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 };
-
 
 //@desc     Authenticate a user by email and password
-//@route    POST /aip/users/login
-const loginUser = async (req, res) => {
+//@route    POST /users/login
+export const loginUser = async (req, res) => {
   try {
     const { email, password } = req.body;
-    const user = await User.findOne({ email: email });
-    if (!user) return res.status(400).json({ msg: "User does not exist. " });
 
-    const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) return res.status(400).json({ msg: "Invalid credentials. " });
+    const user = await User.findOne({ email });
 
-    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
-    delete user.password;
-    res.status(200).json({ token, user });
+    if (user && (await user.matchPassword(password))) {
+      res.json({
+        _id: user._id,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        email: user.email,
+        userImage: user.userImage,
+        friends: user.friends,
+        location: user.location,
+        position: user.position,
+        userBio: user.userBio,
+        token: generateToken(user._id),
+      });
+    } else {
+      res.status(401)
+      throw new Error("Invalid Email or Password");
+    }
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 };
-
 
 //@desc     Get user profile
 //@route    GET /users/:id
-const getUser = async (req, res) => {
+export const getUser = async (req, res) => {
   try {
     const { id } = req.params;
     const user = await User.findById(id);
@@ -74,7 +97,7 @@ const getUser = async (req, res) => {
 
 //@desc     Get user friends
 //@route    GET /users/:id/friends
-const getUserFriends = async (req, res) => {
+export const getUserFriends = async (req, res) => {
   try {
     const { id } = req.params;
     const user = await User.findById(id);
@@ -83,8 +106,8 @@ const getUserFriends = async (req, res) => {
       user.friends.map((id) => User.findById(id))
     );
     const formattedFriends = friends.map(
-      ({ _id, firstName, lastName, position, location, picturePath }) => {
-        return { _id, firstName, lastName, position, location, picturePath };
+      ({ _id, firstName, lastName, position, location, userImage }) => {
+        return { _id, firstName, lastName, position, location, userImage };
       }
     );
     res.status(200).json(formattedFriends);
@@ -95,7 +118,7 @@ const getUserFriends = async (req, res) => {
 
 //@desc     Add or remove user friends
 //@route    PATCH /users/:id/:friendId
-const addRemoveFriend = async (req, res) => {
+export const addRemoveFriend = async (req, res) => {
   try {
     const { id, friendId } = req.params;
     const user = await User.findById(id);
@@ -115,8 +138,8 @@ const addRemoveFriend = async (req, res) => {
       user.friends.map((id) => User.findById(id))
     );
     const formattedFriends = friends.map(
-      ({ _id, firstName, lastName, position, location, picturePath }) => {
-        return { _id, firstName, lastName, position, location, picturePath };
+      ({ _id, firstName, lastName, position, location, userImage }) => {
+        return { _id, firstName, lastName, position, location, userImage };
       }
     );
 
@@ -125,6 +148,3 @@ const addRemoveFriend = async (req, res) => {
     res.status(404).json({ message: err.message });
   }
 };
-
-
-export default { registerUser, loginUser, getUser, getUserFriends, addRemoveFriend };
