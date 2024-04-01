@@ -2,7 +2,7 @@
 
 const HomePage = () => {
   return (
-    <div>HomePage</div>
+    <div>DashBoard</div>
   )
 }
 

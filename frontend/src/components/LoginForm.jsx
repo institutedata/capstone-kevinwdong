@@ -37,7 +37,7 @@ const LoginForm = () => {
       }
       if (res.ok) {
         dispatch(logInSuccess(data));
-        navigate("/home");
+        navigate("/dashboard");
       }
     } catch (error) {
       dispatch(logInFailure(error.message));
@@ -57,7 +57,7 @@ const LoginForm = () => {
             name="email"
             sx={{ mb: "1rem" }}
           />
-          <TextField
+          <TextField     
             fullWidth
             label="Password"
             type="password"

@@ -7,19 +7,17 @@ import {
   useMediaQuery,
   Typography,
   useTheme,
-  Alert,  
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
 import { themeSettings } from "../theme";
-import { registerStart, registerSuccess, registerFailure } from "../redux/userSlice";
+// import { useDispatch, useSelector } from "react-redux";
 
 const RegisterForm = () => {
   const [formData, setFormData] = useState({});
   const { palette } = useTheme(themeSettings);
   const navigate = useNavigate();
-  const dispatch = useDispatch();
-  const { error: errorMessage } = useSelector((state) => state.user);
+  // const dispatch = useDispatch();
+  // const { error: errorMessage } = useSelector((state) => state.error);
   const isNonMobile = useMediaQuery("(min-width:600px)");
 
   const handleChange = (e) => {
@@ -30,12 +28,10 @@ const RegisterForm = () => {
     e.preventDefault();
 
     if (formData.password !== formData.confirmPassword) {
-      dispatch(registerFailure("Passwords do not match"));
       return;
     }
 
     try {
-      dispatch(registerStart());
       const res = await fetch("http://localhost:8080/auth/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -43,14 +39,13 @@ const RegisterForm = () => {
       });
       const data = await res.json();
       if (data.success === false) {
-       dispatch(registerFailure(data.message));
+        return console.log(data.message);
       }
       if (res.ok) {
-        dispatch(registerSuccess(data));
         navigate("/dashboard");
       }
     } catch (error) {
-      dispatch(registerFailure(error.message));
+      console.log(error.message);
     }
   };
 
@@ -79,6 +74,35 @@ const RegisterForm = () => {
           sx={{ gridColumn: "span 2" }}
         />
         <TextField
+          label="Height"
+          onChange={handleChange}
+          id="height"
+          name="height"
+          sx={{ gridColumn: "span 2" }}
+        />
+        <TextField
+          label="Weight"
+          onChange={handleChange}
+          id="weight"
+          name="weight"
+          sx={{ gridColumn: "span 2" }}
+        />
+        <TextField
+          label="Location"
+          onChange={handleChange}
+          id="location"
+          name="location"
+          sx={{ gridColumn: "span 2" }}
+        />
+        <TextField
+          label="Position"
+          onChange={handleChange}
+          id="position"
+          name="position"
+          sx={{ gridColumn: "span 2" }}
+        />
+        <TextField
+          required
           label="Email"
           onChange={handleChange}
           id="email"
@@ -86,6 +110,7 @@ const RegisterForm = () => {
           sx={{ gridColumn: "span 4" }}
         />
         <TextField
+          required
           label="Password"
           type="password"
           onChange={handleChange}
@@ -94,46 +119,33 @@ const RegisterForm = () => {
           sx={{ gridColumn: "span 4" }}
         />
         <TextField
+          required
           label="Confirm Password"
           type="password"
           onChange={handleChange}
           id="confirmPassword"
           name="confirmPassword"
-          sx={{ gridColumn: "span 4",  mb: "1rem"}}
+          sx={{ gridColumn: "span 4" }}
         />
       </Box>
-      {errorMessage && <Alert severity="error">
-          {errorMessage}
-        </Alert>}
-      <Box>
-          <Button
-            fullWidth
-            type="submit"
-            sx={{
-              m: "2rem 0",
-              p: "1rem",
-              backgroundColor: palette.primary.main,
-              color: palette.background.alt,
-              "&:hover": { color: palette.primary.main },
-            }}
-          >
-            REGISTER
-          </Button>
-        <Typography
-            onClick={() => {
-              navigate("/login");
-            }}
-            sx={{
-              textDecoration: "underline",
-              color: palette.primary.main,
-              "&:hover": {
-                cursor: "pointer",
-                color: palette.primary.light,
-              },
-            }}
-          >
-            Already have an account? Login
-          </Typography>
+
+      {/* BUTTONS */}
+      <Box display='flex' justifyContent='space-between'>
+        
+        <Button
+          fullWidth
+          type="submit"
+          sx={{
+            width: "25%",
+            m: "2rem 0",
+            p: "1rem",
+            backgroundColor: palette.primary.main,
+            color: palette.background.alt,
+            "&:hover": { color: palette.primary.main },
+          }}
+        >
+          UPDATE
+        </Button>
       </Box>
     </form>
   );
