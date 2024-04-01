@@ -9,6 +9,7 @@ import {
   useTheme,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import { setLogin } from "../redux/index";
 import { themeSettings } from "../theme";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 // import { useDispatch } from "react-redux";
@@ -16,51 +17,39 @@ import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import Dropzone from "react-dropzone";
 import FlexBetween from "../components/FlexBetween";
 
-
-
-
-
-
 const RegisterForm = ({ setErrorMessage }) => {
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
-  const [location, setLocation] = useState("");
-  const [position, setPosition] = useState("");
-  const [userImage, setUserImage] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
+  const [formData, setFormData] = useState({});
   const { palette } = useTheme(themeSettings);
 
   const navigate = useNavigate();
   const isNonMobile = useMediaQuery("(min-width:600px)");
 
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.id]: e.target.value.trim() });
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (password !== confirmPassword) {
+    if (formData.password !== formData.confirmPassword) {
       return setErrorMessage("Passwords do not match");
     }
 
     try {
-      const res = await fetch("http://localhost:8080/users/register", {
+      const res = await fetch("http://localhost:8080/auth/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          firstName,
-          lastName,
-          location,
-          position,
-          email,
-          password,
-        }),
+        body: JSON.stringify(formData),
       });
-      console.log(firstName, lastName, location, position, email, password);
       const data = await res.json();
-      if (data.error) {
-        setErrorMessage(data.error);
+      if (data.success === false) {
+        return setErrorMessage(data.error);
       }
       if (res.ok) {
+        setLogin({
+          user: data.user,
+          token: data.token,
+        });
         navigate("/home");
       }
     } catch (error) {
@@ -80,85 +69,38 @@ const RegisterForm = ({ setErrorMessage }) => {
       >
         <TextField
           label="First Name"
-          onChange={(e) => setFirstName(e.target.value)}
-          value={firstName}
+          onChange={handleChange}
+          id="firstName"
           name="firstName"
           sx={{ gridColumn: "span 2" }}
         />
         <TextField
           label="Last Name"
-          onChange={(e) => setLastName(e.target.value)}
-          value={lastName}
+          onChange={handleChange}
+          id="lastName"
           name="lastName"
           sx={{ gridColumn: "span 2" }}
         />
         <TextField
-          label="Location"
-          onChange={(e) => setLocation(e.target.value)}
-          value={location}
-          name="location"
-          sx={{ gridColumn: "span 4" }}
-        />
-        <TextField
-          label="position"
-          onChange={(e) => setPosition(e.target.value)}
-          value={position}
-          name="position"
-          sx={{ gridColumn: "span 4" }}
-        />
-        <Box
-                  gridColumn="span 4"
-                  border={`1px solid ${palette.neutral.medium}`}
-                  borderRadius="5px"
-                  p="1rem"
-                >
-                  <Dropzone
-                    acceptedFiles=".jpg,.jpeg,.png"
-                    multiple={false}
-                    onDrop={(acceptedFiles) =>
-                      setUserImage(acceptedFiles[0])
-                    }
-                  >
-                    {({ getRootProps, getInputProps }) => (
-                      <Box
-                        {...getRootProps()}
-                        border={`2px dashed ${palette.primary.main}`}
-                        p="1rem"
-                        sx={{ "&:hover": { cursor: "pointer" } }}
-                      >
-                        <input {...getInputProps()} />
-                        {!userImage ? (
-                          <p>Add Picture Here</p>
-                        ) : (
-                          <FlexBetween>
-                            <Typography>{userImage.name}</Typography>
-                            <EditOutlinedIcon />
-                          </FlexBetween>
-                        )}
-                      </Box>
-                    )}
-                  </Dropzone>
-                </Box>
-        <TextField
           label="Email"
-          onChange={(e) => setEmail(e.target.value)}
-          value={email}
+          onChange={handleChange}
+          id="email"
           name="email"
           sx={{ gridColumn: "span 4" }}
         />
         <TextField
           label="Password"
           type="password"
-          onChange={(e) => setPassword(e.target.value)}
-          value={password}
+          onChange={handleChange}
+          id="password"
           name="password"
           sx={{ gridColumn: "span 4" }}
         />
         <TextField
           label="Confirm Password"
           type="password"
-          onChange={(e) => setConfirmPassword(e.target.value)}
-          value={confirmPassword}
+          onChange={handleChange}
+          id="confirmPassword"
           name="confirmPassword"
           sx={{ gridColumn: "span 4" }}
         />

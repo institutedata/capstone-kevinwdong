@@ -1,11 +1,9 @@
-import { useState } from "react";
 import { Box, Typography, useTheme, useMediaQuery } from "@mui/material";
 import LoginForm from "../components/LoginForm";
 
 
 
 const LoginPage = () => {
-  const [errorMessage, setErrorMessage] = useState(null);
 
   const theme = useTheme();
   const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
@@ -29,13 +27,10 @@ const LoginPage = () => {
         borderRadius="1.5rem"
         backgroundColor={theme.palette.background.alt}
       >
-        {errorMessage ? <Typography color="red" fontWeight="500" variant="h5" sx={{ mb: "1.5rem"}}>
-          {errorMessage}
-        </Typography> : <Typography fontWeight="500" variant="h5" sx={{ mb: "1.5rem" }}>
+        <Typography fontWeight="500" variant="h5" sx={{ mb: "1.5rem" }}>
           Welcom to Hoops Connect!
-        </Typography>}
-        <LoginForm errorMessage={errorMessage} setErrorMessage={setErrorMessage}/>
-
+        </Typography>
+        <LoginForm />
       </Box>
     </Box>
   );

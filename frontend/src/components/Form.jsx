@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import {
   Box,
@@ -13,7 +12,7 @@ import { Formik } from "formik";
 import * as yup from "yup";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { setLogin } from "../state/index";
+import { setLogin } from "../redux/index";
 import Dropzone from "react-dropzone";
 import FlexBetween from "../components/FlexBetween";
 
@@ -168,9 +167,7 @@ const Form = () => {
                   onChange={handleChange}
                   value={values.position}
                   name="position"
-                  error={
-                    Boolean(touched.position) && Boolean(errors.position)
-                  }
+                  error={Boolean(touched.position) && Boolean(errors.position)}
                   helperText={touched.position && errors.position}
                   sx={{ gridColumn: "span 4" }}
                 />
@@ -241,8 +238,8 @@ const Form = () => {
               sx={{
                 m: "2rem 0",
                 p: "1rem",
-                backgroundColor: 'primary',
-                color: 'white',
+                backgroundColor: "primary",
+                color: "white",
                 // "&:hover": { color: palette.primary.main },
               }}
             >
@@ -258,7 +255,7 @@ const Form = () => {
                 color: palette.primary.main,
                 "&:hover": {
                   cursor: "pointer",
-                //   color: palette.primary.light,
+                  //   color: palette.primary.light,
                 },
               }}
             >
