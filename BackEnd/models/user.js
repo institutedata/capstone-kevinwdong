@@ -1,9 +1,6 @@
-import { Schema as _Schema, model } from 'mongoose'
-import bcrypt from "bcrypt";
+import mongoose from "mongoose";
 
-
-const Schema = _Schema
-const userSchema = new Schema(
+const UserSchema = new mongoose.Schema(
   {
     firstName: { type: String, min: 3, max: 50},
     lastName: { type: String, min: 3, max: 50},
@@ -20,20 +17,8 @@ const userSchema = new Schema(
   {
     timestamps: true,
   }
-)
-
-userSchema.methods.matchPassword = async function (enteredPassword) {
-  return await bcrypt.compare(enteredPassword, this.password);
-};
-
-// will encrypt password everytime its saved
-userSchema.pre("save", async function (next) {
-  if (!this.isModified("password")) {
-    next();
-  }
-  const salt = await bcrypt.genSalt(10);
-  this.password = await bcrypt.hash(this.password, salt);
-});
+);
 
 
-export default model('user', userSchema)
+const User = mongoose.model("User", UserSchema);
+export default User;

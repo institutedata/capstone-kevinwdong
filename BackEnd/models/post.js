@@ -1,9 +1,8 @@
-import { Schema as _Schema, model } from 'mongoose'
-const Schema = _Schema
+import mongoose from "mongoose";
 
-const postSchema = new Schema(
+const postSchema = new mongoose.Schema(
   {
-    userId: { type: String, required: true},
+    userId: { type: String, required: true },
     firstName: { type: String, required: true },
     lastName: { type: String, required: true },
     location: { type: String },
@@ -11,11 +10,13 @@ const postSchema = new Schema(
     postDescription: { type: String },
     postImage: { type: String },
     userImage: { type: String },
-    likes: { type: Map, of: Boolean,},
+    likes: { type: Map, of: Boolean },
     comments: { type: Array, default: [] },
   },
   {
     timestamps: true,
   }
-)
-export default model('post', postSchema)
+);
+
+const Post = mongoose.model("Post", postSchema);
+export default Post;

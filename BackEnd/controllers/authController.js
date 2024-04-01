@@ -1,7 +1,7 @@
 import User from "../models/user.js";
 import { errorHandler } from "../utils/error.js";
-import generateToken from "../utils/generateToken.js";
-import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
+import bcryptjs from "bcryptjs";
 
 //@desc     Register a new user
 //@route    POST /users/register
@@ -27,14 +27,15 @@ export const registerUser = async (req, res, next) => {
       next(errorHandler(400, "User already exists"));
     }
 
-    const salt = await bcrypt.genSalt();
-    const passwordHash = await bcrypt.hash(password, salt);
+    // const salt = await bcrypt.genSalt();
+    // const passwordHash = await bcrypt.hash(password, salt);
+    const hasdedPassword = bcryptjs.hashSync(password, 10);
 
     const newUser = new User({
       firstName,
       lastName,
       email,
-      password,
+      password: hasdedPassword,
       userImage,
       friends,
       location,
@@ -43,6 +44,8 @@ export const registerUser = async (req, res, next) => {
       weight,
       userBio,
     });
+
+
     const savedUser = await newUser.save();
     res.status(201).json({
       _id: savedUser._id,
@@ -56,7 +59,6 @@ export const registerUser = async (req, res, next) => {
       height: savedUser.height,
       weight: savedUser.weight,
       userBio: savedUser.userBio,
-      token: generateToken(savedUser._id),
     });
   } catch (error) {
     next(error);
@@ -66,24 +68,35 @@ export const registerUser = async (req, res, next) => {
 //@desc     Authenticate a user by email and password
 //@route    POST /users/login
 export const loginUser = async (req, res, next) => {
-  const { email, password } = req.body;
-
-  if (!email || !password || email === "" || password === "") {
-    next(errorHandler(400, "All fields are required"));
-  }
-
   try {
-    const user = await User.findOne({ email });
+    const { email, password } = req.body;
 
-    const validPassword = await bcrypt.compare(password, user.password);
-
-    if (!validPassword || !user) {
-     return next(errorHandler(401, "Invalid email or password"));
+    if (!email || !password || email === "" || password === "") {
+      next(errorHandler(400, "All fields are required"));
     }
 
-    const token = generateToken(user._id);
-    delete user.password;
-    res.json({ user, token });
+    const user = await User.findOne({ email: email });
+
+
+    if (!user) {
+      return next(errorHandler(401, "Invalid email"));
+    }
+    const isMatch = bcryptjs.compareSync(password, user.password);
+
+
+    if (!isMatch) return next(errorHandler(401, "Invalid password"));
+  
+    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
+    console.log(token); 
+
+    const { password: pass, ...rest } = user._doc;
+
+    res
+      .status(200)
+      .cookie("accessToken", token, {
+        httpOnly: true,
+      })
+      .json(user);
   } catch (error) {
     next(error);
   }

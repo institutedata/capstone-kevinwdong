@@ -1,70 +1,42 @@
 import User from "../models/user.js";
-import generateToken from "../utils/generateToken.js";
+import { errorHandler } from "../utils/error.js";
+import bcryptjs from "bcryptjs";
 
 
-
-//@desc     Get user profile
-//@route    GET /users/:id
-export const getUser = async (req, res) => {
+export const updateUser = async (req, res, next) => {
   try {
-    const { id } = req.params;
-    const user = await User.findById(id);
-    res.status(200).json(user);
-  } catch (err) {
-    res.status(404).json({ message: err.message });
-  }
-};
-
-//@desc     Get user friends
-//@route    GET /users/:id/friends
-export const getUserFriends = async (req, res) => {
-  try {
-    const { id } = req.params;
-    const user = await User.findById(id);
-
-    const friends = await Promise.all(
-      user.friends.map((id) => User.findById(id))
-    );
-    const formattedFriends = friends.map(
-      ({ _id, firstName, lastName, position, location, userImage }) => {
-        return { _id, firstName, lastName, position, location, userImage };
-      }
-    );
-    res.status(200).json(formattedFriends);
-  } catch (err) {
-    res.status(404).json({ message: err.message });
-  }
-};
-
-//@desc     Add or remove user friends
-//@route    PATCH /users/:id/:friendId
-export const addRemoveFriend = async (req, res) => {
-  try {
-    const { id, friendId } = req.params;
-    const user = await User.findById(id);
-    const friend = await User.findById(friendId);
-
-    if (user.friends.includes(friendId)) {
-      user.friends = user.friends.filter((id) => id !== friendId);
-      friend.friends = friend.friends.filter((id) => id !== id);
-    } else {
-      user.friends.push(friendId);
-      friend.friends.push(id);
+    if (req.user.id !== req.params.userId) {
+      return next(errorHandler(403, "Not allow to update this user"));
     }
-    await user.save();
-    await friend.save();
-
-    const friends = await Promise.all(
-      user.friends.map((id) => User.findById(id))
-    );
-    const formattedFriends = friends.map(
-      ({ _id, firstName, lastName, position, location, userImage }) => {
-        return { _id, firstName, lastName, position, location, userImage };
+    if (req.body.password) {
+      if (req.body.password.length < 8) {
+        return next(
+          errorHandler(400, "Password must be at least 8 characters")
+        );
       }
-    );
+      req.body.password = bcryptjs.hashSync(req.body.password, 10);
+    }
 
-    res.status(200).json(formattedFriends);
-  } catch (err) {
-    res.status(404).json({ message: err.message });
+    const updatedUser = await User.findByIdAndUpdate(
+      req.params.userId,
+      {
+        $set: {
+          firstName: req.body.firstName,
+          lastName: req.body.lastName,
+          height: req.body.height,
+          weight: req.body.weight,
+          position: req.body.position,
+          location: req.body.location,
+          email: req.body.email,
+          userImage: req.body.userImage,
+          password: req.body.password,
+        },
+      },
+      { new: true }
+    );
+    const { password, ...rest } = updatedUser._doc;
+    res.status(200).json(rest);
+  } catch (error) {
+    next(error);
   }
 };
