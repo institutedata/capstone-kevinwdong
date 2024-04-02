@@ -12,6 +12,7 @@ import { fileURLToPath } from "url";
 import userRoutes from "./routes/userRoutes.js";
 import postRoutes from "./routes/postRoutes.js";
 import authRoutes from "./routes/authRoutes.js";
+import gameRoutes from "./routes/gameRoutes.js";
 import cookieParser from "cookie-parser";
 
 
@@ -25,9 +26,11 @@ app.use(cors());
 
 //@desc     Routes without file upload functionality
 // app.use('/auth', authRoutes);
+
 app.use("/auth", authRoutes);
 app.use("/users", userRoutes);
 app.use("/posts", postRoutes);
+app.use("/games", gameRoutes);
 
 //@desc     Setup mongodb database
 

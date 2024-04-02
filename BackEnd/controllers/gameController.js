@@ -1,41 +1,49 @@
-import Post from "../models/post.js";
+import Game from "../models/game.js";
 import User from "../models/user.js";
 import { errorHandler } from "../utils/error.js";
 
 //@desc     Create a post
 //@route    POST /posts/create
-export const createPost = async (req, res, next) => {
+export const createGame = async (req, res, next) => {
   try {
+    const {
+      userId,
+      firstName,
+      lastName,
+      location,
+      description,
+      gameImage,
+      userImage,
+      participancts,
+      comments,
+    } = req.body;
 
-    const { userId, description, postImage } = req.body;
-  
     const user = await User.findById(userId);
- 
-    const newPost = new Post({
+
+    const newGame = new Game({
       userId,
       firstName: user.firstName,
       lastName: user.lastName,
       location: user.location,
+      location,
       description,
       userImage: user.userImage,
-      postImage,
-      likes: {},
+      gameImage,
+      paticipants: {},
       comments: [],
     });
-    await newPost.save();
+    await newGame.save();
 
-    const posts = await Post.find();
-    res.status(201).json(posts);
+    const games = await Game.find();
+    res.status(201).json(games);
   } catch (error) {
     next(errorHandler(400, error.message));
   }
 };
 
-
-
 //@desc     Get all posts
 //route    GET /posts
-export const getFeedPosts = async (req, res, next) => {
+export const getFeedGames = async (req, res, next) => {
   try {
     const post = await Post.find();
     res.status(200).json(post);
@@ -44,10 +52,9 @@ export const getFeedPosts = async (req, res, next) => {
   }
 };
 
-
 //@desc     Get a user's posts
 //@route    GET /posts/:userId/posts
-export const getUserPosts = async (req, res, next) => {
+export const getUserGames = async (req, res, next) => {
   try {
     const { userId } = req.params;
     const post = await Post.find({ userId });
@@ -59,7 +66,7 @@ export const getUserPosts = async (req, res, next) => {
 
 //@desc     Like a post
 //@route    PATCH /posts/:id/like
-export const likePost = async (req, res, next) => {
+export const likeGame = async (req, res, next) => {
   try {
     const { id } = req.params;
     const { userId } = req.body;
