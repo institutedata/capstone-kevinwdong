@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Box,
   IconButton,
@@ -22,16 +22,18 @@ import {
 } from "@mui/icons-material";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { toggleMode } from "../redux/themeSlice";
+import { setMode } from "../redux/themeSlice";
+import { setLogout } from "../redux/userSlice";
 import FlexBetween from "../components/FlexBetween";
 
 const Navbar = () => {
   const [isMobileMenuToggled, setIsMobileMenuToggled] = useState(false);
-  const { currentUser } = useSelector((state) => state.user);
+  const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
+  const [fullName, setFullName] = useState("Guest User");
+  const { user, token } = useSelector((state) => state.user);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  // const user = useSelector((state) => state.user);
-  const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
+  
 
   const theme = useTheme();
   const neutralLight = theme.palette.neutral.light;
@@ -40,7 +42,14 @@ const Navbar = () => {
   const primaryLight = theme.palette.primary.light;
   const alt = theme.palette.background.alt;
 
-  // const fullName = `${currentUser.firstName} ${currentUser.lastName}`;
+  useEffect(() =>{
+    if (!token) {
+      setFullName('Guest User')
+    } else {
+      setFullName(`${user.firstName} ${user.lastName}`)
+    }
+  }, [token, user])
+  
 
 
   return (
@@ -78,7 +87,7 @@ const Navbar = () => {
       {/* DESKTOP NAV */}
       {isNonMobileScreens ? (
         <FlexBetween gap="2rem">
-          <IconButton onClick={() => dispatch(toggleMode())}>
+          <IconButton onClick={() => dispatch(setMode())}>
             { theme.palette.mode === "dark" ? (
               <DarkMode sx={{ fontSize: "25px" }} />
             ) : (
@@ -89,6 +98,7 @@ const Navbar = () => {
           <AccountBoxOutlined sx={{ fontSize: "25px" }} onClick={() => navigate('/profile')}/>
           <FormControl variant="standard" >
             <Select
+              value={fullName}
               sx={{
                 backgroundColor: neutralLight,
                 width: "150px",
@@ -104,8 +114,8 @@ const Navbar = () => {
               }}
               input={<InputBase />}
             >
-              <MenuItem value='kevin dong'>
-                <Typography>Keivn Dong</Typography>
+              <MenuItem value={fullName}>
+                <Typography>{fullName}</Typography>
               </MenuItem>
               <MenuItem onClick={() => dispatch(setLogout())}>Log Out</MenuItem>
             </Select>
@@ -149,7 +159,7 @@ const Navbar = () => {
             gap="3rem"
           >
             <IconButton
-              onClick={() => dispatch(toggleTheme())}
+              onClick={() => dispatch(setMode())}
               sx={{ fontSize: "25px" }}
             >
               {theme.palette.mode === "dark" ? (
@@ -180,7 +190,7 @@ const Navbar = () => {
                 input={<InputBase />}
               >
                 <MenuItem value={fullName} onClick={() => navigate('/profile')}>
-                 {currentUser ? <Typography>{fullName}</Typography> : <Typography>Guest</Typography>}
+                 <Typography>{fullName}</Typography>
                 </MenuItem>
                 <MenuItem onClick={() => dispatch(setLogout())}>
                   Log Out

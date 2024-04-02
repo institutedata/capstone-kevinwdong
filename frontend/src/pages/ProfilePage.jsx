@@ -1,7 +1,7 @@
 import { Box, useMediaQuery } from "@mui/material";
 import UserWidget from "../widgets/UserWidget.jsx";
 import PostsWidget from "../widgets/PostsWidget.jsx";
-import FriendListWidget from "../widgets/FriendListWidget.jsx";
+// import FriendListWidget from "../widgets/FriendListWidget.jsx";
 import ProfileForm from "../components/ProfileForm.jsx";
 
 const HomePage = () => {
@@ -31,7 +31,7 @@ const HomePage = () => {
         </Box>
         {isNonMobileScreens && (
           <Box flexBasis="26%">
-            <PostsWidget />
+            {/* <PostsWidget /> */}
             <Box m="2rem 0" />
             <FriendListWidget />
           </Box>

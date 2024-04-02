@@ -1,90 +1,51 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
-  currentUser: null,
-  error: null,
-  loading: false,
+  user: null,
+  token: null,
 };
 
 const userSlice = createSlice({
   name: 'user',
   initialState,
   reducers: {
-    logInStart: (state) => {
-      state.loading = true;
-      state.error = null;
+    setLogin: (state, action) => {
+      state.user = action.payload.user;
+      state.token = action.payload.token;
     },
-    logInSuccess: (state, action) => {
-      state.currentUser = action.payload;
-      state.loading = false;
-      state.error = null;
+    setLogout: (state) => {
+      state.user = null;
+      state.token = null;
     },
-    logInFailure: (state, action) => {
-      state.loading = false;
-      state.error = action.payload;
+    setRegister: (state, action) => {
+      state.user = action.payload.user;
+      state.token = action.payload.token;
     },
-    registerStart: (state) => {
-      state.loading = true;
-      state.error = null;
+    setUpdate: (state, action) => {
+      state.user = action.payload.user;
+      state.token = action.payload.token;
     },
-    registerSuccess: (state, action) => {
-      state.currentUser = action.payload;
-      state.loading = false;
-      state.error = null;
+    setDelete: (state) => {
+      state.user = null;
+      state.token = null;
     },
-    registerFailure: (state, action) => {
-      state.loading = false;
-      state.error = action.payload;
+    setFriends: (state, action) => {
+      if (state.user) {
+        state.user.friends = action.payload.friends;
+      } else {
+        console.error("user friends non-existent :(");
+      }
     },
-    updateStart: (state) => {
-      state.loading = true;
-      state.error = null;
-    },
-    updateSuccess: (state, action) => {
-      state.currentUser = action.payload;
-      state.loading = false;
-      state.error = null;
-    },
-    updateFailure: (state, action) => {
-      state.loading = false;
-      state.error = action.payload;
-    },
-    deleteStart: (state) => {
-      state.loading = true;
-      state.error = null;
-    },
-    deleteSuccess: (state) => {
-      state.currentUser = null;
-      state.loading = false;
-      state.error = null;
-    },
-    deleteFailure: (state, action) => {
-      state.loading = false;
-      state.error = action.payload;
-    },
-    logoutSuccess: (state) => {
-      state.currentUser = null;
-      state.loading = false;
-      state.error = null;
-    }
-
-  },
+  }
 });
 
 export const {
-  logInStart,
-  logInSuccess,
-  logInFailure,
-  registerStart,
-  registerSuccess,
-  registerFailure,
-  updateStart,
-  updateSuccess,
-  updateFailure,
-  deleteStart,
-  deleteSuccess,
-  deleteFailure,
-  logoutSuccess,
+  setLogin,
+  setLogout,
+  setRegister,
+  setUpdate,
+  setDelete,
+  setFriends,
 } = userSlice.actions;
 
 export default userSlice.reducer;

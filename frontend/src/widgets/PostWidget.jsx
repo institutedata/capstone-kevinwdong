@@ -7,9 +7,7 @@ import {
 } from "@mui/icons-material";
 import { Box, Divider, IconButton, Typography, useTheme } from "@mui/material";
 import FlexBetween from "../components/FlexBetween";
-import Friend from "../components/Friend";
 import WidgetWrapper from "../components/WidgetWrapper";
-import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 
@@ -25,23 +23,39 @@ const PostWidget = ({
   comments,
 }) => {
  
-  const { currentUser } = useSelector((state) => state.user)
-  const loggedInUserId = currentUser.user._id;
+  const { user, token  } = useSelector((state) => state.user)
+  const loggedInUserId = user._id;
   const isLiked = Boolean(likes[loggedInUserId]);
   const likeCount = Object.keys(likes).length;  
+
   const { palette } = useTheme();
   const main = palette.neutral.main;
   const primary = palette.primary.main;
 
+  // console.log(postId,
+  //   postUserId, loggedInUserId)
+
+  const patchLike = async () => {
+    const response = await fetch(`http://localhost:8080/posts/${postId}/like`, {
+      method: "PATCH",
+      headers: {
+        Authorization: token,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ userId: loggedInUserId }),
+    });
+    const updatedPost = await response.json();
+      dispatch(setPost({ post: updatedPost }));
+  };
 
   return (
     <WidgetWrapper m="2rem 0">
-      <Friend
+      {/* <Friend
         friendId={postUserId}
         name={name}
         subtitle={position}
         userImage={userImage}
-      />
+      /> */}
       <Typography color={main} sx={{ mt: "1rem" }}>
         {description}
       </Typography>
@@ -57,7 +71,7 @@ const PostWidget = ({
       <FlexBetween mt="0.25rem">
         <FlexBetween gap="1rem">
           <FlexBetween gap="0.3rem">
-            <IconButton >
+            <IconButton onClick={patchLike}>
               {isLiked ? (
                 <FavoriteOutlined sx={{ color: primary }} />
               ) : (
@@ -71,7 +85,7 @@ const PostWidget = ({
             <IconButton >
               <ChatBubbleOutlineOutlined />
             </IconButton>
-            <Typography>{comments}</Typography>
+            <Typography>{comments.length}</Typography>
           </FlexBetween>
         </FlexBetween>
 
@@ -105,6 +119,7 @@ PostWidget.prototype = {
   userPicturePath: PropTypes.string.isRequired,
   likes: PropTypes.object.isRequired,
   comments: PropTypes.array.isRequired,
+  length: PropTypes.number,
 };
 
 export default PostWidget;

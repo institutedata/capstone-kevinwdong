@@ -1,17 +1,14 @@
 import { useDispatch, useSelector } from "react-redux";
 import { ImageOutlined } from "@mui/icons-material";
 import {
+  Alert,
   Divider,
   Typography,
   InputBase,
   useTheme,
   Button,
 } from "@mui/material";
-import {
-  createPostStart,
-  createPostSuccess,
-  createPostFailure,
-} from "../redux/postSlice.js";
+import { setPosts } from "../redux/postSlice.js";
 import { useState } from "react";
 import FlexBetween from "../components/FlexBetween.jsx";
 import WidgetWrapper from "../components/WidgetWrapper.jsx";
@@ -19,8 +16,9 @@ import UserImage from "../components/UserImage.jsx";
 import userAvatar from "../assets/userAvatar.jpg";
 
 const MyPostWidget = () => {
+  const [error, setError] = useState(null);
   const [post, setPost] = useState("");
-  const { currentUser } = useSelector((state) => state.user);
+  const { user, token } = useSelector((state) => state.user);
   const { palette } = useTheme();
   const dispatch = useDispatch();
   const mediumMain = palette.neutral.mediumMain;
@@ -28,33 +26,33 @@ const MyPostWidget = () => {
 
   const handlePost = async () => {
     try {
-      createPostStart();
       const formData = new FormData();
-      formData.append("userId", currentUser.user._id);
+      formData.append("userId", user._id);
       formData.append("description", post);
-      dispatch(createPostStart());
-   
+
       const response = await fetch(`http://localhost:8080/posts/create`, {
         method: "POST",
         headers: {
-          Authorisation: currentUser.token,
+          Authorisation: token,
         },
         body: formData,
       });
+      const data = await response.json();
       if (!response.ok) {
-        dispatch(createPostFailure("Failed to create post"));
+       setError(data.message);
         return;
       } else {
         const posts = await response.json();
-        dispatch(createPostSuccess(posts));
+        dispatch(setPosts(posts));
       }
     } catch (error) {
-      createPostFailure(error.message);
+      setError(error.message);
     }
   };
 
   return (
     <WidgetWrapper>
+      {error && <Alert severity="error">{error}</Alert>}
       <FlexBetween gap="1.5rem">
         <UserImage image={userAvatar} size="60px" />
         <InputBase

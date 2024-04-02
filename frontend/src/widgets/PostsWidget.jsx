@@ -5,13 +5,12 @@ import PostWidget from "./PostWidget";
 
 const PostsWidget = ({ isProfile = false }) => {
   const [posts, setPosts] = useState([]);
-
-  const { currentUser } = useSelector((state) => state.user);
+  const { token } = useSelector((state) => state.user);
 
   const getPosts = async () => {
     const response = await fetch("http://localhost:8080/posts", {
       method: "GET",
-      headers: { Authorization: currentUser.token },
+      headers: { Authorization: token },
     });
     const data = await response.json();
     setPosts(data);
@@ -23,7 +22,7 @@ const PostsWidget = ({ isProfile = false }) => {
       `http://localhost:8080/posts/${userId}/post`,
       {
         method: "GET",
-        headers: { Authorization: currentUser.token },
+        headers: { Authorization: token },
       }
     );
     const data = await response.json();

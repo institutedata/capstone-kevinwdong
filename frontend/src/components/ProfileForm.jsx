@@ -8,15 +8,7 @@ import {
   useTheme,
   Alert,
 } from "@mui/material";
-import {
-  updateStart,
-  updateSuccess,
-  updateFailure,
-  deleteStart,
-  deleteSuccess,
-  deleteFailure,
-  logoutSuccess,
-} from "../redux/userSlice";
+import { setUpdate, setDelete, setLogout } from "../redux/userSlice";
 import { useNavigate } from "react-router-dom";
 import { themeSettings } from "../theme";
 import { useDispatch, useSelector } from "react-redux";
@@ -24,9 +16,7 @@ import { useDispatch, useSelector } from "react-redux";
 import userAvatar from "../assets/userAvatar.jpg";
 
 const ProfilePage = () => {
-  const { currentUser, error: errorMessage } = useSelector(
-    (state) => state.user
-  );
+  const [error, setError] = useState(null);
   const [formData, setFormData] = useState({});
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -34,6 +24,8 @@ const ProfilePage = () => {
   const isNonMobile = useMediaQuery("(min-width:600px)");
   const theme = useTheme();
   const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
+  const { user, token } = useSelector((state) => state.user);
+
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.id]: e.target.value.trim() });
@@ -45,13 +37,36 @@ const ProfilePage = () => {
       return;
     }
     try {
-      dispatch(updateStart());
-      const res = await fetch(
-        `http://localhost:8080/users/update/${currentUser.user._id}`,
+      const response = await fetch(
+        `http://localhost:8080/users/update/${user._id}`,
         {
           method: "PUT",
           headers: {
-            Authorisation: currentUser.token,
+            Authorisation: token,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(formData),
+        }
+      );
+      const data = await response.json();
+      if (!response.ok) {
+        setError(data.message);
+      } else {
+        dispatch(setUpdate(data));
+      }
+    } catch (error) {
+      setError(error.message);
+    }
+  };
+
+  const handleDelete = async () => {
+    try {
+      const res = await fetch(
+        `http://localhost:8080/users/delete/${user._id}`,
+        {
+          method: "DELETE",
+          headers: {
+            Authorisation: token,
             "Content-Type": "application/json",
           },
           body: JSON.stringify(formData),
@@ -59,51 +74,30 @@ const ProfilePage = () => {
       );
       const data = await res.json();
       if (!res.ok) {
-        dispatch(updateFailure(data.message));
+        setError(data.message);
       } else {
-        dispatch(updateSuccess(data));
-      }
-    } catch (error) {
-      dispatch(updateFailure(error.message));
-    }
-  };
-
-  const handleDelete = async () => {
-    try {
-      dispatch(deleteStart());
-      const res = await fetch(
-        `http://localhost:8080/users/delete/${currentUser._id}`,
-        {
-          method: "DELETE",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(formData),
-        }
-      );
-      const data = await res.json();
-      if (!res.ok) {
-        dispatch(deleteFailure(data.message));
-      } else {
-        dispatch(deleteSuccess(data));
+        dispatch(setDelete());
         navigate("/");
       }
     } catch (error) {
-      dispatch(deleteFailure(error.message));
+      setError(error.message);
     }
   };
 
   const handleLogout = async () => {
     try {
-      const res = await fetch(`http://localhost:8080/users/logout`, {
+      const response = await fetch(`http://localhost:8080/users/logout`, {
         method: "POST",
       });
-      if (!res.ok) {
-        console.log("Failed to logout");
+      const data = await response.json();
+      if (!response.ok) {
+        setError(data.message);
       } else {
-        dispatch(logoutSuccess());
+        dispatch(setLogout());
         navigate("/");
       }
     } catch (error) {
-      console.log(error.message);
+      setError(error.message);
     }
   };
 
@@ -158,7 +152,7 @@ const ProfilePage = () => {
             >
               <TextField
                 label="First Name"
-                defaultValue={currentUser.user.firstName}
+                defaultValue={user.firstName}
                 onChange={handleChange}
                 id="firstName"
                 name="firstName"
@@ -166,7 +160,7 @@ const ProfilePage = () => {
               />
               <TextField
                 label="Last Name"
-                defaultValue={currentUser.user.lastName}
+                defaultValue={user.lastName}
                 onChange={handleChange}
                 id="lastName"
                 name="lastName"
@@ -174,7 +168,7 @@ const ProfilePage = () => {
               />
               <TextField
                 label="Height"
-                defaultValue={currentUser.user.height}
+                defaultValue={user.height}
                 onChange={handleChange}
                 id="height"
                 name="height"
@@ -182,7 +176,7 @@ const ProfilePage = () => {
               />
               <TextField
                 label="Weight"
-                defaultValue={currentUser.user.weight}
+                defaultValue={user.weight}
                 onChange={handleChange}
                 id="weight"
                 name="weight"
@@ -190,7 +184,7 @@ const ProfilePage = () => {
               />
               <TextField
                 label="Location"
-                defaultValue={currentUser.user.location}
+                defaultValue={user.location}
                 onChange={handleChange}
                 id="location"
                 name="location"
@@ -198,7 +192,7 @@ const ProfilePage = () => {
               />
               <TextField
                 label="Position"
-                defaultValue={currentUser.user.position}
+                defaultValue={user.position}
                 onChange={handleChange}
                 id="position"
                 name="position"
@@ -206,7 +200,7 @@ const ProfilePage = () => {
               />
               <TextField
                 label="Email"
-                defaultValue={currentUser.user.email}
+                defaultValue={user.email}
                 onChange={handleChange}
                 id="email"
                 name="email"
@@ -222,7 +216,7 @@ const ProfilePage = () => {
               />
             </Box>
             <Box mt={3}>
-              {errorMessage && <Alert severity="error">{errorMessage}</Alert>}
+              {error && <Alert severity="error">{error}</Alert>}
             </Box>
 
             {/* BUTTONS */}

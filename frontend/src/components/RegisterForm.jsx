@@ -10,16 +10,16 @@ import {
   Alert,  
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { themeSettings } from "../theme";
-import { registerStart, registerSuccess, registerFailure } from "../redux/userSlice";
+import { setRegister } from "../redux/userSlice";
 
 const RegisterForm = () => {
+  const [error, setError] = useState(null);
   const [formData, setFormData] = useState({});
   const { palette } = useTheme(themeSettings);
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { error: errorMessage } = useSelector((state) => state.user);
   const isNonMobile = useMediaQuery("(min-width:600px)");
 
   const handleChange = (e) => {
@@ -30,27 +30,26 @@ const RegisterForm = () => {
     e.preventDefault();
 
     if (formData.password !== formData.confirmPassword) {
-      dispatch(registerFailure("Passwords do not match"));
+      setError("Passwords do not match");
       return;
     }
 
     try {
-      dispatch(registerStart());
-      const res = await fetch("http://localhost:8080/auth/register", {
+      const response = await fetch("http://localhost:8080/auth/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
       });
-      const data = await res.json();
+      const data = await response.json();
       if (data.success === false) {
-       dispatch(registerFailure(data.message));
+       setError(data.message);
       }
-      if (res.ok) {
-        dispatch(registerSuccess(data));
-        navigate("/dashboard");
+      if (response.ok) {
+        dispatch(setRegister(data));
+        navigate("/login");
       }
     } catch (error) {
-      dispatch(registerFailure(error.message));
+      setError(error.message);
     }
   };
 
@@ -102,8 +101,8 @@ const RegisterForm = () => {
           sx={{ gridColumn: "span 4",  mb: "1rem"}}
         />
       </Box>
-      {errorMessage && <Alert severity="error">
-          {errorMessage}
+      {error && <Alert severity="error">
+          {error}
         </Alert>}
       <Box>
           <Button

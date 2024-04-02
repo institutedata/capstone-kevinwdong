@@ -4,10 +4,11 @@ import { useNavigate } from "react-router-dom";
 import { Box, Button, TextField, Typography, useTheme, Alert} from "@mui/material";
 import { themeSettings } from "../theme";
 import { useDispatch, useSelector } from "react-redux";
-import { logInStart, logInSuccess, logInFailure } from "../redux/userSlice"; 
+import { setLogin } from "../redux/userSlice"; 
 
 const LoginForm = () => {
   const [formData, setFormData] = useState({});
+  const [error, setError] = useState(null);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { error: errorMessage } = useSelector((state) => state.user);
@@ -20,27 +21,26 @@ const LoginForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!formData.email || !formData.password) {
-      dispatch(logInFailure("Please fill in all fields"));
+      setError("Please fill in all fields");
       return;
     }
     try {
-      dispatch(logInStart());
-      const res = await fetch("http://localhost:8080/auth/login", {
+      const response = await fetch("http://localhost:8080/auth/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
       });
-      const data = await res.json();
+      const data = await response.json();
 
       if (data.success === false) {
-        dispatch(logInFailure(data.message))
+        setError(data.message)
       }
-      if (res.ok) {
-        dispatch(logInSuccess(data));
+      if (response.ok) {
+        dispatch(setLogin(data));
         navigate("/home");
       }
     } catch (error) {
-      dispatch(logInFailure(error.message));
+     setError(error.message);
     }
   };
 
@@ -67,8 +67,8 @@ const LoginForm = () => {
             sx={{ mb: "1rem" }}
           />
         </Box>
-        {errorMessage && <Alert severity="error">
-          {errorMessage}
+        {error && <Alert severity="error">
+          {error}
         </Alert>}
         <Box>
           <Button

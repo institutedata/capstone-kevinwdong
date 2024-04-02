@@ -1,6 +1,9 @@
+import PropType from "prop-types";
+import { useState, useEffect} from "react";
 import {
   ManageAccountsOutlined,
   EditOutlined,
+  Height,
 } from "@mui/icons-material";
 import { Box, Typography, Divider, useTheme } from "@mui/material";
 import WidgetWrapper from "../components/WidgetWrapper.jsx";
@@ -8,30 +11,46 @@ import FlexBetween from "../components/FlexBetween.jsx";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import UserImage from "../components/UserImage.jsx";
-import userAvatar from '../assets/userAvatar.jpg';
 import FacebookIcon from "@mui/icons-material/Facebook";
 
 
-const UserWidget = () => {
-  const { currentUser } = useSelector((state) => state.user);
-  const user = currentUser.user
+const UserWidget = ({ userId }) => {
+  const [user, setUser] = useState({});
+  const { token } = useSelector((state) => state.user);
   const navigate = useNavigate();
+
   const { palette } = useTheme();
   const dark = palette.neutral.dark;
   const medium = palette.neutral.medium;
   const main = palette.neutral.main;  
 
+  const getUser = async () => {
+    const response = await fetch(`http://localhost:8080/users/${userId}`, {
+      method: "GET",
+      headers: { Authorization: token },
+    });
+    const data = await response.json();
+      setUser(data);
+      console.log(data);
+  };
+
+  useEffect(() => {
+    getUser();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+
 
   return (
     <WidgetWrapper>
-      {/* FIRST ROW */}
+ 
       <FlexBetween
         gap="0.5rem"
         pb="1.1rem"
         onClick={() => navigate(`/profile/${user._id}`)}
       >
         <FlexBetween gap="1rem">
-          <UserImage image={userAvatar} size="40px" />
+          <UserImage image={user.userImage} size="40px" />
           <Box>
             <Typography
               variant="h4"
@@ -47,7 +66,7 @@ const UserWidget = () => {
               {user.firstName} {user.lastName}
             </Typography>
             <Typography color={medium}>
-              {user.friends.length} friends
+             friends
             </Typography>
           </Box>
         </FlexBetween>
@@ -68,11 +87,11 @@ const UserWidget = () => {
         </Box>
         <Box display="flex" alignItems="center" gap="1rem" mb="0.5rem">
           <Typography color={medium}>Height:</Typography>
-          <Typography color={medium}>{user.location}</Typography>
+          <Typography color={medium}>{user.height}</Typography>
         </Box>
         <Box display="flex" alignItems="center" gap="1rem" mb="0.5rem">
           <Typography color={medium}>Weight:</Typography>
-          <Typography color={medium}>{user.position}</Typography>
+          <Typography color={medium}>{user.weight}</Typography>
         </Box>
       </Box>
 
@@ -111,5 +130,11 @@ const UserWidget = () => {
     </WidgetWrapper>
   );
 };
+
+UserWidget.propTypes = {
+  userId: PropType.string,
+  userImage: PropType.string,
+};
+
 
 export default UserWidget;
