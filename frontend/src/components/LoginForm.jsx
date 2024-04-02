@@ -37,7 +37,7 @@ const LoginForm = () => {
       }
       if (res.ok) {
         dispatch(logInSuccess(data));
-        navigate("/");
+        navigate("/home");
       }
     } catch (error) {
       dispatch(logInFailure(error.message));

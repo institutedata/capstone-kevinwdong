@@ -18,9 +18,9 @@ const PostWidget = ({
   postUserId,
   name,
   description,
-  location,
+  position,
   picturePath,
-  userPicturePath,
+  userImage,
   likes,
   comments,
 }) => {
@@ -28,6 +28,7 @@ const PostWidget = ({
   const { currentUser } = useSelector((state) => state.user)
   const loggedInUserId = currentUser.user._id;
   const isLiked = Boolean(likes[loggedInUserId]);
+  const likeCount = Object.keys(likes).length;  
   const { palette } = useTheme();
   const main = palette.neutral.main;
   const primary = palette.primary.main;
@@ -38,8 +39,8 @@ const PostWidget = ({
       <Friend
         friendId={postUserId}
         name={name}
-        subtitle={location}
-        userPicturePath={userPicturePath}
+        subtitle={position}
+        userImage={userImage}
       />
       <Typography color={main} sx={{ mt: "1rem" }}>
         {description}
@@ -63,14 +64,14 @@ const PostWidget = ({
                 <FavoriteBorderOutlined />
               )}
             </IconButton>
-            <Typography>{25}</Typography>
+            <Typography>{likeCount}</Typography>
           </FlexBetween>
 
           <FlexBetween gap="0.3rem">
             <IconButton >
               <ChatBubbleOutlineOutlined />
             </IconButton>
-            <Typography>{33}</Typography>
+            <Typography>{comments}</Typography>
           </FlexBetween>
         </FlexBetween>
 

@@ -1,4 +1,5 @@
 import { Box, useMediaQuery } from "@mui/material";
+import { useSelector } from "react-redux";
 import UserWidget from "../widgets/UserWidget.jsx";
 import MyPostWidget from "../widgets/MyPostWidget.jsx";
 import PostsWidget from "../widgets/PostsWidget.jsx";
@@ -8,6 +9,7 @@ import GamesWidget from "../widgets/GamesWidget.jsx";
 
 const HomePage = () => {
   const isNonMobileScreens = useMediaQuery("(min-width:1000px)");
+  const { currentUser } = useSelector((state) => state.user);
 
   return (
     <Box>
@@ -36,7 +38,7 @@ const HomePage = () => {
           <Box flexBasis="26%">
             <GamesWidget />
             <Box m="2rem 0" />
-            <FriendListWidget />
+            <FriendListWidget userId={currentUser.user._id}/>
           </Box>
         )}
       </Box>
