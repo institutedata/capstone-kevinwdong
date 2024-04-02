@@ -41,24 +41,26 @@ export const createGame = async (req, res, next) => {
   }
 };
 
-//@desc     Get all posts
-//route    GET /posts
+
+//@desc     Get all games
+//route    GET /games
 export const getFeedGames = async (req, res, next) => {
   try {
-    const post = await Post.find();
-    res.status(200).json(post);
+    const games = await Game.find();
+    res.status(200).json(games);
   } catch (error) {
     next(errorHandler(400, error.message));
   }
 };
 
-//@desc     Get a user's posts
-//@route    GET /posts/:userId/posts
+
+//@desc     Get a user's games
+//@route    GET /games/:userId/games
 export const getUserGames = async (req, res, next) => {
   try {
     const { userId } = req.params;
-    const post = await Post.find({ userId });
-    res.status(200).json(post);
+    const game = await Game.find({ userId });
+    res.status(200).json(game);
   } catch (error) {
     next(errorHandler(400, error.message));
   }

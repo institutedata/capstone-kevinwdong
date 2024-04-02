@@ -1,30 +1,78 @@
-import { Box, Typography, useTheme } from "@mui/material";
-import WidgetWrapper from "../components/WidgetWrapper.jsx";
+import { PropTypes } from "prop-types";
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { setPosts } from "../redux/postSlice.js";
+import GameWidget from "./GameWidget";
 
+const GamesWidget = ({ isProfile = false }) => {
+  const dispatch = useDispatch();
+  const { token } = useSelector((state) => state.user);
 
-
-const GamesWidget = () => {
-  const { palette } = useTheme();
   const getGames = async () => {
-    
+    const response = await fetch("http://localhost:8080/games", {
+      method: "GET",
+      headers: { Authorization: token },
+    });
+    const data = await response.json();
+    dispatch(setPosts(data));
   };
-  getGames();
+
+
+  const getUserGames = async () => {
+    const response = await fetch(
+      `http://localhost:8080/posts/${userId}/post`,
+      {
+        method: "GET",
+        headers: { Authorization: token },
+      }
+    );
+    const data = await response.json();
+    setPosts(data);
+  }
+
+  useEffect(() => {
+    if (isProfile) {
+      getUserGames();
+    } else {
+      getGames();
+    }
+  }, []);
 
   return (
-    <WidgetWrapper>
-      <Typography
-        color={palette.neutral.dark}
-        variant="h5"
-        fontWeight="500"
-        sx={{ mb: "1.5rem" }}
-      >
-        Ongoing Games
-      </Typography>
-      <Box display="flex" flexDirection="column" gap="1.5rem">
-       Games List here
-      </Box>
-    </WidgetWrapper>
+    <>
+      {posts.map(
+        ({
+          _id,
+          userId,
+          firstName,
+          lastName,
+          description,
+          position,
+          postImage,
+          userImage,
+          likes,
+          comments,
+        }) => (
+          <GameWidget
+            key={_id}
+            postId={_id}
+            postUserId={userId}
+            name={`${firstName} ${lastName}`}
+            description={description}
+            position={position}
+            postImage={postImage}
+            userImage={userImage}
+            likes={likes}
+            comments={comments}
+          />
+        )
+      )}
+    </>
   );
+};
+
+GamesWidget.propTypes = {
+  userId: PropTypes.string,
 };
 
 export default GamesWidget;

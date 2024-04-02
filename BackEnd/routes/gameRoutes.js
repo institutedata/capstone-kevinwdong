@@ -12,7 +12,7 @@ router.post('/create', createGame);
 router.get("/", getFeedGames);
 
 //@desc    Get a user's games
-router.get("/:userId/posts", getUserGames);
+router.get("/:userId/games", getUserGames);
 
 //@desc     Like a game
 router.patch("/:id/like", likeGame);
