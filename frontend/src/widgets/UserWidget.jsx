@@ -1,52 +1,36 @@
 import {
   ManageAccountsOutlined,
   EditOutlined,
-  LocationOnOutlined,
-  WorkOutlineOutlined,
 } from "@mui/icons-material";
 import { Box, Typography, Divider, useTheme } from "@mui/material";
-import UserImage from "../components/UserImage";
-import FlexBetween from "../components/FlexBetween";
-import WidgetWrapper from "../components/WidgetWrapper";
-import { useSelector } from "react-redux";
-import { useEffect, useState } from "react";
+import WidgetWrapper from "../components/WidgetWrapper.jsx";
+import FlexBetween from "../components/FlexBetween.jsx";
 import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
+import UserImage from "../components/UserImage.jsx";
+import userAvatar from '../assets/userAvatar.jpg';
+import FacebookIcon from "@mui/icons-material/Facebook";
 
-const UserWidget = ({ userId, picturePath }) => {
-  const [user, setUser] = useState(null);
-  const { palette } = useTheme();
+
+const UserWidget = () => {
+  // const [user, setUser] = useState({});
+  const { currentUser } = useSelector((state) => state.user);
+  // const token = useSelector((state) => state.token);
   const navigate = useNavigate();
-  const token = useSelector((state) => state.token);
+  const { palette } = useTheme();
   const dark = palette.neutral.dark;
   const medium = palette.neutral.medium;
   const main = palette.neutral.main;
 
-  const getUser = async () => {
-  //   const response = await fetch(`http://localhost:8080/users/${userId}`, {
+  // const getUser = async () => {
+  //   const response = await fetch(`http://localhost:3001/users/${userId}`, {
   //     method: "GET",
-  //     headers: { Authorization: `Bearer ${token}` },
+  //     headers: { Authorization: token },
   //   });
-  //   const data = await response.json();
-  //   setUser(data);
+  //   const currentUser = await response.json();
+  //   setUser(currentUser)
   // };
 
-  // useEffect(() => {
-  //   getUser();
-  // }, []); // eslint-disable-line react-hooks/exhaustive-deps
-
-  // if (!user) {
-  //   return null;
-  // }
-
-  // const {
-  //   firstName,
-  //   lastName,
-  //   location,
-  //   occupation,
-  //   viewedProfile,
-  //   impressions,
-  //   friends,
-  // } = user;
 
   return (
     <WidgetWrapper>
@@ -54,10 +38,10 @@ const UserWidget = ({ userId, picturePath }) => {
       <FlexBetween
         gap="0.5rem"
         pb="1.1rem"
-        onClick={() => navigate(`/profile/${userId}`)}
+        onClick={() => navigate(`/profile/${currentUser.user._id}`)}
       >
         <FlexBetween gap="1rem">
-          <UserImage image={picturePath} />
+          <UserImage image={userAvatar} size="40px" />
           <Box>
             <Typography
               variant="h4"
@@ -70,9 +54,11 @@ const UserWidget = ({ userId, picturePath }) => {
                 },
               }}
             >
-              {firstName} {lastName}
+              {currentUser.firstName} {currentUser.lastName}
             </Typography>
-            <Typography color={medium}>{friends.length} friends</Typography>
+            <Typography color={medium}>
+              {currentUser.friends.length} friends
+            </Typography>
           </Box>
         </FlexBetween>
         <ManageAccountsOutlined />
@@ -83,31 +69,21 @@ const UserWidget = ({ userId, picturePath }) => {
       {/* SECOND ROW */}
       <Box p="1rem 0">
         <Box display="flex" alignItems="center" gap="1rem" mb="0.5rem">
-          <LocationOnOutlined fontSize="large" sx={{ color: main }} />
-          <Typography color={medium}>{location}</Typography>
+          <Typography color={medium}>Location:</Typography>
+          <Typography color={medium}>{currentUser.location}</Typography>
         </Box>
-        <Box display="flex" alignItems="center" gap="1rem">
-          <WorkOutlineOutlined fontSize="large" sx={{ color: main }} />
-          <Typography color={medium}>{occupation}</Typography>
+        <Box display="flex" alignItems="center" gap="1rem" mb="0.5rem">
+          <Typography color={medium}>Position:</Typography>
+          <Typography color={medium}>{currentUser.position}</Typography>
         </Box>
-      </Box>
-
-      <Divider />
-
-      {/* THIRD ROW */}
-      <Box p="1rem 0">
-        <FlexBetween mb="0.5rem">
-          <Typography color={medium}>Who's viewed your profile</Typography>
-          <Typography color={main} fontWeight="500">
-            {viewedProfile}
-          </Typography>
-        </FlexBetween>
-        <FlexBetween>
-          <Typography color={medium}>Impressions of your post</Typography>
-          <Typography color={main} fontWeight="500">
-            {impressions}
-          </Typography>
-        </FlexBetween>
+        <Box display="flex" alignItems="center" gap="1rem" mb="0.5rem">
+          <Typography color={medium}>Height:</Typography>
+          <Typography color={medium}>{currentUser.location}</Typography>
+        </Box>
+        <Box display="flex" alignItems="center" gap="1rem" mb="0.5rem">
+          <Typography color={medium}>Weight:</Typography>
+          <Typography color={medium}>{currentUser.position}</Typography>
+        </Box>
       </Box>
 
       <Divider />
@@ -120,12 +96,11 @@ const UserWidget = ({ userId, picturePath }) => {
 
         <FlexBetween gap="1rem" mb="0.5rem">
           <FlexBetween gap="1rem">
-            <img src="../assets/twitter.png" alt="twitter" />
+          <FacebookIcon />
             <Box>
               <Typography color={main} fontWeight="500">
-                Twitter
+                TikTok
               </Typography>
-              <Typography color={medium}>Social Network</Typography>
             </Box>
           </FlexBetween>
           <EditOutlined sx={{ color: main }} />
@@ -133,12 +108,11 @@ const UserWidget = ({ userId, picturePath }) => {
 
         <FlexBetween gap="1rem">
           <FlexBetween gap="1rem">
-            <img src="../assets/linkedin.png" alt="linkedin" />
+            <FacebookIcon />
             <Box>
               <Typography color={main} fontWeight="500">
-                Linkedin
+                Facebook
               </Typography>
-              <Typography color={medium}>Network Platform</Typography>
             </Box>
           </FlexBetween>
           <EditOutlined sx={{ color: main }} />

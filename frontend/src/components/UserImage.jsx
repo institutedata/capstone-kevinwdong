@@ -1,7 +1,7 @@
 import PropType from "prop-types";
 import { Box } from "@mui/material";
 
-const UserImage = ({ image, size = "60px" }) => {
+const UserImage = ({ image, size }) => {
   return (
     <Box width={size} height={size}>
       <img
@@ -9,14 +9,14 @@ const UserImage = ({ image, size = "60px" }) => {
         width={size}
         height={size}
         alt="user"
-        src={`http://localhost:8080/images/${image}`}
+        src={image}
       />
     </Box>
   );
 };
 
 UserImage.propTypes = {
-  image: PropType.string,
+  imageURL: PropType.string,
   size: PropType.string,
 };
 

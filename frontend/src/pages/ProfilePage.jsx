@@ -15,6 +15,7 @@ import {
   deleteStart,
   deleteSuccess,
   deleteFailure,
+  logoutSuccess,
 } from "../redux/userSlice";
 import { useNavigate } from "react-router-dom";
 import { themeSettings } from "../theme";
@@ -88,7 +89,24 @@ const ProfilePage = () => {
     }
   };
 
-  const handleLogout = () => {};
+  const handleLogout = async () => {
+    try {
+      const res = await fetch(
+        `http://localhost:8080/users/logout`,
+        {
+          method: "POST",
+        }
+      );
+      if (!res.ok) {
+        console.log("Failed to logout");
+      } else {
+        dispatch(logoutSuccess());
+        navigate("/");
+      }
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
 
   return (
     <>
