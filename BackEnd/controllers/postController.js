@@ -57,7 +57,8 @@ export const getUserPosts = async (req, res, next) => {
   }
 };
 
-
+//@desc     Like a post
+//@route    PATCH /posts/:id/like
 export const likePost = async (req, res, next) => {
   try {
     const { id } = req.params;

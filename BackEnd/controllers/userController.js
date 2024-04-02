@@ -2,6 +2,21 @@ import User from "../models/user.js";
 import { errorHandler } from "../utils/error.js";
 import bcryptjs from "bcryptjs";
 
+
+//@desc     Get a user
+//@route    GET /users/:id
+export const getUser = async (req, res, next) => {
+  try {
+    const user = await User.findById(req.params.id);
+    if (!user) {
+      return next(errorHandler(404, "User not found"));
+    }
+    res.status(200).json(user);
+  } catch (error) {
+    next(error);
+  }
+};
+
 //@desc     Update a user
 //@route    PUT /users/update/:userId
 export const updateUser = async (req, res, next) => {
@@ -17,7 +32,6 @@ export const updateUser = async (req, res, next) => {
       }
       req.body.password = bcryptjs.hashSync(req.body.password, 10);
     }
-    const token = req.header("Authorisation");
 
     const user = await User.findByIdAndUpdate(
       req.params.userId,
@@ -37,7 +51,7 @@ export const updateUser = async (req, res, next) => {
       { new: true }
     );
     delete user.password;
-    res.status(200).json({ token, user });
+    res.status(200).json(user);
   } catch (error) {
     next(error);
   }

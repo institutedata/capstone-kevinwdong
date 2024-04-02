@@ -92,6 +92,7 @@ export const loginUser = async (req, res, next) => {
     res
       .status(200)
       .json({token, user});
+      console.log(token, user)
   } catch (error) {
     next(error);
   }
