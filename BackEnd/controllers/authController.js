@@ -79,7 +79,7 @@ export const loginUser = async (req, res, next) => {
 
 
     if (!user) {
-      return next(errorHandler(401, "Invalid email"));
+      return next(errorHandler(401, "Email not found"));
     }
     const isMatch = bcryptjs.compareSync(password, user.password);
 
