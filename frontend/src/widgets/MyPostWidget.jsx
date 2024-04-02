@@ -1,39 +1,56 @@
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { ImageOutlined } from "@mui/icons-material";
 import {
-  Box,
   Divider,
   Typography,
   InputBase,
   useTheme,
   Button,
 } from "@mui/material";
+import {
+  createPostStart,
+  createPostSuccess,
+  createPostFailure,
+} from "../redux/postSlice.js";
+import { useState } from "react";
 import FlexBetween from "../components/FlexBetween.jsx";
 import WidgetWrapper from "../components/WidgetWrapper.jsx";
 import UserImage from "../components/UserImage.jsx";
 import userAvatar from "../assets/userAvatar.jpg";
-import { useState } from "react";
 
 const MyPostWidget = () => {
-  const [isImage, setIsImage] = useState(false);
-  const [image, setImage] = useState(null);
   const [post, setPost] = useState("");
   const { currentUser } = useSelector((state) => state.user);
   const { palette } = useTheme();
+  const dispatch = useDispatch();
   const mediumMain = palette.neutral.mediumMain;
   const medium = palette.neutral.medium;
 
   const handlePost = async () => {
-    const formData = new FormData();
-    const response = await fetch(`http://localhost:3001/posts`, {
-      method: "POST",
-      headers: { Authorization: currentUser.token },
-      body: formData,
-    });
-    const posts = await response.json();
-    
-
-
+    try {
+      createPostStart();
+      const formData = new FormData();
+      formData.append("userId", currentUser.user._id);
+      formData.append("description", post);
+      dispatch(createPostStart());
+   
+      const response = await fetch(`http://localhost:8080/posts/create`, {
+        method: "POST",
+        headers: {
+          Authorisation: currentUser.token,
+        },
+        body: formData,
+      });
+      if (!response.ok) {
+        dispatch(createPostFailure("Failed to create post"));
+        return;
+      } else {
+        const posts = await response.json();
+        dispatch(createPostSuccess(posts));
+      }
+    } catch (error) {
+      createPostFailure(error.message);
+    }
   };
 
   return (
@@ -52,19 +69,11 @@ const MyPostWidget = () => {
           }}
         />
       </FlexBetween>
-      {isImage && (
-        <Box
-          border={`1px solid ${medium}`}
-          borderRadius="5px"
-          mt="1rem"
-          p="1rem"
-        ></Box>
-      )}
 
       <Divider sx={{ margin: "1.25rem 0" }} />
 
       <FlexBetween>
-        <FlexBetween gap="0.25rem" onClick={() => setIsImage(!isImage)}>
+        <FlexBetween gap="0.25rem" onClick={() => console.log("upload image")}>
           <ImageOutlined sx={{ color: mediumMain }} />
           <Typography
             color={mediumMain}

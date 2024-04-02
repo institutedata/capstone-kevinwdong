@@ -4,10 +4,14 @@ import { errorHandler } from "../utils/error.js";
 
 //@desc     Create a post
 //@route    POST /posts/create
-export const createPost = async (req, res) => {
+export const createPost = async (req, res, next) => {
   try {
+
     const { userId, description, postImage } = req.body;
+  
     const user = await User.findById(userId);
+    console.log(user);
+ 
     const newPost = new Post({
       userId,
       firstName: user.firstName,

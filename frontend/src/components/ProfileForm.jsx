@@ -41,7 +41,6 @@ const ProfilePage = () => {
 
   const handleUpdate = async (e) => {
     e.preventDefault();
-    console.log(formData);
     if (Object.keys(formData).length === 0) {
       return;
     }

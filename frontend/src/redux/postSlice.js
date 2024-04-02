@@ -10,22 +10,22 @@ const postSlice = createSlice({
   name: "post",
   initialState,
   reducers: {
-    logInStart: (state) => {
-        state.loading = true;
-        state.error = null;
-      },
-      logInSuccess: (state, action) => {
-        state.currentUser = action.payload;
-        state.loading = false;
-        state.error = null;
-      },
-      logInFailure: (state, action) => {
-        state.loading = false;
-        state.error = action.payload;
-      },
+    createPostStart: (state) => {
+      state.loading = true;
+      state.error = null;
+    },
+    createPostSuccess: (state, action) => {
+      state.newPost = action.payload;
+      state.loading = false;
+      state.error = null;
+    },
+    createPostFailure: (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    },
   },
 });
 
-export const {} = postSlice.actions;
+export const {createPostStart, createPostSuccess, createPostFailure} = postSlice.actions;
 
 export default postSlice.reducer;
