@@ -2,7 +2,6 @@ import User from "../models/user.js";
 import { errorHandler } from "../utils/error.js";
 import bcryptjs from "bcryptjs";
 
-
 //@desc     Update a user
 //@route    PUT /users/update/:userId
 export const updateUser = async (req, res, next) => {
@@ -38,13 +37,11 @@ export const updateUser = async (req, res, next) => {
       { new: true }
     );
     delete user.password;
-    res.status(200).json({token, user});
+    res.status(200).json({ token, user });
   } catch (error) {
     next(error);
   }
 };
-
-
 
 //@desc     Delete a user
 //@route    DELETE /users/delete/:userId
@@ -60,7 +57,6 @@ export const deleteUser = async (req, res, next) => {
   }
 };
 
-
 //@desc     Logout a user
 //@route    POST /users/logout
 export const logoutUser = async (req, res, next) => {
@@ -74,6 +70,26 @@ export const logoutUser = async (req, res, next) => {
   }
 };
 
+//@desc     Get a user's friends
+//@route    GET /users/:id/friends
+export const getUserFriends = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const user = await User.findById(id);
+
+    const friends = await Promise.all(
+      user.friends.map((id) => User.findById(id))
+    );
+    const formattedFriends = friends.map(
+      ({ _id, firstName, lastName, position, location, userImage }) => {
+        return { _id, firstName, lastName, position, location, userImage };
+      }
+    );
+    res.status(200).json(formattedFriends);
+  } catch (error) {
+    next(error);
+  }
+};
 
 //@desc     Add or remove a friend
 //@route    PATCH /users/:id/:friendId
@@ -103,7 +119,7 @@ export const addRemoveFriend = async (req, res, next) => {
     );
 
     res.status(200).json(formattedFriends);
-  } catch (err) {
+  } catch (error) {
     next(error);
   }
 };

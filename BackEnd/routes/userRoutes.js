@@ -1,5 +1,5 @@
 import express from "express";
-import { updateUser, deleteUser, logoutUser, addRemoveFriend } from "../controllers/userController.js";
+import { updateUser, deleteUser, logoutUser, getUserFriends, addRemoveFriend } from "../controllers/userController.js";
 import { verifyToken } from "../utils/verifyToken.js";
 
 const router = express.Router();
@@ -13,7 +13,10 @@ router.delete('/delete/:userId', verifyToken, deleteUser);
 // @desc    Logout a user
 router.post('/logout', logoutUser);
 
+// @desc    Get a user's friends
+router.get("/:id/friends", getUserFriends);
 
-router.patch('/:id/:friendId',verifyToken, addRemoveFriend);
+// @desc    Add or remove a friend
+router.patch('/:id/:friendId', addRemoveFriend);
 
 export default router;

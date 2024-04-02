@@ -10,7 +10,6 @@ export const createPost = async (req, res, next) => {
     const { userId, description, postImage } = req.body;
   
     const user = await User.findById(userId);
-    console.log(user);
  
     const newPost = new Post({
       userId,
@@ -36,7 +35,7 @@ export const createPost = async (req, res, next) => {
 
 //@desc     Get all posts
 //route    GET /posts
-export const getFeedPosts = async (req, res) => {
+export const getFeedPosts = async (req, res, next) => {
   try {
     const post = await Post.find();
     res.status(200).json(post);
@@ -48,15 +47,38 @@ export const getFeedPosts = async (req, res) => {
 
 //@desc     Get a user's posts
 //@route    GET /posts/:userId/posts
-export const getUserPosts = async (req, res) => {
+export const getUserPosts = async (req, res, next) => {
   try {
     const { userId } = req.params;
     const post = await Post.find({ userId });
     res.status(200).json(post);
-  } catch (err) {
+  } catch (error) {
     next(errorHandler(400, error.message));
   }
 };
 
 
+export const likePost = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const { userId } = req.body;
+    const post = await Post.findById(id);
+    const isLiked = post.likes.get(userId);
 
+    if (isLiked) {
+      post.likes.delete(userId);
+    } else {
+      post.likes.set(userId, true);
+    }
+
+    const updatedPost = await Post.findByIdAndUpdate(
+      id,
+      { likes: post.likes },
+      { new: true }
+    );
+
+    res.status(200).json(updatedPost);
+  } catch (error) {
+    next(errorHandler(400, error.message));
+  }
+};
