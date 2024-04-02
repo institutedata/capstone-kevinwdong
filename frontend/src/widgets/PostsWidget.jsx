@@ -1,8 +1,24 @@
 
 
+import PostWidget from "./PostWidget";
+
 const PostsWidget = () => {
+
+
+  const getPosts = async () => {
+
+  }
+
+  const getUserPosts = async () => {
+
+  }
+
+  getPosts();
+  getUserPosts();
+
+
   return (
-    <div>PostsWidget</div>
+    <PostWidget />
   )
 }
 

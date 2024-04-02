@@ -15,8 +15,8 @@ import {
   Message,
   DarkMode,
   LightMode,
-  Notifications,
-  Help,
+  Login,
+  AccountBoxOutlined,
   Menu,
   Close,
 } from "@mui/icons-material";
@@ -40,7 +40,7 @@ const Navbar = () => {
   const primaryLight = theme.palette.primary.light;
   const alt = theme.palette.background.alt;
 
-  // const fullName = `${currentUser.firstName} ${currentUser.lastName}`;
+  const fullName = `${currentUser.firstName} ${currentUser.lastName}`;
 
 
   return (
@@ -78,9 +78,6 @@ const Navbar = () => {
       {/* DESKTOP NAV */}
       {isNonMobileScreens ? (
         <FlexBetween gap="2rem">
-
-
-          
           <IconButton onClick={() => dispatch(toggleMode())}>
             { theme.palette.mode === "dark" ? (
               <DarkMode sx={{ fontSize: "25px" }} />
@@ -88,14 +85,8 @@ const Navbar = () => {
               <LightMode sx={{ color: dark, fontSize: "25px" }} />
             )}
           </IconButton>
-
-
-
-
-
-          <Message sx={{ fontSize: "25px" }} />
-          <Notifications sx={{ fontSize: "25px" }} />
-          <Help sx={{ fontSize: "25px" }} />
+          <Login sx={{ fontSize: "25px" }} onClick={() => navigate('/login')}/>
+          <AccountBoxOutlined sx={{ fontSize: "25px" }} onClick={() => navigate('/profile')}/>
           <FormControl variant="standard" >
             <Select
               sx={{
@@ -168,8 +159,8 @@ const Navbar = () => {
               )}
             </IconButton>
             <Message sx={{ fontSize: "25px" }} />
-            <Notifications sx={{ fontSize: "25px" }} />
-            <Help sx={{ fontSize: "25px" }} />
+            <Login sx={{ fontSize: "25px" }} />
+            <AccountBoxOutlined sx={{ fontSize: "25px" }} />
             <FormControl variant="standard" value={fullName}>
               <Select
                 value={fullName}
@@ -188,7 +179,7 @@ const Navbar = () => {
                 }}
                 input={<InputBase />}
               >
-                <MenuItem value={fullName}>
+                <MenuItem value={fullName} onClick={() => navigate('/profile')}>
                  {currentUser ? <Typography>{fullName}</Typography> : <Typography>Guest</Typography>}
                 </MenuItem>
                 <MenuItem onClick={() => dispatch(setLogout())}>
