@@ -15,8 +15,9 @@ export const updateUser = async (req, res, next) => {
       }
       req.body.password = bcryptjs.hashSync(req.body.password, 10);
     }
+    const token = req.header("Authorisation");
 
-    const updatedUser = await User.findByIdAndUpdate(
+    const user = await User.findByIdAndUpdate(
       req.params.userId,
       {
         $set: {
@@ -33,8 +34,8 @@ export const updateUser = async (req, res, next) => {
       },
       { new: true }
     );
-    const { password, ...rest } = updatedUser._doc;
-    res.status(200).json(rest);
+    delete user.password;
+    res.status(200).json({token, user});
   } catch (error) {
     next(error);
   }
@@ -55,7 +56,7 @@ export const deleteUser = async (req, res, next) => {
 export const logoutUser = async (req, res, next) => {
   try {
     res
-      .clearCookie("access_token")
+      // .clearCookie("access_token")
       .status(200)
       .json("User has been logged out");
   } catch (error) {
