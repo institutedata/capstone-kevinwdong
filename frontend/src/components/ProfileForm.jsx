@@ -48,10 +48,13 @@ const ProfilePage = () => {
     try {
       dispatch(updateStart());
       const res = await fetch(
-        `http://localhost:8080/users/update/${currentUser._id}`,
+        `http://localhost:8080/users/update/${currentUser.user._id}`,
         {
           method: "PUT",
-          headers: { "Content-Type": "application/json" },
+          headers: {
+            Authorisation: currentUser.token,
+            "Content-Type": "application/json",
+          },
           body: JSON.stringify(formData),
         }
       );
@@ -91,12 +94,9 @@ const ProfilePage = () => {
 
   const handleLogout = async () => {
     try {
-      const res = await fetch(
-        `http://localhost:8080/users/logout`,
-        {
-          method: "POST",
-        }
-      );
+      const res = await fetch(`http://localhost:8080/users/logout`, {
+        method: "POST",
+      });
       if (!res.ok) {
         console.log("Failed to logout");
       } else {
@@ -159,7 +159,7 @@ const ProfilePage = () => {
             >
               <TextField
                 label="First Name"
-                defaultValue={currentUser.firstName}
+                defaultValue={currentUser.user.firstName}
                 onChange={handleChange}
                 id="firstName"
                 name="firstName"
@@ -167,7 +167,7 @@ const ProfilePage = () => {
               />
               <TextField
                 label="Last Name"
-                defaultValue={currentUser.lastName}
+                defaultValue={currentUser.user.lastName}
                 onChange={handleChange}
                 id="lastName"
                 name="lastName"
@@ -175,7 +175,7 @@ const ProfilePage = () => {
               />
               <TextField
                 label="Height"
-                defaultValue={currentUser.height}
+                defaultValue={currentUser.user.height}
                 onChange={handleChange}
                 id="height"
                 name="height"
@@ -183,7 +183,7 @@ const ProfilePage = () => {
               />
               <TextField
                 label="Weight"
-                defaultValue={currentUser.weight}
+                defaultValue={currentUser.user.weight}
                 onChange={handleChange}
                 id="weight"
                 name="weight"
@@ -191,7 +191,7 @@ const ProfilePage = () => {
               />
               <TextField
                 label="Location"
-                defaultValue={currentUser.location}
+                defaultValue={currentUser.user.location}
                 onChange={handleChange}
                 id="location"
                 name="location"
@@ -199,7 +199,7 @@ const ProfilePage = () => {
               />
               <TextField
                 label="Position"
-                defaultValue={currentUser.position}
+                defaultValue={currentUser.user.position}
                 onChange={handleChange}
                 id="position"
                 name="position"
@@ -207,7 +207,7 @@ const ProfilePage = () => {
               />
               <TextField
                 label="Email"
-                defaultValue={currentUser.email}
+                defaultValue={currentUser.user.email}
                 onChange={handleChange}
                 id="email"
                 name="email"
@@ -222,7 +222,10 @@ const ProfilePage = () => {
                 sx={{ gridColumn: "span 4" }}
               />
             </Box>
-            {errorMessage && <Alert severity="error">{errorMessage}</Alert>}
+            <Box mt={3}>
+              {errorMessage && <Alert severity="error">{errorMessage}</Alert>}
+            </Box>
+
             {/* BUTTONS */}
             <Box display="flex" justifyContent="end">
               <Button

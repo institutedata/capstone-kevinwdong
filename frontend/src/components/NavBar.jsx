@@ -40,7 +40,7 @@ const Navbar = () => {
   const primaryLight = theme.palette.primary.light;
   const alt = theme.palette.background.alt;
 
-  const fullName = `${currentUser.firstName} ${currentUser.lastName}`;
+  // const fullName = `${currentUser.firstName} ${currentUser.lastName}`;
 
 
   return (

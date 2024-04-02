@@ -13,23 +13,13 @@ import FacebookIcon from "@mui/icons-material/Facebook";
 
 
 const UserWidget = () => {
-  // const [user, setUser] = useState({});
   const { currentUser } = useSelector((state) => state.user);
-  // const token = useSelector((state) => state.token);
+  const user = currentUser.user
   const navigate = useNavigate();
   const { palette } = useTheme();
   const dark = palette.neutral.dark;
   const medium = palette.neutral.medium;
-  const main = palette.neutral.main;
-
-  // const getUser = async () => {
-  //   const response = await fetch(`http://localhost:3001/users/${userId}`, {
-  //     method: "GET",
-  //     headers: { Authorization: token },
-  //   });
-  //   const currentUser = await response.json();
-  //   setUser(currentUser)
-  // };
+  const main = palette.neutral.main;  
 
 
   return (
@@ -38,7 +28,7 @@ const UserWidget = () => {
       <FlexBetween
         gap="0.5rem"
         pb="1.1rem"
-        onClick={() => navigate(`/profile/${currentUser.user._id}`)}
+        onClick={() => navigate(`/profile/${user._id}`)}
       >
         <FlexBetween gap="1rem">
           <UserImage image={userAvatar} size="40px" />
@@ -54,10 +44,10 @@ const UserWidget = () => {
                 },
               }}
             >
-              {currentUser.firstName} {currentUser.lastName}
+              {user.firstName} {user.lastName}
             </Typography>
             <Typography color={medium}>
-              {currentUser.friends.length} friends
+              {user.friends.length} friends
             </Typography>
           </Box>
         </FlexBetween>
@@ -70,19 +60,19 @@ const UserWidget = () => {
       <Box p="1rem 0">
         <Box display="flex" alignItems="center" gap="1rem" mb="0.5rem">
           <Typography color={medium}>Location:</Typography>
-          <Typography color={medium}>{currentUser.location}</Typography>
+          <Typography color={medium}>{user.location}</Typography>
         </Box>
         <Box display="flex" alignItems="center" gap="1rem" mb="0.5rem">
           <Typography color={medium}>Position:</Typography>
-          <Typography color={medium}>{currentUser.position}</Typography>
+          <Typography color={medium}>{user.position}</Typography>
         </Box>
         <Box display="flex" alignItems="center" gap="1rem" mb="0.5rem">
           <Typography color={medium}>Height:</Typography>
-          <Typography color={medium}>{currentUser.location}</Typography>
+          <Typography color={medium}>{user.location}</Typography>
         </Box>
         <Box display="flex" alignItems="center" gap="1rem" mb="0.5rem">
           <Typography color={medium}>Weight:</Typography>
-          <Typography color={medium}>{currentUser.position}</Typography>
+          <Typography color={medium}>{user.position}</Typography>
         </Box>
       </Box>
 
