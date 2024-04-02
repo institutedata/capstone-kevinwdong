@@ -87,6 +87,7 @@ export const loginUser = async (req, res, next) => {
     if (!isMatch) return next(errorHandler(401, "Invalid password"));
   
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
+
     console.log(token); 
 
     const { password: pass, ...rest } = user._doc;

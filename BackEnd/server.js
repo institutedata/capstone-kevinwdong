@@ -8,51 +8,20 @@ import helmet from "helmet";
 import morgan from "morgan";
 import path from "path";
 import { fileURLToPath } from "url";
-// import { userController } from './controllers/index.js';
-import { registerUser } from "./controllers/authController.js";
-import { createPost } from "./controllers/postController.js";
-import { verifyToken } from "./utils/verifyToken.js";
+
 import userRoutes from "./routes/userRoutes.js";
 import postRoutes from "./routes/postRoutes.js";
 import authRoutes from "./routes/authRoutes.js";
 import cookieParser from "cookie-parser";
 
-//@desc     This is only for injecting dummy data to the database!
-// import User from './models/user.js';
-// import Post from './models/post.js';
-// import { users, posts } from './data/index.js';
 
-//@desc     Sever Configuration
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
 dotenvConfig();
 
 const app = express();
 app.use(express.json());
 app.use(cookieParser());
 app.use(cors());
-app.use(helmet());
-app.use(helmet.crossOriginResourcePolicy({ policy: "cross-origin" }));
-app.use(morgan("common"));
-app.use(bodyParser.json({ limit: "30mb", extended: true }));
-app.use(bodyParser.urlencoded({ limit: "30mb", extended: true }));
 
-app.use("/assets", express.static(path.join(__dirname, "public/images")));
-
-//@desc     Setup file upload functionality
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, "public/images");
-  },
-  filename: function (req, file, cb) {
-    cb(null, file.originalname);
-  },
-});
-const upload = multer({ storage });
-
-//@desc     Routes with file upload functionality
-app.post("/auth/register", upload.single("picture"), registerUser);
-app.post("/posts", verifyToken, upload.single("picture"), createPost);
 
 //@desc     Routes without file upload functionality
 // app.use('/auth', authRoutes);
@@ -69,10 +38,6 @@ mongoose
     console.log("MongoDB is connected!");
     app.listen(PORT, () => console.log(`Server is running on port: ${PORT}`));
 
-    //@desc     For inject dummy data to the database, only use once and comment out to prevent duplication
-
-    // User.inserMany(User);
-    // Post.insertMany(posts);
   })
   .catch((error) => console.log(`${error} did not connect`));
 
