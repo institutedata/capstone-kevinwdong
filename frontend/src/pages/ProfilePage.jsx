@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from "react";
+import { useState } from "react";
 import {
   Box,
   Button,
@@ -15,112 +15,57 @@ import { updateStart, updateSuccess, updateFailure } from "../redux/userSlice";
 import userAvatar from "../assets/userAvatar.jpg";
 
 const ProfilePage = () => {
-  const { error: errorMessage } = useSelector((state) => state.user);
-  const [imageFile, setImageFile] = useState(null);
-  const [imageFileUrl, setImageFileUrl] = useState(null);
-  const [imageFileUploadProgress, setImageFileUploadProgress] = useState(null);
-  const [imageFileUploadError, setImageFileUploadError] = useState(null);
-  const [imageFileUploading, setImageFileUploading] = useState(false);
-  const [updateUserSuccess, setUpdateUserSuccess] = useState(null);
-  const [updateUserError, setUpdateUserError] = useState(null);
+  const { currentUser, error: errorMessage } = useSelector((state) => state.user);
   const [formData, setFormData] = useState({});
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { palette } = useTheme(themeSettings);
   const isNonMobile = useMediaQuery("(min-width:600px)");
-  const chooseImageRef = useRef();
+  const theme = useTheme();
+  const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
 
-  const handleImageChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      setImageFile(file);
-      setImageFileUrl(URL.createObjectURL(file));
-    }
-  };
-
-  useEffect(() => {
-    if (imageFile) {
-      uploadImage();
-    }
-  }, [imageFile]);
-
-  const uploadImage = async () => {
-    // service firebase.storage {
-    //   match /b/{bucket}/o {
-    //     match /{allPaths=**} {
-    //       allow read;
-    //       allow write: if
-    //       request.resource.size < 2 * 1024 * 1024 &&
-    //       request.resource.contentType.matches('image/.*')
-    //     }
-    //   }
-    // }
-    setImageFileUploading(true);
-    setImageFileUploadError(null);
-    const storage = getStorage(app);
-    const fileName = new Date().getTime() + imageFile.name;
-    const storageRef = ref(storage, fileName);
-    const uploadTask = uploadBytesResumable(storageRef, imageFile);
-    uploadTask.on(
-      "state_changed",
-      (snapshot) => {
-        const progress =
-          (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-
-        setImageFileUploadProgress(progress.toFixed(0));
-      },
-      (error) => {
-        setImageFileUploadError(
-          "Could not upload image (File must be less than 2MB)"
-        );
-        setImageFileUploadProgress(null);
-        setImageFile(null);
-        setImageFileUrl(null);
-        setImageFileUploading(false);
-      },
-      () => {
-        getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-          setImageFileUrl(downloadURL);
-          setFormData({ ...formData, profilePicture: downloadURL });
-          setImageFileUploading(false);
-        });
-      }
-    );
-  };
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.id]: e.target.value.trim() });
   };
 
-  const handleSubmit = async (e) => {
+
+  const handleUpdate = async (e) => {
     e.preventDefault();
-    dispatch(updateStart());
-    if (formData.password !== formData.confirmPassword) {
-      dispatch(updateFailure("Passwords do not match"));
+    console.log(formData);
+    if (Object.keys(formData).length === 0) {
       return;
     }
-
     try {
-      const res = await fetch("http://localhost:8080/auth/register", {
-        method: "PATCH",
+      dispatch(updateStart());
+      const res = await fetch(`http://localhost:8080/users/update/${currentUser._id}`, {
+        method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
       });
       const data = await res.json();
-      if (data.success === false) {
+      if (!res.ok) {
         dispatch(updateFailure(data.message));
-      }
-      if (res.ok) {
+      } else {
         dispatch(updateSuccess(data));
-        navigate("/profile");
       }
     } catch (error) {
       dispatch(updateFailure(error.message));
     }
-  };
+  }
 
-  const theme = useTheme();
-  const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
+  const handleDelete = async () => {
+    
+  }
+
+  const handleLogout = () => {
+
+  }
+
+
+  
+
+
   return (
     <Box>
       <Box
@@ -134,32 +79,33 @@ const ProfilePage = () => {
           <Typography fontWeight="500" variant="h3" sx={{ mb: "1.5rem" }}>
             Profile
           </Typography>
-          <input
+          {/* <input
             type="file"
             accept="image/*"
             id="avatar"
             onChange={handleImageChange}
             ref={chooseImageRef}
             hidden
-          />
+          /> */}
           <Box
-            onClick={() => chooseImageRef.current.click()}
+            // onClick={() => chooseImageRef.current.click()}
             sx={{
               width: "100px",
               height: "100px",
+              border: "5px solid #ccc",
               borderRadius: "50%",
               overflow: "hidden",
               "&:hover": { cursor: "pointer" },
             }}
           >
             <img
-              src={imageFileUrl || userAvatar}
+              src={userAvatar}
               rel="user image"
               style={{ width: "100%", height: "100%", objectFit: "cover" }}
             />
           </Box>
         </Box>
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleUpdate}>
           <Box
             display="grid"
             gap="30px"
@@ -170,6 +116,7 @@ const ProfilePage = () => {
           >
             <TextField
               label="First Name"
+              defaultValue={currentUser.firstName}
               onChange={handleChange}
               id="firstName"
               name="firstName"
@@ -177,6 +124,7 @@ const ProfilePage = () => {
             />
             <TextField
               label="Last Name"
+              defaultValue={currentUser.lastName}
               onChange={handleChange}
               id="lastName"
               name="lastName"
@@ -184,6 +132,7 @@ const ProfilePage = () => {
             />
             <TextField
               label="Height"
+              defaultValue={currentUser.height}
               onChange={handleChange}
               id="height"
               name="height"
@@ -191,6 +140,7 @@ const ProfilePage = () => {
             />
             <TextField
               label="Weight"
+              defaultValue={currentUser.weight}
               onChange={handleChange}
               id="weight"
               name="weight"
@@ -198,6 +148,7 @@ const ProfilePage = () => {
             />
             <TextField
               label="Location"
+              defaultValue={currentUser.location}
               onChange={handleChange}
               id="location"
               name="location"
@@ -205,13 +156,15 @@ const ProfilePage = () => {
             />
             <TextField
               label="Position"
+              defaultValue={currentUser.position}
               onChange={handleChange}
               id="position"
               name="position"
               sx={{ gridColumn: "span 2" }}
             />
             <TextField
-              label="Email"
+              label="Email" 
+              defaultValue={currentUser.email}
               onChange={handleChange}
               id="email"
               name="email"
@@ -228,21 +181,7 @@ const ProfilePage = () => {
           </Box>
           {errorMessage && <Alert severity="error">{errorMessage}</Alert>}
           {/* BUTTONS */}
-          <Box display="flex" justifyContent="space-between">
-            <Button
-              fullWidth
-              type="submit"
-              sx={{
-                width: "25%",
-                m: "2rem 0",
-                p: "1rem",
-                backgroundColor: "red",
-                color: palette.background.alt,
-                "&:hover": { color: palette.primary.main },
-              }}
-            >
-              DELETE
-            </Button>
+          <Box display="flex" justifyContent="end">
             <Button
               fullWidth
               type="submit"
@@ -259,6 +198,34 @@ const ProfilePage = () => {
             </Button>
           </Box>
         </form>
+        <Box display="flex" justifyContent="space-between">
+        <Typography
+            onClick={handleDelete}
+            sx={{
+              textDecoration: "underline",
+              color: 'red',
+              "&:hover": {
+                cursor: "pointer",
+                color: palette.primary.light,
+              },
+            }}
+          >
+            DELETE ACCOUNT
+          </Typography>
+          <Typography
+            onClick={handleLogout}
+            sx={{
+              textDecoration: "underline",
+              color: palette.primary.main,
+              "&:hover": {
+                cursor: "pointer",
+                color: palette.primary.light,
+              },
+            }}
+          >
+            LOGOUT
+          </Typography>
+        </Box>
       </Box>
     </Box>
   );
