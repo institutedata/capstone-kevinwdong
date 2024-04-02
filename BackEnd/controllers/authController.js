@@ -94,7 +94,7 @@ export const loginUser = async (req, res, next) => {
 
     res
       .status(200)
-      .cookie("accessToken", token, {
+      .cookie("access_token", token, {
         httpOnly: true,
       })
       .json(user);

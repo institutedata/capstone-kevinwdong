@@ -2,7 +2,6 @@ import User from "../models/user.js";
 import { errorHandler } from "../utils/error.js";
 import bcryptjs from "bcryptjs";
 
-
 export const updateUser = async (req, res, next) => {
   try {
     if (req.user.id !== req.params.userId) {
@@ -51,4 +50,15 @@ export const deleteUser = async (req, res, next) => {
   } catch (error) {
     next(error);
   }
-}
+};
+
+export const logoutUser = async (req, res, next) => {
+  try {
+    res
+      .clesrCookie("access_token")
+      .status(200)
+      .json("User has been logged out");
+  } catch (error) {
+    next(error);
+  }
+};
