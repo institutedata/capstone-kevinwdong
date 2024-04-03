@@ -37,8 +37,8 @@ export const createPost = async (req, res, next) => {
 //route    GET /posts
 export const getFeedPosts = async (req, res, next) => {
   try {
-    const post = await Post.find();
-    res.status(200).json(post);
+    const posts = await Post.find();
+    res.status(200).json(posts);
   } catch (error) {
     next(errorHandler(400, error.message));
   }

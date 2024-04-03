@@ -1,6 +1,7 @@
 import User from "../models/user.js";
 import { errorHandler } from "../utils/error.js";
 import bcryptjs from "bcryptjs";
+import jwt from "jsonwebtoken";
 
 
 //@desc     Get a user
@@ -33,6 +34,7 @@ export const updateUser = async (req, res, next) => {
       req.body.password = bcryptjs.hashSync(req.body.password, 10);
     }
 
+
     const user = await User.findByIdAndUpdate(
       req.params.userId,
       {
@@ -50,8 +52,12 @@ export const updateUser = async (req, res, next) => {
       },
       { new: true }
     );
+
+    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
     delete user.password;
-    res.status(200).json(user);
+
+    delete user.password;
+    res.status(200).json({ token, user });
   } catch (error) {
     next(error);
   }
