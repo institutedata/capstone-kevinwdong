@@ -51,7 +51,7 @@ const MyPostWidget = () => {
   };
 
   return (
-    <WidgetWrapper>
+    <WidgetWrapper mb='1rem'>
       {error && <Alert severity="error">{error}</Alert>}
       <FlexBetween gap="1.5rem">
         <UserImage image={userAvatar} size="60px" />

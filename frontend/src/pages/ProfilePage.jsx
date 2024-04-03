@@ -1,44 +1,62 @@
+import { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
 import { Box, useMediaQuery } from "@mui/material";
+import { useSelector } from "react-redux";
 import UserWidget from "../widgets/UserWidget.jsx";
 import PostsWidget from "../widgets/PostsWidget.jsx";
 // import FriendListWidget from "../widgets/FriendListWidget.jsx";
-import ProfileForm from "../components/ProfileForm.jsx";
+import ProfileWidget from "../widgets/ProfileWidget.jsx";
+import GamesWidget from "../widgets/GamesWidget.jsx";
 
-const HomePage = () => {
+const ProfilePage = () => {
+
   const isNonMobileScreens = useMediaQuery("(min-width:1000px)");
+  const { user, token } = useSelector((state) => state.user);
+
+
+  // const getUser = async () => {
+  //   const response = await fetch(`http://localhost:8080/users/${user._id}`, {
+  //     method: "GET",
+  //     headers: { Authorization: token },
+  //   });
+  //   const data = await response.json();
+  //   setUser(data);
+  // };
+  // useEffect(() => {
+  //   getUser();
+  // }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // if (!user) return null;
 
   return (
-    <Box>
+    <Box
+      width="100%"
+      padding="2rem 2rem"
+      display={isNonMobileScreens ? "flex" : "block"}
+      gap="0.5rem"
+      justifyContent="space-between"
+    >
       <Box
-        width="100%"
-        padding="2rem 6%"
-        display={isNonMobileScreens ? "flex" : "block"}
-        gap="0.5rem"
-        justifyContent="space-between"
+        flexBasis={isNonMobileScreens ? "26%" : undefined}
+        mt={isNonMobileScreens ? undefined : "2rem"}
       >
-        {/* <Box
-          flexBasis={isNonMobileScreens ? "26%" : undefined}
-          mt={isNonMobileScreens ? undefined : "2rem"}
-        >
-          <UserWidget />
-        </Box> */}
-        <Box
-          flexBasis={isNonMobileScreens ? "100%" : undefined}
-          mt={isNonMobileScreens ? undefined : "2rem"}
-        >
-          <ProfileForm />
-          
-        </Box>
-        {isNonMobileScreens && (
-          <Box flexBasis="26%">
-            {/* <PostsWidget /> */}
-            <Box m="2rem 0" />
-            <FriendListWidget />
-          </Box>
-        )}
+        <UserWidget />
+        <GamesWidget userId={user._id} isProfile={true}/>
       </Box>
+      <Box
+        flexBasis={isNonMobileScreens ? "42%" : undefined}
+        mt={isNonMobileScreens ? undefined : "2rem"}
+      >
+        <ProfileWidget />
+      </Box>
+      {isNonMobileScreens && (
+        <Box flexBasis="26%">
+          <PostsWidget userId={user._id} isProfile={true}/>
+          <Box m="2rem 0" />
+        </Box>
+      )}
     </Box>
   );
 };
 
-export default HomePage;
+export default ProfilePage;

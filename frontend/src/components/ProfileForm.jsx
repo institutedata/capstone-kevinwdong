@@ -29,6 +29,7 @@ const ProfilePage = () => {
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.id]: e.target.value.trim() });
+    setError(null);
   };
 
   const handleUpdate = async (e) => {
@@ -36,6 +37,7 @@ const ProfilePage = () => {
     if (Object.keys(formData).length === 0) {
       return;
     }
+
     try {
       const response = await fetch(
         `http://localhost:8080/users/update/${user._id}`,

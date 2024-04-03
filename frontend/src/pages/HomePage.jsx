@@ -12,36 +12,33 @@ const HomePage = () => {
   const { user } = useSelector((state) => state.user);
 
   return (
-    <Box>
+    <Box
+      width="100%"
+      padding="2rem 6%"
+      display={isNonMobileScreens ? "flex" : "block"}
+      gap="0.5rem"
+      justifyContent="space-between"
+    >
       <Box
-        width="100%"
-        padding="2rem 6%"
-        display={isNonMobileScreens ? "flex" : "block"}
-        gap="0.5rem"
-        justifyContent="space-between"
+        flexBasis={isNonMobileScreens ? "26%" : undefined}
+        mt={isNonMobileScreens ? undefined : "2rem"}
       >
-        <Box
-          flexBasis={isNonMobileScreens ? "26%" : undefined}
-          mt={isNonMobileScreens ? undefined : "2rem"}
-        >
-          <UserWidget userId={user._id} userImage={user.userImage}/>
-          <AdvertWidget />
-        </Box>
-        <Box
-          flexBasis={isNonMobileScreens ? "42%" : undefined}
-          mt={isNonMobileScreens ? undefined : "2rem"}
-        >
-          <MyPostWidget userImage={user.userImage}/>
-          <PostsWidget userId={user._id}/>
-        </Box>
-        {isNonMobileScreens && (
-          <Box flexBasis="26%">
-            <GamesWidget />
-            <Box m="2rem 0" />
-            {/* <FriendListWidget userId={user._id}/> */}
-          </Box>
-        )}
+        <UserWidget userId={user._id} userImage={user.userImage} />
+        <AdvertWidget />
       </Box>
+      <Box
+        flexBasis={isNonMobileScreens ? "42%" : undefined}
+        mt={isNonMobileScreens ? undefined : "2rem"}
+      >
+        <MyPostWidget userImage={user.userImage} />
+        <PostsWidget isProfile={false} />
+      </Box>
+      {isNonMobileScreens && (
+        <Box flexBasis="26%">
+          <GamesWidget isProfile={false} />
+          <Box m="2rem 0" />
+        </Box>
+      )}
     </Box>
   );
 };

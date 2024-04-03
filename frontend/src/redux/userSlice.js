@@ -9,6 +9,10 @@ const userSlice = createSlice({
   name: 'user',
   initialState,
   reducers: {
+    setUser: (state, action) => {
+      state.user = action.payload.user;
+      state.token = action.payload.token;
+    },
     setLogin: (state, action) => {
       state.user = action.payload.user;
       state.token = action.payload.token;
@@ -40,6 +44,7 @@ const userSlice = createSlice({
 });
 
 export const {
+  setUser,
   setLogin,
   setLogout,
   setRegister,

@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import PropTypes from "prop-types";
 import {
   ChatBubbleOutlineOutlined,
@@ -9,6 +10,8 @@ import { Box, Divider, IconButton, Typography, useTheme } from "@mui/material";
 import FlexBetween from "../components/FlexBetween";
 import WidgetWrapper from "../components/WidgetWrapper";
 import { useDispatch, useSelector } from "react-redux";
+import { setPost } from "../redux/postSlice.js";
+import Friend from "../components/Friend";
 
 
 const PostWidget = ({
@@ -24,6 +27,7 @@ const PostWidget = ({
 }) => {
  
   const { user, token  } = useSelector((state) => state.user)
+  const dispatch = useDispatch();
   const loggedInUserId = user._id;
   const isLiked = Boolean(likes[loggedInUserId]);
   const likeCount = Object.keys(likes).length;  
@@ -49,13 +53,13 @@ const PostWidget = ({
   };
 
   return (
-    <WidgetWrapper m="2rem 0">
-      {/* <Friend
+    <WidgetWrapper mb="1rem">
+      <Friend
         friendId={postUserId}
         name={name}
         subtitle={position}
         userImage={userImage}
-      /> */}
+      />
       <Typography color={main} sx={{ mt: "1rem" }}>
         {description}
       </Typography>

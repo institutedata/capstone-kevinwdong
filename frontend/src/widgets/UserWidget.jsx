@@ -5,45 +5,44 @@ import {
   EditOutlined,
   Height,
 } from "@mui/icons-material";
-import { Box, Typography, Divider, useTheme } from "@mui/material";
+import { Box, Typography, Divider, useTheme, IconButton } from "@mui/material";
 import WidgetWrapper from "../components/WidgetWrapper.jsx";
 import FlexBetween from "../components/FlexBetween.jsx";
 import { useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import UserImage from "../components/UserImage.jsx";
 import FacebookIcon from "@mui/icons-material/Facebook";
+import { setUser } from "../redux/userSlice.js";
 
 
-const UserWidget = ({ userId }) => {
-  const [user, setUser] = useState({});
-  const { token } = useSelector((state) => state.user);
+const UserWidget = () => {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
-
+  const { user, token } = useSelector((state) => state.user);
+  
   const { palette } = useTheme();
   const dark = palette.neutral.dark;
   const medium = palette.neutral.medium;
   const main = palette.neutral.main;  
 
-  const getUser = async () => {
-    const response = await fetch(`http://localhost:8080/users/${userId}`, {
-      method: "GET",
-      headers: { Authorization: token },
-    });
-    const data = await response.json();
-      setUser(data);
-      console.log(data);
-  };
+  // const getUser = async () => {
+  //   const response = await fetch(`http://localhost:8080/users/${user._id}`, {
+  //     method: "GET",
+  //     headers: { Authorization: token },
+  //   });
+  //   const data = await response.json();
+  //   dispatch(setUser({user: data}));
+  // };
 
-  useEffect(() => {
-    getUser();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  // useEffect(() => {
+  //   getUser();
+  // // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, []);
 
 
 
   return (
-    <WidgetWrapper>
- 
+    <WidgetWrapper mb='1rem'>
       <FlexBetween
         gap="0.5rem"
         pb="1.1rem"
@@ -65,12 +64,14 @@ const UserWidget = ({ userId }) => {
             >
               {user.firstName} {user.lastName}
             </Typography>
-            <Typography color={medium}>
-             friends
-            </Typography>
           </Box>
         </FlexBetween>
+        <IconButton onClick={() => {
+          navigate('/profile')
+          navigate(0)
+          }} >
         <ManageAccountsOutlined />
+        </IconButton>
       </FlexBetween>
 
       <Divider />

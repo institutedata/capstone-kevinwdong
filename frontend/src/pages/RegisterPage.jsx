@@ -1,7 +1,5 @@
-
-import { Box, Typography, useTheme, useMediaQuery } from "@mui/material";
-import RegisterForm from "../components/RegisterForm";
-
+import { Box, useTheme, useMediaQuery } from "@mui/material";
+import RegisterWidget from "../widgets/RegisterWidget";
 
 const RegisterPage = () => {
   const theme = useTheme();
@@ -15,10 +13,7 @@ const RegisterPage = () => {
         borderRadius="1.5rem"
         backgroundColor={theme.palette.background.alt}
       >
-        <Typography fontWeight="500" variant="h5" sx={{ mb: "1.5rem" }}>
-          Welcom to Hoops Connect!
-        </Typography>
-        <RegisterForm />
+        <RegisterWidget />
       </Box>
     </Box>
   );

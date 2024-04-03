@@ -12,7 +12,7 @@ const AdvetWidget = () => {
 
 
   return (
-    <WidgetWrapper>
+    <WidgetWrapper >
       <FlexBetween>
         <Typography color={dark} variant="h5" fontWeight="500">
           GAME LINKS

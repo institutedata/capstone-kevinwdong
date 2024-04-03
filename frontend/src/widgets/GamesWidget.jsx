@@ -1,12 +1,13 @@
 import { PropTypes } from "prop-types";
-import { useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { setPosts } from "../redux/postSlice.js";
+import { setGames } from "../redux/gameSlice.js";
 import GameWidget from "./GameWidget";
 
-const GamesWidget = ({ isProfile = false }) => {
+const GamesWidget = ({ userId, isProfile }) => {
   const dispatch = useDispatch();
   const { token } = useSelector((state) => state.user);
+  const { games } = useSelector((state) => state.game);
 
   const getGames = async () => {
     const response = await fetch("http://localhost:8080/games", {
@@ -14,21 +15,20 @@ const GamesWidget = ({ isProfile = false }) => {
       headers: { Authorization: token },
     });
     const data = await response.json();
-    dispatch(setPosts(data));
+    dispatch(setGames({games: data}));
   };
-
 
   const getUserGames = async () => {
     const response = await fetch(
-      `http://localhost:8080/posts/${userId}/post`,
+      `http://localhost:8080/games/${userId}/games`,
       {
         method: "GET",
         headers: { Authorization: token },
       }
     );
     const data = await response.json();
-    setPosts(data);
-  }
+    dispatch(setGames({games: data}));
+  };
 
   useEffect(() => {
     if (isProfile) {
@@ -36,33 +36,33 @@ const GamesWidget = ({ isProfile = false }) => {
     } else {
       getGames();
     }
-  }, []);
+  }, []); // eslint-disable-next-line react-hooks/exhaustive-deps
 
   return (
     <>
-      {posts.map(
+      {games.map(
         ({
           _id,
           userId,
           firstName,
           lastName,
           description,
-          position,
-          postImage,
+          location,
+          gameImage,
           userImage,
-          likes,
+          players,
           comments,
         }) => (
           <GameWidget
             key={_id}
-            postId={_id}
-            postUserId={userId}
+            gameId={_id}
+            gameUserId={userId}
             name={`${firstName} ${lastName}`}
             description={description}
-            position={position}
-            postImage={postImage}
+            location={location}
+            gameImage={gameImage}
             userImage={userImage}
-            likes={likes}
+            players={players}
             comments={comments}
           />
         )
@@ -73,6 +73,7 @@ const GamesWidget = ({ isProfile = false }) => {
 
 GamesWidget.propTypes = {
   userId: PropTypes.string,
+  isProfile: PropTypes.bool,
 };
 
 export default GamesWidget;

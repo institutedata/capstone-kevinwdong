@@ -18,9 +18,12 @@ const postSlice = createSlice({
       });
       state.posts = updatedPosts;
     },
+    clearPost: (state) => {
+      state.posts = [];
+    },
   },
 });
 
-export const {setPosts, setPost} = postSlice.actions;
+export const {setPosts, setPost, clearPost} = postSlice.actions;
 
 export default postSlice.reducer;

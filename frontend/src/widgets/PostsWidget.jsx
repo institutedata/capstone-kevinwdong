@@ -1,11 +1,14 @@
 import { PropTypes } from "prop-types";
-import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useEffect, } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { setPosts} from "../redux/postSlice";
 import PostWidget from "./PostWidget";
 
-const PostsWidget = ({ isProfile = false }) => {
-  const [posts, setPosts] = useState([]);
+const PostsWidget = ({ userId, isProfile  }) => {
+  const dispatch = useDispatch();
   const { token } = useSelector((state) => state.user);
+  const { posts } = useSelector((state) => state.post);
+  console.log( token )
 
   const getPosts = async () => {
     const response = await fetch("http://localhost:8080/posts", {
@@ -13,20 +16,20 @@ const PostsWidget = ({ isProfile = false }) => {
       headers: { Authorization: token },
     });
     const data = await response.json();
-    setPosts(data);
+    dispatch(setPosts({ posts: data }));
   };
 
 
   const getUserPosts = async () => {
     const response = await fetch(
-      `http://localhost:8080/posts/${userId}/post`,
+      `http://localhost:8080/posts/${userId}/posts`,
       {
         method: "GET",
         headers: { Authorization: token },
       }
     );
     const data = await response.json();
-    setPosts(data);
+    dispatch(setPosts({ posts: data }));
   }
 
   useEffect(() => {
@@ -72,6 +75,7 @@ const PostsWidget = ({ isProfile = false }) => {
 
 PostsWidget.propTypes = {
   userId: PropTypes.string,
+  isProfile: PropTypes.bool,
 };
 
 export default PostsWidget;

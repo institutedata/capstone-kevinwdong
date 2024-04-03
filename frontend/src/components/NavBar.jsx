@@ -20,20 +20,23 @@ import {
   Menu,
   Close,
 } from "@mui/icons-material";
+import EmojiEventsIcon from '@mui/icons-material/EmojiEvents';
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { setMode } from "../redux/themeSlice";
 import { setLogout } from "../redux/userSlice";
+import { clearPost } from "../redux/postSlice";
+import { clearGame } from "../redux/gameSlice";
 import FlexBetween from "../components/FlexBetween";
 
 const Navbar = () => {
   const [isMobileMenuToggled, setIsMobileMenuToggled] = useState(false);
   const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
   const [fullName, setFullName] = useState("Guest User");
+  const [isLoggedin, setIsLoggedin] = useState("LogIn");
   const { user, token } = useSelector((state) => state.user);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  
 
   const theme = useTheme();
   const neutralLight = theme.palette.neutral.light;
@@ -42,15 +45,26 @@ const Navbar = () => {
   const primaryLight = theme.palette.primary.light;
   const alt = theme.palette.background.alt;
 
-  useEffect(() =>{
+  useEffect(() => {
     if (!token) {
-      setFullName('Guest User')
+      setFullName("Profile");
+      setIsLoggedin("Log In");
     } else {
-      setFullName(`${user.firstName} ${user.lastName}`)
+      setFullName(`${user.firstName} ${user.lastName}`);
+      setIsLoggedin("Log Out");
     }
-  }, [token, user])
-  
+  }, [token, user]);
 
+  const handleLogging = async () => {
+    if (!token) {
+      navigate("/login");
+    } else {
+      dispatch(setLogout());
+      dispatch(clearPost());
+      dispatch(clearGame());
+      navigate("/");
+    }
+  };
 
   return (
     <FlexBetween padding="1rem 2%" backgroundColor={alt}>
@@ -88,15 +102,16 @@ const Navbar = () => {
       {isNonMobileScreens ? (
         <FlexBetween gap="2rem">
           <IconButton onClick={() => dispatch(setMode())}>
-            { theme.palette.mode === "dark" ? (
+            {theme.palette.mode === "dark" ? (
               <DarkMode sx={{ fontSize: "25px" }} />
             ) : (
               <LightMode sx={{ color: dark, fontSize: "25px" }} />
             )}
           </IconButton>
-          <Login sx={{ fontSize: "25px" }} onClick={() => navigate('/login')}/>
-          <AccountBoxOutlined sx={{ fontSize: "25px" }} onClick={() => navigate('/profile')}/>
-          <FormControl variant="standard" >
+          <EmojiEventsIcon
+            sx={{ fontSize: "25px" }}
+          />
+          <FormControl variant="standard">
             <Select
               value={fullName}
               sx={{
@@ -117,7 +132,7 @@ const Navbar = () => {
               <MenuItem value={fullName}>
                 <Typography>{fullName}</Typography>
               </MenuItem>
-              <MenuItem onClick={() => dispatch(setLogout())}>Log Out</MenuItem>
+              <MenuItem onClick={handleLogging}>{isLoggedin}</MenuItem>
             </Select>
           </FormControl>
         </FlexBetween>
@@ -189,12 +204,16 @@ const Navbar = () => {
                 }}
                 input={<InputBase />}
               >
-                <MenuItem value={fullName} onClick={() => navigate('/profile')}>
-                 <Typography>{fullName}</Typography>
+                <MenuItem
+                  value={fullName}
+                  onClick={() => {
+                    navigate("/profile");
+                    navigate(0);
+                  }}
+                >
+                  <Typography>{fullName}</Typography>
                 </MenuItem>
-                <MenuItem onClick={() => dispatch(setLogout())}>
-                  Log Out
-                </MenuItem>
+                <MenuItem onClick={handleLogging}>{isLoggedin}</MenuItem>
               </Select>
             </FormControl>
           </FlexBetween>
