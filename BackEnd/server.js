@@ -8,12 +8,13 @@ import helmet from "helmet";
 import morgan from "morgan";
 import path from "path";
 import { fileURLToPath } from "url";
-
+import { dbConnect } from './dbConnect.js'
 import userRoutes from "./routes/userRoutes.js";
 import postRoutes from "./routes/postRoutes.js";
 import authRoutes from "./routes/authRoutes.js";
 import gameRoutes from "./routes/gameRoutes.js";
 import cookieParser from "cookie-parser";
+import colors from 'colors'
 
 
 dotenvConfig();
@@ -34,15 +35,27 @@ app.use("/games", gameRoutes);
 
 //@desc     Setup mongodb database
 
-const PORT = process.env.PORT || 8080;
-mongoose
-  .connect(process.env.MONGODB)
-  .then(() => {
-    console.log("MongoDB is connected!");
-    app.listen(PORT, () => console.log(`Server is running on port: ${PORT}`));
+// const PORT = process.env.PORT || 8080;
+// mongoose
+//   .connect(process.env.MONGODB)
+//   .then(() => {
+//     console.log("MongoDB is connected!");
+//     app.listen(PORT, () => console.log(`Server is running on port: ${PORT}`));
 
-  })
-  .catch((error) => console.log(`${error} did not connect`));
+//   })
+//   .catch((error) => console.log(`${error} did not connect`));
+
+const PORT = process.env.PORT || 8080
+app.listen(PORT, () => {
+ try {
+  console.log(`Server is running on port ${PORT}. `.bgYellow)
+ } catch (error) {
+  console.log(`Server cannot Connect. `.bgRed)
+  process.exit()
+ }
+})
+
+
 
 app.use((err, req, res, next) => {
   const statusCode = err.statusCode || 500;
