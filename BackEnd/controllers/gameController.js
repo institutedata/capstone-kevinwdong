@@ -30,7 +30,7 @@ export const createGame = async (req, res, next) => {
       description,
       userImage: user.userImage,
       gameImage,
-      players: {},
+      players: [],
       comments: [],
     });
     await newGame.save();
@@ -67,26 +67,32 @@ export const getUserGames = async (req, res, next) => {
 
 //@desc     Play a game
 //@route    PATCH /games/:id/play
-export const playGame = async (req, res, next) => {
+export const addOrRemovePlayer = async (req, res, next) => {
   try {
     const { id } = req.params;
-    const { userId } = req.body;
+    const { players } = req.body;
     const game = await Game.findById(id);
-    const isPlay = game.players.get(userId);
+    const isPlay = game.players.filter(
+      (player) => player.userId === players[0].userId
+    )[0];
 
-    if (isPlay) {
-      game.players.delete(userId);
+    if (!isPlay) {
+      console.log("add");
+      const updatedGame = await Game.findByIdAndUpdate(
+        id,
+        { $push: { players: players } },
+        { new: true }
+      );
+      res.status(200).json(updatedGame);
     } else {
-      game.players.set(userId, true);
+      console.log("remove");
+      const updatedGame = await Game.findByIdAndUpdate(
+        id,
+        { $pull: { players: { _id: isPlay._id } } },
+        { new: true }
+      );
+      res.status(200).json(updatedGame);
     }
-
-    const updatedGame = await Game.findByIdAndUpdate(
-      id,
-      { players: game.players },
-      { new: true }
-    );
-
-    res.status(200).json(updatedGame);
   } catch (error) {
     next(errorHandler(400, error.message));
   }

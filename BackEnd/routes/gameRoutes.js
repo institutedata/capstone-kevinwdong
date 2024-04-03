@@ -1,5 +1,5 @@
 import express from "express";
-import { createGame, getFeedGames, getUserGames, playGame } from "../controllers/gameController.js";
+import { createGame, getFeedGames, getUserGames, addOrRemovePlayer } from "../controllers/gameController.js";
 import { verifyToken } from "../utils/verifyToken.js";
 
 
@@ -14,8 +14,8 @@ router.get("/", getFeedGames);
 //@desc    Get a user's games
 router.get("/:userId/games", getUserGames);
 
-//@desc     play a game
-router.patch("/:id/play", playGame);
+//@desc     Add or remove a player from a game
+router.patch("/:id/player", addOrRemovePlayer);
 
 
 export default router;
