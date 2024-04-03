@@ -8,6 +8,8 @@ export const createPost = async (req, res, next) => {
   try {
 
     const { userId, description, postImage } = req.body;
+
+    console.log(req.body);  
   
     const user = await User.findById(userId);
  

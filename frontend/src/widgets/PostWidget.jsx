@@ -75,7 +75,7 @@ const PostWidget = ({
         {
           method: "PUT",
           headers: {
-            Authorization: token,
+            Authorization: token, "Content-Type": "application/json" 
           },
           body: JSON.stringify({
             userId: user._id,

@@ -16,7 +16,6 @@ import UserImage from "../components/UserImage.jsx";
 import userAvatar from "../assets/userAvatar.jpg";
 
 const MyPostWidget = () => {
-  const [error, setError] = useState(null);
   const [post, setPost] = useState("");
   const { user, token } = useSelector((state) => state.user);
   const { palette } = useTheme();
@@ -26,33 +25,38 @@ const MyPostWidget = () => {
 
   const handlePost = async () => {
     try {
-      const formData = new FormData();
-      formData.append("userId", user._id);
-      formData.append("description", post);
+      // const formData = new FormData();
+      // formData.append("userId", user._id);
+      // formData.append("description", post);
 
       const response = await fetch(`http://localhost:8080/posts/create`, {
         method: "POST",
         headers: {
           Authorisation: token,
+          "Content-Type": "application/json",
         },
-        body: formData,
+        body: JSON.stringify({
+          userId: user._id,
+          description: post,
+          firstName: user.firstName,
+          lastName: user.lastName,
+        }),
       });
       const data = await response.json();
       if (!response.ok) {
-       setError(data.message);
+        console.log(data);
         return;
       } else {
         const posts = await response.json();
         dispatch(setPosts(posts));
       }
     } catch (error) {
-      setError(error.message);
+      console.error(error);     
     }
   };
 
   return (
-    <WidgetWrapper mb='1rem'>
-      {error && <Alert severity="error">{error}</Alert>}
+    <WidgetWrapper mb="1rem">
       <FlexBetween gap="1.5rem">
         <UserImage image={userAvatar} size="60px" />
         <InputBase

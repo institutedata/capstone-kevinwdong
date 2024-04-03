@@ -43,13 +43,13 @@ const ProfilePage = () => {
         <GamesWidget userId={user._id} isProfile={true}/>
       </Box>
       <Box
-        flexBasis={isNonMobileScreens ? "42%" : undefined}
+        flexBasis={isNonMobileScreens ? "40%" : undefined}
         mt={isNonMobileScreens ? undefined : "2rem"}
       >
         <ProfileWidget />
       </Box>
       {isNonMobileScreens && (
-        <Box flexBasis="26%">
+        <Box flexBasis="40%">
           <PostsWidget userId={user._id} isProfile={true}/>
           <Box m="2rem 0" />
         </Box>

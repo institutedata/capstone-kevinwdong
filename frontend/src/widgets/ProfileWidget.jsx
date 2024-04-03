@@ -88,20 +88,9 @@ const ProfileWidget = () => {
 
   return (
     <WidgetWrapper>
-          <Box display="flex" justifyContent="space-between" mb={3} mx={3}>
-            <Typography fontWeight="500" variant="h3" sx={{ mb: "1.5rem" }}>
-              Profile:
-            </Typography>
-            {/* <input
-            type="file"
-            accept="image/*"
-            id="avatar"
-            onChange={handleImageChange}
-            ref={chooseImageRef}
-            hidden
-          /> */}
+          <Box display="flex" justifyContent="center" mb={3} mx={3}>
             <Box
-              // onClick={() => chooseImageRef.current.click()}
+
               sx={{
                 width: "100px",
                 height: "100px",
@@ -196,7 +185,7 @@ const ProfileWidget = () => {
 
             {/* BUTTONS */}
             <FlexBetween>
-              <Typography
+              {/* <Typography
                 onClick={handleDelete}  
                 sx={{
                   textDecoration: "underline",
@@ -208,7 +197,22 @@ const ProfileWidget = () => {
                 }}
               >
                 DELETE ACCOUNT
-              </Typography>
+              </Typography> */}
+               <Button
+                fullWidth
+                onClick={handleDelete}
+                type="submit"
+                sx={{
+                  width: "25%",
+                  m: "2rem 0",
+                  p: "1rem",
+                  backgroundColor: 'red',
+                  color: palette.background.alt,
+                  "&:hover": { color: palette.primary.main },
+                }}
+              >
+                UPDATE
+              </Button>
               <Button
                 fullWidth
                 type="submit"
