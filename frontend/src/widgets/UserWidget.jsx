@@ -1,5 +1,5 @@
 import PropType from "prop-types";
-import { useState, useEffect} from "react";
+import { useState, useEffect } from "react";
 import {
   ManageAccountsOutlined,
   EditOutlined,
@@ -10,20 +10,19 @@ import WidgetWrapper from "../components/WidgetWrapper.jsx";
 import FlexBetween from "../components/FlexBetween.jsx";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import UserImage from "../components/UserImage.jsx";
+import UserImage from "../components/UserAvatar.jsx";
 import FacebookIcon from "@mui/icons-material/Facebook";
 import { setUser } from "../redux/userSlice.js";
-
 
 const UserWidget = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { user, token } = useSelector((state) => state.user);
-  
+
   const { palette } = useTheme();
   const dark = palette.neutral.dark;
   const medium = palette.neutral.medium;
-  const main = palette.neutral.main;  
+  const main = palette.neutral.main;
 
   // const getUser = async () => {
   //   const response = await fetch(`http://localhost:8080/users/${user._id}`, {
@@ -39,10 +38,8 @@ const UserWidget = () => {
   // // eslint-disable-next-line react-hooks/exhaustive-deps
   // }, []);
 
-
-
   return (
-    <WidgetWrapper mb='1rem'>
+    <WidgetWrapper mb="1rem">
       <FlexBetween
         gap="0.5rem"
         pb="1.1rem"
@@ -66,11 +63,13 @@ const UserWidget = () => {
             </Typography>
           </Box>
         </FlexBetween>
-        <IconButton onClick={() => {
-          navigate('/profile')
-          navigate(0)
-          }} >
-        <ManageAccountsOutlined />
+        <IconButton
+          onClick={() => {
+            navigate("/profile");
+            navigate(0);
+          }}
+        >
+          <ManageAccountsOutlined />
         </IconButton>
       </FlexBetween>
 
@@ -106,7 +105,7 @@ const UserWidget = () => {
 
         <FlexBetween gap="1rem" mb="0.5rem">
           <FlexBetween gap="1rem">
-          <FacebookIcon />
+            <FacebookIcon />
             <Box>
               <Typography color={main} fontWeight="500">
                 TikTok
@@ -136,6 +135,5 @@ UserWidget.propTypes = {
   userId: PropType.string,
   userImage: PropType.string,
 };
-
 
 export default UserWidget;

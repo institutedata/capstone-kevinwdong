@@ -4,7 +4,7 @@ import { Box, IconButton, Typography, useTheme } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import FlexBetween from "./FlexBetween";
-import UserImage from "./UserImage";
+import UserImage from "./UserAvatar";
 import { setFriends } from "../redux/userSlice";
 
 const Friend = ({ friendId, name, subtitle, userImage }) => {

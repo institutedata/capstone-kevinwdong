@@ -12,7 +12,7 @@ import { setPosts } from "../redux/postSlice.js";
 import { useState } from "react";
 import FlexBetween from "../components/FlexBetween.jsx";
 import WidgetWrapper from "../components/WidgetWrapper.jsx";
-import UserImage from "../components/UserImage.jsx";
+import UserImage from "../components/UserAvatar.jsx";
 import userAvatar from "../assets/userAvatar.jpg";
 
 const MyPostWidget = () => {
@@ -51,7 +51,7 @@ const MyPostWidget = () => {
         dispatch(setPosts(posts));
       }
     } catch (error) {
-      console.error(error);     
+      console.error(error);
     }
   };
 

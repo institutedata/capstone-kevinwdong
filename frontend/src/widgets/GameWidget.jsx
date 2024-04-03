@@ -1,18 +1,20 @@
 import PropTypes from "prop-types";
+import { useState } from "react";
 import { ChatBubbleOutlineOutlined } from "@mui/icons-material";
-import ThumbUpAltIcon from "@mui/icons-material/ThumbUpAlt";
-import ThumbUpOffAltOutlinedIcon from "@mui/icons-material/ThumbUpOffAltOutlined";
-import ThumbUpOutlinedIcon from "@mui/icons-material/ThumbUpOutlined";
+import SportsBasketballIcon from "@mui/icons-material/SportsBasketball";
+import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import { Box, Divider, IconButton, Typography, useTheme } from "@mui/material";
 import FlexBetween from "../components/FlexBetween";
 import WidgetWrapper from "../components/WidgetWrapper";
 import { useDispatch, useSelector } from "react-redux";
 import { setGame } from "../redux/gameSlice";
+import UserAvatar from "../components/UserAvatar";
 
 const GameWidget = ({
   gameId,
   gameUserId,
-  name,
+  firstName,
+  lastName,
   title,
   description,
   location,
@@ -21,11 +23,11 @@ const GameWidget = ({
   players,
   comments,
 }) => {
-  const { user, token } = useSelector((state) => state.user);
+  const { token } = useSelector((state) => state.user);
   const dispatch = useDispatch();
+  const [showPlayers, setShowPlayers] = useState(false);
+  const [isComments, setIsComments] = useState(false);
 
-  const loggedInUserId = user._id;
-  const isPlay = Boolean(players[loggedInUserId]);
   const playerCount = Object.keys(players).length;
 
   const { palette } = useTheme();
@@ -33,21 +35,29 @@ const GameWidget = ({
   const primary = palette.primary.main;
 
   const patchPlayer = async () => {
-    const response = await fetch(`http://localhost:8080/games/${gameId}/play`, {
-      method: "PATCH",
-      headers: {
-        Authorization: token,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ userId: loggedInUserId }),
-    });
+    const response = await fetch(
+      `http://localhost:8080/games/${gameId}/player`,
+      {
+        method: "PATCH",
+        headers: {
+          Authorization: token,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          userId: gameUserId,
+          firstName: firstName,
+          lastName: lastName,
+          userImage: userImage,
+        }),
+      }
+    );
     const updatedGame = await response.json();
     dispatch(setGame({ game: updatedGame }));
   };
 
   return (
     <WidgetWrapper mb="1rem">
-      <Typography color={main} sx={{ mt: "1rem" }}>
+      <Typography color="white" sx={{ mt: "1rem" }}>
         {title}
       </Typography>
 
@@ -67,36 +77,63 @@ const GameWidget = ({
         <FlexBetween gap="1rem">
           <FlexBetween gap="0.3rem">
             <IconButton onClick={patchPlayer}>
-              {isPlay ? (
-                <ThumbUpAltIcon sx={{ color: primary }} />
-              ) : (
-                <ThumbUpOffAltOutlinedIcon />
-              )}
+              <SportsBasketballIcon />
             </IconButton>
             <Typography>{playerCount}</Typography>
           </FlexBetween>
-
           <FlexBetween gap="0.3rem">
             <IconButton>
-              <ChatBubbleOutlineOutlined />
+              <ChatBubbleOutlineOutlined
+                onClick={() => {
+                  setShowPlayers(!showPlayers);
+                  setIsComments(!isComments);
+                }}
+              />
             </IconButton>
             <Typography>{comments.length}</Typography>
           </FlexBetween>
         </FlexBetween>
+        <IconButton>
+          <ArrowDropDownIcon
+            onClick={() => {
+              setIsComments(!isComments);
+              setShowPlayers(!showPlayers);
+            }}
+          />
+        </IconButton>
       </FlexBetween>
-      {/* {isComments && (
-      <Box mt="0.5rem">
-        {comments.map((comment, i) => (
+      {showPlayers && (
+        <Box mt="0.5rem">
+          {players.map((player) => (
+            <>
+              <Box m="0.5rem">
+                <FlexBetween>
+                  <UserAvatar userImage={userImage} size="40px" />
+                  <FlexBetween gap="0.5rem">
+                    <Typography>{firstName}</Typography>
+                    <Typography>{lastName}</Typography>
+                  </FlexBetween>
+                </FlexBetween>
+                <Divider />
+              </Box>
+            </>
+          ))}
+        </Box>
+      )}
+      {isComments && (
+        <Box mt="0.5rem">
+          {/* {comments.map((comment, i) => (
           <Box key={`${name}-${i}`}>
             <Divider />
             <Typography sx={{ color: main, m: "0.5rem 0", pl: "1rem" }}>
               {comment}
             </Typography>
           </Box>
-        ))}
-        <Divider />
-      </Box>
-    )} */}
+        ))} */}
+          hello world
+          <Divider />
+        </Box>
+      )}
     </WidgetWrapper>
   );
 };
@@ -104,12 +141,15 @@ const GameWidget = ({
 GameWidget.propTypes = {
   gameId: PropTypes.string,
   gameUserId: PropTypes.string,
-  name: PropTypes.string,
+  firstName: PropTypes.string,
+  lastName: PropTypes.string,
+  title: PropTypes.string,
   description: PropTypes.string,
   location: PropTypes.string,
   gameImage: PropTypes.string,
   userImage: PropTypes.string,
-  participants: PropTypes.array,
+  players: PropTypes.array,
+  player: PropTypes.object,
   comments: PropTypes.array,
 };
 

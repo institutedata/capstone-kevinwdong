@@ -1,7 +1,7 @@
 import PropType from "prop-types";
 import { Box } from "@mui/material";
 
-const UserImage = ({ image, size }) => {
+const UserAvatar = ({ image, size }) => {
   return (
     <Box width={size} height={size}>
       <img
@@ -15,9 +15,9 @@ const UserImage = ({ image, size }) => {
   );
 };
 
-UserImage.propTypes = {
+UserAvatar.propTypes = {
   imageURL: PropType.string,
   size: PropType.string,
 };
 
-export default UserImage;
+export default UserAvatar;

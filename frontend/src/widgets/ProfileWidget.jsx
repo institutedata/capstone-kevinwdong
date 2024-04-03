@@ -183,21 +183,7 @@ const ProfileWidget = () => {
             </Box>
             <Box mt={3}>{error && <Alert severity="error">{error}</Alert>}</Box>
 
-            {/* BUTTONS */}
             <FlexBetween>
-              {/* <Typography
-                onClick={handleDelete}  
-                sx={{
-                  textDecoration: "underline",
-                  color: "red",
-                  "&:hover": {
-                    cursor: "pointer",
-                    color: palette.primary.light,
-                  },
-                }}
-              >
-                DELETE ACCOUNT
-              </Typography> */}
                <Button
                 fullWidth
                 onClick={handleDelete}
@@ -211,7 +197,7 @@ const ProfileWidget = () => {
                   "&:hover": { color: palette.primary.main },
                 }}
               >
-                UPDATE
+                DELETE
               </Button>
               <Button
                 fullWidth

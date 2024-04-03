@@ -70,22 +70,21 @@ export const getUserGames = async (req, res, next) => {
 export const addOrRemovePlayer = async (req, res, next) => {
   try {
     const { id } = req.params;
-    const { players } = req.body;
+    const { userId } = req.body;
+    console.log(userId);
     const game = await Game.findById(id);
-    const isPlay = game.players.filter(
-      (player) => player.userId === players[0].userId
-    )[0];
+    const isPlay = game.players.filter((player) => player.userId === userId)[0];
 
     if (!isPlay) {
-      console.log("add");
       const updatedGame = await Game.findByIdAndUpdate(
         id,
-        { $push: { players: players } },
+        {
+          $push: { players: req.body },
+        },
         { new: true }
       );
       res.status(200).json(updatedGame);
     } else {
-      console.log("remove");
       const updatedGame = await Game.findByIdAndUpdate(
         id,
         { $pull: { players: { _id: isPlay._id } } },
