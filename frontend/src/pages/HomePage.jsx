@@ -10,34 +10,39 @@ const HomePage = () => {
   const isNonMobileScreens = useMediaQuery("(min-width:1000px)");
   const { user } = useSelector((state) => state.user);
 
+
   return (
     <Box
       width="100%"
-      padding="2rem 6%"
+      padding="2rem"
       display={isNonMobileScreens ? "flex" : "block"}
-      gap="0.5rem"
+      gap="1rem"
       justifyContent="space-between"
     >
-      <Box
-        flexBasis={isNonMobileScreens ? "26%" : undefined}
-        mt={isNonMobileScreens ? undefined : "2rem"}
-      >
-        <UserWidget userId={user._id} userImage={user.userImage} />
-        <AdvertWidget />
-      </Box>
-      <Box
-        flexBasis={isNonMobileScreens ? "42%" : undefined}
-        mt={isNonMobileScreens ? undefined : "2rem"}
-      >
-        <MyPostWidget userImage={user.userImage} />
-        <PostsWidget isProfile={false} />
-      </Box>
       {isNonMobileScreens && (
         <Box flexBasis="26%">
-          <GamesWidget isProfile={false} />
-          <Box m="2rem 0" />
+          <UserWidget userId={user._id} userImage={user.userImage} />
         </Box>
       )}
+
+      <Box
+        flexBasis={isNonMobileScreens ? "40%" : undefined}
+        mt={isNonMobileScreens ? undefined : "1rem"}
+      >
+        <MyPostWidget userImage={user.userImage} />
+      <PostsWidget isProfile={false} /> 
+        <GamesWidget isProfile={false} />
+      </Box>
+
+      
+     
+        {isNonMobileScreens && <Box 
+        flexBasis={isNonMobileScreens ? "40%" : undefined}
+        mt={isNonMobileScreens ? undefined : "1rem"}
+        >
+          <AdvertWidget />
+          <GamesWidget isProfile={false} />
+        </Box>}
     </Box>
   );
 };

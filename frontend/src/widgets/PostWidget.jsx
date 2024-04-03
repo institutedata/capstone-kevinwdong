@@ -1,18 +1,26 @@
 /* eslint-disable react/prop-types */
+import { useState } from "react";
 import PropTypes from "prop-types";
 import {
   ChatBubbleOutlineOutlined,
   FavoriteBorderOutlined,
   FavoriteOutlined,
-  ShareOutlined,
 } from "@mui/icons-material";
-import { Box, Divider, IconButton, Typography, useTheme } from "@mui/material";
+import PostAddIcon from "@mui/icons-material/PostAdd";
+import {
+  Box,
+  Divider,
+  IconButton,
+  Typography,
+  useTheme,
+  InputBase,
+  Button,
+} from "@mui/material";
 import FlexBetween from "../components/FlexBetween";
 import WidgetWrapper from "../components/WidgetWrapper";
 import { useDispatch, useSelector } from "react-redux";
 import { setPost } from "../redux/postSlice.js";
 import Friend from "../components/Friend";
-
 
 const PostWidget = ({
   postId,
@@ -25,19 +33,19 @@ const PostWidget = ({
   likes,
   comments,
 }) => {
- 
-  const { user, token  } = useSelector((state) => state.user)
+  const [error, setError] = useState(null);
+  const [commentText, setCommentText] = useState("");
+  const [isComments, setIsComments] = useState(false);
+  const { user, token } = useSelector((state) => state.user);
   const dispatch = useDispatch();
   const loggedInUserId = user._id;
   const isLiked = Boolean(likes[loggedInUserId]);
-  const likeCount = Object.keys(likes).length;  
+  const likeCount = Object.keys(likes).length;
 
   const { palette } = useTheme();
+  const dark = palette.neutral.dark;
   const main = palette.neutral.main;
   const primary = palette.primary.main;
-
-  // console.log(postId,
-  //   postUserId, loggedInUserId)
 
   const patchLike = async () => {
     const response = await fetch(`http://localhost:8080/posts/${postId}/like`, {
@@ -49,7 +57,40 @@ const PostWidget = ({
       body: JSON.stringify({ userId: loggedInUserId }),
     });
     const updatedPost = await response.json();
+    dispatch(setPost({ post: updatedPost }));
+  };
+
+  const addComment = async () => {
+    try {
+      // const formData = new FormData();
+      // formData.append("userId", user._id);
+      // formData.append("firstName", user.firstName);
+      // formData.append("lastName", user.lastName);
+      // formData.append("comment", commentText);
+
+      // console.log("formData", formData);
+
+      const response = await fetch(
+        `http://localhost:8080/posts/update/${postId}/comments`,
+        {
+          method: "PUT",
+          headers: {
+            Authorization: token,
+          },
+          body: JSON.stringify({
+            userId: user._id,
+            comment: commentText,
+            firstName: user.firstName,
+            lastName: user.lastName,
+            postId: postId,
+          }),
+        }
+      );
+      const updatedPost = await response.json();
       dispatch(setPost({ post: updatedPost }));
+    } catch (error) {
+      setError(error.message);
+    }
   };
 
   return (
@@ -69,7 +110,7 @@ const PostWidget = ({
           height="auto"
           alt="post"
           style={{ borderRadius: "0.75rem", marginTop: "0.75rem" }}
-          src={'#'}
+          src={"#"}
         />
       )}
       <FlexBetween mt="0.25rem">
@@ -86,30 +127,58 @@ const PostWidget = ({
           </FlexBetween>
 
           <FlexBetween gap="0.3rem">
-            <IconButton >
+            <IconButton onClick={() => setIsComments(!isComments)}>
               <ChatBubbleOutlineOutlined />
             </IconButton>
             <Typography>{comments.length}</Typography>
           </FlexBetween>
         </FlexBetween>
-
-        <IconButton>
-          <ShareOutlined />
-        </IconButton>
       </FlexBetween>
-      {/* {isComments && (
+      {isComments && (
         <Box mt="0.5rem">
-          {comments.map((comment, i) => (
-            <Box key={`${name}-${i}`}>
-              <Divider />
-              <Typography sx={{ color: main, m: "0.5rem 0", pl: "1rem" }}>
-                {comment}
-              </Typography>
-            </Box>
+          {comments.map((comment) => (
+            <>
+              <Box key={comment._id}>
+                <Box display="flex" justifyContent="start" m="1rem 0">
+                  <Typography variant="h5" color={dark} fontWeight="500">
+                    {comment.comment}
+                  </Typography>
+                </Box>
+                <Box display="flex" justifyContent="end" mb="0.5rem">
+                  <Typography variant="h6" color={dark} fontWeight="400">
+                    {comment.firstName} {comment.lastName}
+                  </Typography>
+                </Box>
+                <Divider />
+              </Box>
+            </>
           ))}
-          <Divider />
+          <Box mt="2rem">
+            <InputBase
+              placeholder="What do you think?"
+              onChange={(e) => setCommentText(e.target.value)}
+              sx={{
+                width: "100%",
+                backgroundColor: palette.neutral.light,
+                borderRadius: "1rem",
+                padding: "0.5rem 1rem",
+              }}
+            />
+          </Box>
+          <Box display="flex" justifyContent="end" mt="0.5rem">
+            <IconButton
+              onClick={addComment}
+              sx={{
+                color: palette.background.alt,
+                backgroundColor: palette.primary.main,
+                borderRadius: "3rem",
+              }}
+            >
+              <PostAddIcon />
+            </IconButton>
+          </Box>
         </Box>
-      )} */}
+      )}
     </WidgetWrapper>
   );
 };

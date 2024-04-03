@@ -83,3 +83,26 @@ export const likePost = async (req, res, next) => {
     next(errorHandler(400, error.message));
   }
 };
+
+
+
+//@desc     Update a post comments
+//@route    PUT /posts/update/:postId/comments
+export const updatePostComments = async (req, res, next) => {
+  try {
+    const { postId } = req.params;
+    const { comments } = req.body;
+    const updatedPost = await Post.findByIdAndUpdate(
+      postId,
+      { $push: {comments: comments} },
+      { new: true }
+    );
+
+      console.log(updatedPost);
+
+    res.status(200).json(updatedPost);
+  }
+  catch (error) {
+    next(errorHandler(400, error.message));
+  }
+}

@@ -2,6 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   posts: [],
+  postsOrGames: true,
 };
 
 const postSlice = createSlice({
@@ -18,12 +19,15 @@ const postSlice = createSlice({
       });
       state.posts = updatedPosts;
     },
+    setPostsOrGames: (state) => {
+      state.postsOrGames = !state.postsOrGames;
+    },
     clearPost: (state) => {
       state.posts = [];
     },
   },
 });
 
-export const {setPosts, setPost, clearPost} = postSlice.actions;
+export const {setPosts, setPost, clearPost, setPostsOrGames} = postSlice.actions;
 
 export default postSlice.reducer;

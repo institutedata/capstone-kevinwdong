@@ -13,7 +13,7 @@ import { themeSettings } from "./theme";
 import Navbar from "./components/NavBar";
 
 function App() {
-  const mode = useSelector((state) => state.mode);
+  const{ mode }= useSelector((state) => state.mode);
   const theme = useMemo(() => createTheme(themeSettings(mode)), [mode]);
 
   return (

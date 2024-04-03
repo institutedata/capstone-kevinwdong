@@ -10,7 +10,13 @@ const postSchema = new mongoose.Schema(
     postImage: { type: String },
     userImage: { type: String },
     likes: { type: Map, of: Boolean },
-    comments: { type: Array, default: [] },
+    comments: [{ 
+      userId: { type: String, required: true },
+      firstName: { type: String, required: true },
+      lastName: { type: String, required: true },
+      comment: { type: String, required: true },
+      userImage: { type: String, required: true },
+    }],
   },
   {
     timestamps: true,

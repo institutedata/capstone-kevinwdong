@@ -72,7 +72,6 @@ export const playGame = async (req, res, next) => {
     const { id } = req.params;
     const { userId } = req.body;
     const game = await Game.findById(id);
-    console.log(game);
     const isPlay = game.players.get(userId);
 
     if (isPlay) {

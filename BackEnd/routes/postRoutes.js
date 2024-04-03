@@ -1,5 +1,5 @@
 import express from "express";
-import { createPost, getFeedPosts, getUserPosts, likePost } from "../controllers/postController.js";
+import { createPost, getFeedPosts, getUserPosts, likePost, updatePostComments } from "../controllers/postController.js";
 import { verifyToken } from "../utils/verifyToken.js";
 
 
@@ -13,6 +13,9 @@ router.get("/", getFeedPosts);
 
 //@desc    Get a user's posts
 router.get("/:userId/posts", getUserPosts);
+
+// @desc    Update a post
+router.put("/update/:postId/comments", updatePostComments);
 
 //@desc     Like a post
 router.patch("/:id/like", likePost);
