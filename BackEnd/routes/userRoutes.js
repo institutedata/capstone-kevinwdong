@@ -1,5 +1,5 @@
 import express from "express";
-import { updateUser, deleteUser, logoutUser, getUserFriends, addRemoveFriend, getUser } from "../controllers/userController.js";
+import { updateUser, deleteUser, getUserFriends, addRemoveFriend, getUser } from "../controllers/userController.js";
 import { verifyToken } from "../utils/verifyToken.js";
 
 const router = express.Router();
@@ -13,8 +13,6 @@ router.put("/update/:userId", verifyToken, updateUser);
 // @desc    Delete a user
 router.delete('/delete/:userId', verifyToken, deleteUser);
 
-// @desc    Logout a user
-router.post('/logout', logoutUser);
 
 // @desc    Get a user's friends
 router.get("/:id/friends", getUserFriends);

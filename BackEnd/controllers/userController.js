@@ -77,18 +77,6 @@ export const deleteUser = async (req, res, next) => {
   }
 };
 
-//@desc     Logout a user
-//@route    POST /users/logout
-export const logoutUser = async (req, res, next) => {
-  try {
-    res
-      // .clearCookie("access_token")
-      .status(200)
-      .json("User has been logged out");
-  } catch (error) {
-    next(error);
-  }
-};
 
 //@desc     Get a user's friends
 //@route    GET /users/:id/friends
