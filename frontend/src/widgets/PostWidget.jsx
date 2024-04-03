@@ -100,7 +100,7 @@ const PostWidget = ({
         subtitle={position}
         userImage={userImage}
       />
-      <Typography color={main} sx={{ mt: "1rem" }}>
+      <Typography color={main} variant="h5" fontWeight="500" sx={{ mt: "1rem" }}>
         {description}
       </Typography>
       {picturePath && (
@@ -122,14 +122,14 @@ const PostWidget = ({
                 <FavoriteBorderOutlined />
               )}
             </IconButton>
-            <Typography>{likeCount}</Typography>
+            <Typography color={main} variant="h6" fontWeight="500">{likeCount}</Typography>
           </FlexBetween>
 
           <FlexBetween gap="0.3rem">
             <IconButton onClick={() => setIsComments(!isComments)}>
               <ChatBubbleOutlineOutlined />
             </IconButton>
-            <Typography>{comments.length}</Typography>
+            <Typography color={main} variant="h6" fontWeight="500">{comments.length}</Typography>
           </FlexBetween>
         </FlexBetween>
       </FlexBetween>
@@ -144,7 +144,7 @@ const PostWidget = ({
                   </Typography>
                 </Box>
                 <Box display="flex" justifyContent="end" mb="0.5rem">
-                  <Typography variant="h6" color={dark} fontWeight="400">
+                  <Typography color={main} variant="h6" fontWeight="500">
                     {comment.firstName} {comment.lastName}
                   </Typography>
                 </Box>

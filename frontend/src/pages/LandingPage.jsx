@@ -6,7 +6,7 @@ import FlexBetween from "../components/FlexBetween"
 const LandingPage = () => {
   return (
       <FlexBetween>
-      <img src={bbgame} alt="nature" />
+      Landing page
       </FlexBetween>  
   )
 }

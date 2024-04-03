@@ -60,7 +60,7 @@ const RegisterWidget = () => {
   };
 
   return (
-    <WidgetWrapper>
+    <WidgetWrapper >
       <Typography fontWeight="500" variant="h5" sx={{ mb: "1.5rem" }}>
         Welcom to Hoops Connect!
       </Typography>

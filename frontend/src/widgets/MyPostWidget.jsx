@@ -58,7 +58,6 @@ const MyPostWidget = () => {
   return (
     <WidgetWrapper mb="1rem">
       <FlexBetween gap="1.5rem">
-        <UserImage image={userAvatar} size="60px" />
         <InputBase
           placeholder="What's on your mind..."
           onChange={(e) => setPost(e.target.value)}
@@ -79,6 +78,7 @@ const MyPostWidget = () => {
           <ImageOutlined sx={{ color: mediumMain }} />
           <Typography
             color={mediumMain}
+            fontWeight={500}
             sx={{ "&:hover": { cursor: "pointer", color: medium } }}
           >
             Upload

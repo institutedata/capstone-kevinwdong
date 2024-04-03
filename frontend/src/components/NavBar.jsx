@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import {
-  Box,
   Avatar,
+  AppBar,
   IconButton,
   InputBase,
   Typography,
@@ -17,10 +17,10 @@ import { Search, DarkMode, LightMode } from "@mui/icons-material";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { setMode } from "../redux/modeSlice";
+import { setPostOrGame } from "../redux/modeSlice";
 import { setLogout } from "../redux/userSlice";
 import { clearPost } from "../redux/postSlice";
 import { clearGame } from "../redux/gameSlice";
-import { setPostsOrGames } from "../redux/postSlice";
 import FlexBetween from "../components/FlexBetween";
 import userAvatar from "../assets/userAvatar.jpg";
 
@@ -62,9 +62,10 @@ const Navbar = () => {
     }
   };
 
-  const handlePostsOrGames = async () => {
-    dispatch(setPostsOrGames());
+  const handlePostOrGame = async () => {
+    dispatch(setPostOrGame());
   };
+
 
   const handlePorfile = async () => {
     if (!token) {
@@ -75,6 +76,7 @@ const Navbar = () => {
   };
 
   return (
+    <AppBar position="sticky">
     <FlexBetween padding="1rem 2%" backgroundColor={alt}>
       <FlexBetween gap="1.75rem" ml="2rem">
         {isNonMobileScreens ? (
@@ -135,6 +137,9 @@ const Navbar = () => {
       {/* DESKTOP NAV */}
       {isNonMobileScreens ? (
         <FlexBetween gap="2rem">
+          <IconButton onClick={handlePostOrGame}>
+            <Switch />
+          </IconButton>
           <IconButton onClick={() => dispatch(setMode())}>
             {theme.palette.mode === "dark" ? (
               <DarkMode sx={{ fontSize: "25px" }} />
@@ -161,7 +166,7 @@ const Navbar = () => {
               }}
               input={<InputBase />}
             >
-              <MenuItem value={fullName}>
+              <MenuItem value={fullName} onClick={() => navigate('/profile')}>
                 <Typography>{fullName}</Typography>
               </MenuItem>
               <MenuItem onClick={handleLogging}>{isLoggedin}</MenuItem>
@@ -170,11 +175,12 @@ const Navbar = () => {
         </FlexBetween>
       ) : (
         <FlexBetween gap="1rem" mr="2rem">
-          <Switch onClick={handlePostsOrGames}/>
+          <IconButton onClick={handlePostOrGame}>
+            <Switch />
+          </IconButton>
           <IconButton onClick={handlePorfile}>
             <ManageAccountsIcon fontSize="large" />
           </IconButton>
-
           <Avatar
             alt="Remy Sharp"
             onClick={handleLogging}
@@ -184,6 +190,7 @@ const Navbar = () => {
         </FlexBetween>
       )}
     </FlexBetween>
+    </AppBar>
   );
 };
 

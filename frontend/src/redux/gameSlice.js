@@ -16,7 +16,7 @@ const gameSlice = createSlice({
         if (game._id === action.payload.game._id) return action.payload.game;
         return game;
       });
-      state.posts = updatedGames;
+      state.games = updatedGames;
     },
     clearGame: (state) => {
       state.games = [];

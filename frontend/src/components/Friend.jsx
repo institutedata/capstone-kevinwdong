@@ -49,13 +49,6 @@ const Friend = ({ friendId, name, subtitle, userImage }) => {
           </Typography>
         </Box>
       </FlexBetween>
-      <IconButton sx={{ backgroundColor: primaryLight, p: "0.6rem" }}>
-        {isFriend ? (
-          <PersonRemoveOutlined sx={{ color: primaryDark }} />
-        ) : (
-          <PersonAddOutlined sx={{ color: primaryDark }} />
-        )}
-      </IconButton>
     </FlexBetween>
   );
 };

@@ -25,6 +25,7 @@ export const updateUser = async (req, res, next) => {
     if (req.user.id !== req.params.userId) {
       return next(errorHandler(403, "Not allow to update this user"));
     }
+    console.log(req.user.id, req.params.userId)
     if (req.body.password) {
       if (req.body.password.length < 8) {
         return next(

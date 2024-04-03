@@ -8,10 +8,8 @@ import ProfileWidget from "../widgets/ProfileWidget.jsx";
 import GamesWidget from "../widgets/GamesWidget.jsx";
 
 const ProfilePage = () => {
-
   const isNonMobileScreens = useMediaQuery("(min-width:1000px)");
-  const { user, token } = useSelector((state) => state.user);
-
+  const { user } = useSelector((state) => state.user);
 
   // const getUser = async () => {
   //   const response = await fetch(`http://localhost:8080/users/${user._id}`, {
@@ -39,21 +37,23 @@ const ProfilePage = () => {
         flexBasis={isNonMobileScreens ? "26%" : undefined}
         mt={isNonMobileScreens ? undefined : "2rem"}
       >
-        <UserWidget />
-        <GamesWidget userId={user._id} isProfile={true}/>
+        {!isNonMobileScreens && <ProfileWidget />}
+            <UserWidget />
+        <GamesWidget userId={user._id} isProfile={true} />
       </Box>
       <Box
         flexBasis={isNonMobileScreens ? "40%" : undefined}
         mt={isNonMobileScreens ? undefined : "2rem"}
       >
-        <ProfileWidget />
+          { isNonMobileScreens &&  <ProfileWidget userId={user._id}/>}
       </Box>
-      {isNonMobileScreens && (
-        <Box flexBasis="40%">
-          <PostsWidget userId={user._id} isProfile={true}/>
-          <Box m="2rem 0" />
-        </Box>
-      )}
+      <Box
+        flexBasis={isNonMobileScreens ? "40%" : undefined}
+        mt={isNonMobileScreens ? undefined : "2rem"}
+      >
+        <PostsWidget userId={user._id} isProfile={true} />
+        <Box m="2rem 0" />
+      </Box>
     </Box>
   );
 };

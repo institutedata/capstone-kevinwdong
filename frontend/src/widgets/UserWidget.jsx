@@ -1,10 +1,6 @@
 import PropType from "prop-types";
 import { useState, useEffect } from "react";
-import {
-  ManageAccountsOutlined,
-  EditOutlined,
-  Height,
-} from "@mui/icons-material";
+import { ManageAccountsOutlined, EditOutlined } from "@mui/icons-material";
 import { Box, Typography, Divider, useTheme, IconButton } from "@mui/material";
 import WidgetWrapper from "../components/WidgetWrapper.jsx";
 import FlexBetween from "../components/FlexBetween.jsx";
@@ -13,30 +9,37 @@ import { useDispatch, useSelector } from "react-redux";
 import UserImage from "../components/UserAvatar.jsx";
 import FacebookIcon from "@mui/icons-material/Facebook";
 import { setUser } from "../redux/userSlice.js";
+import LocationOnIcon from "@mui/icons-material/LocationOn";
+import SportsBasketballIcon from "@mui/icons-material/SportsBasketball";
+import MonitorWeightIcon from "@mui/icons-material/MonitorWeight";
+import PublishIcon from "@mui/icons-material/Publish";
 
-const UserWidget = () => {
+
+
+const UserWidget = ({userId}) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { user, token } = useSelector((state) => state.user);
 
   const { palette } = useTheme();
-  const dark = palette.neutral.dark;
-  const medium = palette.neutral.medium;
   const main = palette.neutral.main;
 
-  // const getUser = async () => {
-  //   const response = await fetch(`http://localhost:8080/users/${user._id}`, {
-  //     method: "GET",
-  //     headers: { Authorization: token },
-  //   });
-  //   const data = await response.json();
-  //   dispatch(setUser({user: data}));
-  // };
+  
 
-  // useEffect(() => {
-  //   getUser();
-  // // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, []);
+  const getUser = async () => {
+    const response = await fetch(`http://localhost:8080/users/${user._id}`, {
+      method: "GET",
+      headers: { Authorization: token },
+    });
+    const data = await response.json();
+    dispatch(setUser({user: data}));
+  };
+
+  useEffect(() => {
+    getUser();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+  console.log(user)
 
   return (
     <WidgetWrapper mb="1rem">
@@ -49,8 +52,8 @@ const UserWidget = () => {
           <UserImage image={user.userImage} size="40px" />
           <Box>
             <Typography
-              variant="h4"
-              color={dark}
+              color={main}
+              variant="h5"
               fontWeight="500"
               sx={{
                 "&:hover": {
@@ -63,12 +66,10 @@ const UserWidget = () => {
             </Typography>
           </Box>
         </FlexBetween>
-        <IconButton
-          onClick={() => {
-            navigate("/profile");
-            navigate(0);
-          }}
-        >
+        <IconButton onClick={() => 
+        {navigate('/profile')
+        navigate(0)}
+      }>
           <ManageAccountsOutlined />
         </IconButton>
       </FlexBetween>
@@ -78,20 +79,28 @@ const UserWidget = () => {
       {/* SECOND ROW */}
       <Box p="1rem 0">
         <Box display="flex" alignItems="center" gap="1rem" mb="0.5rem">
-          <Typography color={medium}>Location:</Typography>
-          <Typography color={medium}>{user.location}</Typography>
+          <LocationOnIcon />
+          <Typography color={main} variant="h5" fontWeight="500">
+            {user.location}
+          </Typography>
         </Box>
         <Box display="flex" alignItems="center" gap="1rem" mb="0.5rem">
-          <Typography color={medium}>Position:</Typography>
-          <Typography color={medium}>{user.position}</Typography>
+          <SportsBasketballIcon />
+          <Typography color={main} variant="h5" fontWeight="500">
+            {user.position}
+          </Typography>
         </Box>
         <Box display="flex" alignItems="center" gap="1rem" mb="0.5rem">
-          <Typography color={medium}>Height:</Typography>
-          <Typography color={medium}>{user.height}</Typography>
+          <PublishIcon />
+          <Typography color={main} variant="h5" fontWeight="500">
+            {user.height}
+          </Typography>
         </Box>
         <Box display="flex" alignItems="center" gap="1rem" mb="0.5rem">
-          <Typography color={medium}>Weight:</Typography>
-          <Typography color={medium}>{user.weight}</Typography>
+          <MonitorWeightIcon />
+          <Typography color={main} variant="h5" fontWeight="500">
+            {user.weight}
+          </Typography>
         </Box>
       </Box>
 

@@ -18,7 +18,6 @@ const PostsWidget = ({ userId, isProfile  }) => {
     dispatch(setPosts({ posts: data }));
   };
 
-
   const getUserPosts = async () => {
     const response = await fetch(
       `http://localhost:8080/posts/${userId}/posts`,

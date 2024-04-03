@@ -101,20 +101,16 @@ export const addOrRemovePlayer = async (req, res, next) => {
 export const updateGameComments = async (req, res, next) => {
   try {
     const { gameId } = req.params;
-
     const { comments } = req.body;
-  
+
     const updatedGame = await Game.findByIdAndUpdate(
       gameId,
-      { $push: {comments: comments} },
+      { $push: { comments: comments } },
       { new: true }
     );
 
-  
-
     res.status(200).json(updatedGame);
-  }
-  catch (error) {
+  } catch (error) {
     next(errorHandler(400, error.message));
   }
-}
+};

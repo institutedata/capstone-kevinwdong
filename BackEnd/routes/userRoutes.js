@@ -8,10 +8,10 @@ const router = express.Router();
 router.get("/:id", getUser);
 
 // @desc    Update a user
-router.put("/update/:userId", verifyToken, updateUser);
+router.put("/update/:userId",  updateUser);
 
 // @desc    Delete a user
-router.delete('/delete/:userId', verifyToken, deleteUser);
+router.delete('/delete/:userId', deleteUser);
 
 
 // @desc    Get a user's friends
