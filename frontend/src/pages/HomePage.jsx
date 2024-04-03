@@ -3,7 +3,6 @@ import { useSelector } from "react-redux";
 import UserWidget from "../widgets/UserWidget.jsx";
 import MyPostWidget from "../widgets/MyPostWidget.jsx";
 import PostsWidget from "../widgets/PostsWidget.jsx";
-// import FriendListWidget from "../widgets/FriendListWidget.jsx";
 import AdvertWidget from "../widgets/AdvetWidget.jsx";
 import GamesWidget from "../widgets/GamesWidget.jsx";
 

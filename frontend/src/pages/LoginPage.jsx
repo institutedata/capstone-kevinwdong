@@ -14,7 +14,6 @@ const LoginPage = () => {
         backgroundColor={theme.palette.background.alt}
       >
         <LoginWidget />
-        {/* <LoginForm /> */}
       </Box>
     </Box>
   );

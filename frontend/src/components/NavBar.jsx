@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import {
-  Box,
+  Avatar,
   IconButton,
   InputBase,
   Typography,
@@ -10,30 +10,23 @@ import {
   useTheme,
   useMediaQuery,
 } from "@mui/material";
-import {
-  Search,
-  Message,
-  DarkMode,
-  LightMode,
-  Login,
-  AccountBoxOutlined,
-  Menu,
-  Close,
-} from "@mui/icons-material";
-import EmojiEventsIcon from '@mui/icons-material/EmojiEvents';
+import ManageAccountsIcon from "@mui/icons-material/ManageAccounts";
+import { Search, DarkMode, LightMode } from "@mui/icons-material";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { setMode } from "../redux/themeSlice";
+import { setMode } from "../redux/modeSlice";
 import { setLogout } from "../redux/userSlice";
 import { clearPost } from "../redux/postSlice";
 import { clearGame } from "../redux/gameSlice";
 import FlexBetween from "../components/FlexBetween";
+import  userAvatar  from "../assets/userAvatar.jpg"
+
 
 const Navbar = () => {
-  const [isMobileMenuToggled, setIsMobileMenuToggled] = useState(false);
   const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
-  const [fullName, setFullName] = useState("Guest User");
-  const [isLoggedin, setIsLoggedin] = useState("LogIn");
+  const [fullName, setFullName] = useState('');
+  const [isLoggedin, setIsLoggedin] = useState('');
+  const [avatarImage, setAvatarImage] = useState('');
   const { user, token } = useSelector((state) => state.user);
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -47,11 +40,13 @@ const Navbar = () => {
 
   useEffect(() => {
     if (!token) {
-      setFullName("Profile");
+      setFullName("Guest User");
       setIsLoggedin("Log In");
+      setAvatarImage('/broken-image.jpg');
     } else {
       setFullName(`${user.firstName} ${user.lastName}`);
       setIsLoggedin("Log Out");
+      setAvatarImage(userAvatar)
     }
   }, [token, user]);
 
@@ -66,9 +61,17 @@ const Navbar = () => {
     }
   };
 
+  const handlePorfile = async () => {
+    if (!token) {
+      navigate("/login");
+    } else {
+      navigate("/profile");
+    }
+  };
+
   return (
     <FlexBetween padding="1rem 2%" backgroundColor={alt}>
-      <FlexBetween gap="1.75rem">
+      <FlexBetween gap="1.75rem" ml="2rem">
         <Typography
           fontWeight="bold"
           fontSize="clamp(1rem, 2rem, 2.25rem)"
@@ -81,8 +84,9 @@ const Navbar = () => {
             },
           }}
         >
-          HoopsConnect
+          {isNonMobileScreens ? "HoopsConnect" : "HC"}
         </Typography>
+
         {isNonMobileScreens && (
           <FlexBetween
             backgroundColor={neutralLight}
@@ -108,9 +112,7 @@ const Navbar = () => {
               <LightMode sx={{ color: dark, fontSize: "25px" }} />
             )}
           </IconButton>
-          <EmojiEventsIcon
-            sx={{ fontSize: "25px" }}
-          />
+
           <FormControl variant="standard">
             <Select
               value={fullName}
@@ -137,87 +139,25 @@ const Navbar = () => {
           </FormControl>
         </FlexBetween>
       ) : (
-        <IconButton
-          onClick={() => setIsMobileMenuToggled(!isMobileMenuToggled)}
-        >
-          <Menu />
-        </IconButton>
-      )}
+        <FlexBetween gap='1rem' mr="2rem">
+          {/* <IconButton onClick={() => dispatch(setMode())}>
+          {theme.palette.mode === "dark" ? (
+            <DarkMode sx={{ fontSize: "25px" }} />
+          ) : (
+            <LightMode sx={{ color: dark, fontSize: "25px" }} />
+          )}
+        </IconButton> */}
+          <IconButton onClick={handlePorfile}>
+            <ManageAccountsIcon fontSize="large" />
+          </IconButton>
 
-      {/* MOBILE NAV */}
-      {!isNonMobileScreens && isMobileMenuToggled && (
-        <Box
-          position="fixed"
-          right="0"
-          bottom="0"
-          height="100%"
-          zIndex="10"
-          maxWidth="500px"
-          minWidth="300px"
-          backgroundColor={background}
-        >
-          {/* CLOSE ICON */}
-          <Box display="flex" justifyContent="flex-end" p="1rem">
-            <IconButton
-              onClick={() => setIsMobileMenuToggled(!isMobileMenuToggled)}
-            >
-              <Close />
-            </IconButton>
-          </Box>
-
-          {/* MENU ITEMS */}
-          <FlexBetween
-            display="flex"
-            flexDirection="column"
-            justifyContent="center"
-            alignItems="center"
-            gap="3rem"
-          >
-            <IconButton
-              onClick={() => dispatch(setMode())}
-              sx={{ fontSize: "25px" }}
-            >
-              {theme.palette.mode === "dark" ? (
-                <DarkMode sx={{ fontSize: "25px" }} />
-              ) : (
-                <LightMode sx={{ color: dark, fontSize: "25px" }} />
-              )}
-            </IconButton>
-            <Message sx={{ fontSize: "25px" }} />
-            <Login sx={{ fontSize: "25px" }} />
-            <AccountBoxOutlined sx={{ fontSize: "25px" }} />
-            <FormControl variant="standard" value={fullName}>
-              <Select
-                value={fullName}
-                sx={{
-                  backgroundColor: neutralLight,
-                  width: "150px",
-                  borderRadius: "0.25rem",
-                  p: "0.25rem 1rem",
-                  "& .MuiSvgIcon-root": {
-                    pr: "0.25rem",
-                    width: "3rem",
-                  },
-                  "& .MuiSelect-select:focus": {
-                    backgroundColor: neutralLight,
-                  },
-                }}
-                input={<InputBase />}
-              >
-                <MenuItem
-                  value={fullName}
-                  onClick={() => {
-                    navigate("/profile");
-                    navigate(0);
-                  }}
-                >
-                  <Typography>{fullName}</Typography>
-                </MenuItem>
-                <MenuItem onClick={handleLogging}>{isLoggedin}</MenuItem>
-              </Select>
-            </FormControl>
-          </FlexBetween>
-        </Box>
+          <Avatar
+            alt="Remy Sharp"
+            onClick={handleLogging}
+            src={avatarImage}
+            sx={{ width: 30, height: 30 }}
+          />
+        </FlexBetween>
       )}
     </FlexBetween>
   );
