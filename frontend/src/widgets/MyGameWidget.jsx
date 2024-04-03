@@ -27,9 +27,6 @@ const MyGameWidget = () => {
 
   const handleGame = async () => {
     try {
-      // const formData = new FormData();
-      // formData.append("userId", user._id);
-      // formData.append("description", post);
 
       const response = await fetch(`http://localhost:8080/games/create`, {
         method: "POST",

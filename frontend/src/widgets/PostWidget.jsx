@@ -14,7 +14,6 @@ import {
   Typography,
   useTheme,
   InputBase,
-  Button,
 } from "@mui/material";
 import FlexBetween from "../components/FlexBetween";
 import WidgetWrapper from "../components/WidgetWrapper";
@@ -61,14 +60,6 @@ const PostWidget = ({
 
   const addComment = async () => {
     try {
-      // const formData = new FormData();
-      // formData.append("userId", user._id);
-      // formData.append("firstName", user.firstName);
-      // formData.append("lastName", user.lastName);
-      // formData.append("comment", commentText);
-
-      // console.log("formData", formData);
-
       const response = await fetch(
         `http://localhost:8080/posts/update/${postId}/comments`,
         {

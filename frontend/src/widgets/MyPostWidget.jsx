@@ -1,7 +1,6 @@
 import { useDispatch, useSelector } from "react-redux";
 import { ImageOutlined } from "@mui/icons-material";
 import {
-  Alert,
   Divider,
   Typography,
   InputBase,
@@ -12,8 +11,6 @@ import { setPosts } from "../redux/postSlice.js";
 import { useState } from "react";
 import FlexBetween from "../components/FlexBetween.jsx";
 import WidgetWrapper from "../components/WidgetWrapper.jsx";
-import UserImage from "../components/UserAvatar.jsx";
-import userAvatar from "../assets/userAvatar.jpg";
 
 const MyPostWidget = () => {
   const [post, setPost] = useState("");
@@ -25,9 +22,6 @@ const MyPostWidget = () => {
 
   const handlePost = async () => {
     try {
-      // const formData = new FormData();
-      // formData.append("userId", user._id);
-      // formData.append("description", post);
 
       const response = await fetch(`http://localhost:8080/posts/create`, {
         method: "POST",

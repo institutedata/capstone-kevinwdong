@@ -1,6 +1,7 @@
 import PropType from "prop-types";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 import {
   Box,
   Button,
@@ -16,6 +17,7 @@ import WidgetWrapper from "../components/WidgetWrapper";
 import FlexBetween from "../components/FlexBetween";
 
 const LoginWidget = () => {
+  const { token } = useSelector((state) => state.user);
   const [formData, setFormData] = useState({});
   const [error, setError] = useState(null);
   const dispatch = useDispatch();
@@ -35,7 +37,7 @@ const LoginWidget = () => {
     try {
       const response = await fetch("http://localhost:8080/auth/login", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { Authorisation: token, "Content-Type": "application/json" },
         body: JSON.stringify(formData),
       });
       const data = await response.json();

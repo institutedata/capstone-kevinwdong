@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Box, useMediaQuery } from "@mui/material";
 import { useSelector } from "react-redux";
 import UserWidget from "../widgets/UserWidget.jsx";
@@ -10,20 +10,7 @@ import GamesWidget from "../widgets/GamesWidget.jsx";
 const ProfilePage = () => {
   const isNonMobileScreens = useMediaQuery("(min-width:1000px)");
   const { user } = useSelector((state) => state.user);
-
-  // const getUser = async () => {
-  //   const response = await fetch(`http://localhost:8080/users/${user._id}`, {
-  //     method: "GET",
-  //     headers: { Authorization: token },
-  //   });
-  //   const data = await response.json();
-  //   setUser(data);
-  // };
-  // useEffect(() => {
-  //   getUser();
-  // }, []); // eslint-disable-line react-hooks/exhaustive-deps
-
-  // if (!user) return null;
+  const [editProfile, setEditProfile] = useState(false);
 
   return (
     <Box
@@ -37,15 +24,15 @@ const ProfilePage = () => {
         flexBasis={isNonMobileScreens ? "26%" : undefined}
         mt={isNonMobileScreens ? undefined : "2rem"}
       >
-        {!isNonMobileScreens && <ProfileWidget />}
-            <UserWidget />
-        <GamesWidget userId={user._id} isProfile={true} />
+        { !isNonMobileScreens && editProfile && <ProfileWidget editProfile={editProfile} setEditProfile={setEditProfile} userId={user._id} /> }
+        <UserWidget editProfile={editProfile} setEditProfile={setEditProfile} />
       </Box>
       <Box
         flexBasis={isNonMobileScreens ? "40%" : undefined}
         mt={isNonMobileScreens ? undefined : "2rem"}
       >
-          { isNonMobileScreens &&  <ProfileWidget userId={user._id}/>}
+        {editProfile && isNonMobileScreens && <ProfileWidget userId={user._id} />}
+        <GamesWidget userId={user._id} isProfile={true} />
       </Box>
       <Box
         flexBasis={isNonMobileScreens ? "40%" : undefined}

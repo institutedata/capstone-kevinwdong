@@ -40,7 +40,6 @@ const GameWidget = ({
 
   const { palette } = useTheme();
   const main = palette.neutral.main;
-  const dark = palette.neutral.dark;
 
   const patchPlayer = async () => {
     const response = await fetch(
@@ -162,7 +161,7 @@ const GameWidget = ({
         <Box mt="0.5rem">
           {players.map((player) => (
             <>
-              <Box m="1rem">
+              <Box m="1rem" key={player._id}>
                 <FlexBetween>
                   <UserAvatar userImage={userImage} size="40px" />
                   <FlexBetween gap="0.5rem">

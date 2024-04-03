@@ -1,4 +1,3 @@
-import { Link } from "react-router-dom";
 import { Typography, useTheme } from "@mui/material";
 import FlexBetween from "../components/FlexBetween.jsx";
 import WidgetWrapper from "../components/WidgetWrapper.jsx";
@@ -7,7 +6,6 @@ import bbgame from '../assets/bbgame.jpg';
 const AdvetWidget = () => {
   const { palette } = useTheme();
   const dark = palette.neutral.dark;
-  const main = palette.neutral.main;
   const medium = palette.neutral.medium;
 
 

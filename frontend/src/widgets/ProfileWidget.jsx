@@ -1,10 +1,10 @@
+import PropTypes from "prop-types";
 import { useState } from "react";
 import {
   Box,
   Button,
   TextField,
   useMediaQuery,
-  Typography,
   useTheme,
   Alert,
 } from "@mui/material";
@@ -16,18 +16,17 @@ import userAvatar from "../assets/userAvatar.jpg";
 import WidgetWrapper from "../components/WidgetWrapper";
 import FlexBetween from "../components/FlexBetween";
 
-const ProfileWidget = () => {
+const ProfileWidget = ({editProfile, setEditProfile}) => {
   const [error, setError] = useState(null);
   const [formData, setFormData] = useState({});
+
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const isNonMobile = useMediaQuery("(min-width:600px)");
-  const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
   const { user, token } = useSelector((state) => state.user);
   const { palette } = useTheme(themeSettings);
-  const theme = useTheme();
 
-  console.log(user, token)
+
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.id]: e.target.value.trim() });
@@ -55,6 +54,7 @@ const ProfileWidget = () => {
         setError(data.message);
       } else {
         dispatch(setUpdate(data));
+        setEditProfile(!editProfile);
       }
     } catch (error) {
       setError(error.message);
@@ -87,7 +87,7 @@ const ProfileWidget = () => {
   };
 
   return (
-    <WidgetWrapper>
+    <WidgetWrapper mb='1rem'>
           <Box display="flex" justifyContent="center" mb={3} mx={3}>
             <Box
 
@@ -217,6 +217,11 @@ const ProfileWidget = () => {
           </form>
     </WidgetWrapper>
   );
+};
+
+ProfileWidget.propTypes = {
+  editProfile: PropTypes.bool.isRequired,
+  setEditProfile: PropTypes.func.isRequired,
 };
 
 export default ProfileWidget;

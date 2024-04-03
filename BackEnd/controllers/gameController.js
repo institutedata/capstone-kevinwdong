@@ -105,7 +105,7 @@ export const updateGameComments = async (req, res, next) => {
 
     const updatedGame = await Game.findByIdAndUpdate(
       gameId,
-      { $push: { comments: comments } },
+      { $push: { comments: req.body } },
       { new: true }
     );
 
