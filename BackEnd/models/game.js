@@ -18,7 +18,13 @@ const gameSchema = new mongoose.Schema(
         userImage: { type: String },
       }
     ],
-    comments: { type: Array, default: [] },
+    comments: [{ 
+      userId: { type: String },
+      firstName: { type: String },
+      lastName: { type: String },
+      comment: { type: String },
+      userImage: { type: String },
+    }],
   },
   {
     timestamps: true,

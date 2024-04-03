@@ -33,7 +33,6 @@ const PostWidget = ({
   likes,
   comments,
 }) => {
-  const [error, setError] = useState(null);
   const [commentText, setCommentText] = useState("");
   const [isComments, setIsComments] = useState(false);
   const { user, token } = useSelector((state) => state.user);
@@ -89,7 +88,7 @@ const PostWidget = ({
       const updatedPost = await response.json();
       dispatch(setPost({ post: updatedPost }));
     } catch (error) {
-      setError(error.message);
+      console.error(error.message);
     }
   };
 
@@ -157,6 +156,7 @@ const PostWidget = ({
             <InputBase
               placeholder="What do you think?"
               onChange={(e) => setCommentText(e.target.value)}
+              value={commentText}
               sx={{
                 width: "100%",
                 backgroundColor: palette.neutral.light,
@@ -167,6 +167,7 @@ const PostWidget = ({
           </Box>
           <Box display="flex" justifyContent="end" mt="0.5rem">
             <IconButton
+              disabled={!commentText}
               onClick={addComment}
               sx={{
                 color: palette.background.alt,

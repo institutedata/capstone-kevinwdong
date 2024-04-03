@@ -8,8 +8,6 @@ export const createPost = async (req, res, next) => {
   try {
 
     const { userId, description, postImage } = req.body;
-
-    console.log(req.body);  
   
     const user = await User.findById(userId);
  
@@ -96,11 +94,9 @@ export const updatePostComments = async (req, res, next) => {
     const { comments } = req.body;
     const updatedPost = await Post.findByIdAndUpdate(
       postId,
-      { $push: {comments: comments} },
+      { $push: {comments: req.body} },
       { new: true }
     );
-
-      console.log(updatedPost);
 
     res.status(200).json(updatedPost);
   }

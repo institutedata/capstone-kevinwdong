@@ -71,7 +71,6 @@ export const addOrRemovePlayer = async (req, res, next) => {
   try {
     const { id } = req.params;
     const { userId } = req.body;
-    console.log(userId);
     const game = await Game.findById(id);
     const isPlay = game.players.filter((player) => player.userId === userId)[0];
 
@@ -96,3 +95,26 @@ export const addOrRemovePlayer = async (req, res, next) => {
     next(errorHandler(400, error.message));
   }
 };
+
+//@desc     Update a game comments
+//@route    PATCH/games/update/:gameId/comments
+export const updateGameComments = async (req, res, next) => {
+  try {
+    const { gameId } = req.params;
+
+    const { comments } = req.body;
+  
+    const updatedGame = await Game.findByIdAndUpdate(
+      gameId,
+      { $push: {comments: comments} },
+      { new: true }
+    );
+
+  
+
+    res.status(200).json(updatedGame);
+  }
+  catch (error) {
+    next(errorHandler(400, error.message));
+  }
+}
