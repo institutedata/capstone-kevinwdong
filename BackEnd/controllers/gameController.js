@@ -10,11 +10,12 @@ export const createGame = async (req, res, next) => {
       userId,
       firstName,
       lastName,
+      title,
       location,
       description,
       gameImage,
       userImage,
-      participancts,
+      players,
       comments,
     } = req.body;
 
@@ -24,12 +25,12 @@ export const createGame = async (req, res, next) => {
       userId,
       firstName: user.firstName,
       lastName: user.lastName,
-      location: user.location,
+      title,
       location,
       description,
       userImage: user.userImage,
       gameImage,
-      paticipants: {},
+      players: {},
       comments: [],
     });
     await newGame.save();
@@ -41,7 +42,6 @@ export const createGame = async (req, res, next) => {
   }
 };
 
-
 //@desc     Get all games
 //route    GET /games
 export const getFeedGames = async (req, res, next) => {
@@ -52,7 +52,6 @@ export const getFeedGames = async (req, res, next) => {
     next(errorHandler(400, error.message));
   }
 };
-
 
 //@desc     Get a user's games
 //@route    GET /games/:userId/games
@@ -66,28 +65,29 @@ export const getUserGames = async (req, res, next) => {
   }
 };
 
-//@desc     Like a post
-//@route    PATCH /posts/:id/like
-export const likeGame = async (req, res, next) => {
+//@desc     Play a game
+//@route    PATCH /games/:id/play
+export const playGame = async (req, res, next) => {
   try {
     const { id } = req.params;
     const { userId } = req.body;
-    const post = await Post.findById(id);
-    const isLiked = post.likes.get(userId);
+    const game = await Game.findById(id);
+    console.log(game);
+    const isPlay = game.players.get(userId);
 
-    if (isLiked) {
-      post.likes.delete(userId);
+    if (isPlay) {
+      game.players.delete(userId);
     } else {
-      post.likes.set(userId, true);
+      game.players.set(userId, true);
     }
 
-    const updatedPost = await Post.findByIdAndUpdate(
+    const updatedGame = await Game.findByIdAndUpdate(
       id,
-      { likes: post.likes },
+      { players: game.players },
       { new: true }
     );
 
-    res.status(200).json(updatedPost);
+    res.status(200).json(updatedGame);
   } catch (error) {
     next(errorHandler(400, error.message));
   }

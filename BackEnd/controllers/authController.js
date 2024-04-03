@@ -27,8 +27,6 @@ export const registerUser = async (req, res, next) => {
       next(errorHandler(400, "User already exists"));
     }
 
-    // const salt = await bcrypt.genSalt();
-    // const passwordHash = await bcrypt.hash(password, salt);
     const hasdedPassword = bcryptjs.hashSync(password, 10);
 
     const newUser = new User({
@@ -45,20 +43,14 @@ export const registerUser = async (req, res, next) => {
       userBio,
     });
 
+    const user = await newUser.save();
 
-    const savedUser = await newUser.save();
+    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
+    delete user.password;
+
     res.status(201).json({
-      _id: savedUser._id,
-      firstName: savedUser.firstName,
-      lastName: savedUser.lastName,
-      email: savedUser.email,
-      userImage: savedUser.userImage,
-      friends: savedUser.friends,
-      location: savedUser.location,
-      position: savedUser.position,
-      height: savedUser.height,
-      weight: savedUser.weight,
-      userBio: savedUser.userBio,
+      token,
+      user,
     });
   } catch (error) {
     next(error);
@@ -77,22 +69,17 @@ export const loginUser = async (req, res, next) => {
 
     const user = await User.findOne({ email: email });
 
-
     if (!user) {
       return next(errorHandler(401, "Email not found"));
     }
     const isMatch = bcryptjs.compareSync(password, user.password);
 
-
     if (!isMatch) return next(errorHandler(401, "Invalid password"));
-  
-    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
-    delete user.password
 
-    res
-      .status(200)
-      .json({token, user});
-      console.log(token, user)
+    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
+    delete user.password;
+
+    res.status(200).json({ token, user });
   } catch (error) {
     next(error);
   }
