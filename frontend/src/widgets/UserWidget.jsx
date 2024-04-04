@@ -34,7 +34,7 @@ const UserWidget = ({ editProfile, setEditProfile }) => {
         onClick={() => navigate("/profile")}
       >
         <FlexBetween gap="1rem">
-          <UserAvatar image={user.userImage} size="40px" />
+          <UserAvatar userImage={user.userImage} size="40px" />
           <Box>
             <Typography
               color={main}

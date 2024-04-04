@@ -2,6 +2,7 @@ import PropTypes from "prop-types";
 import { useState } from "react";
 import { ChatBubbleOutlineOutlined } from "@mui/icons-material";
 import SportsBasketballIcon from "@mui/icons-material/SportsBasketball";
+import MoreVertIcon from "@mui/icons-material/MoreVert";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import PostAddIcon from "@mui/icons-material/PostAdd";
 import {
@@ -20,7 +21,6 @@ import UserAvatar from "../components/UserAvatar";
 
 const GameWidget = ({
   gameId,
-  gameUserId,
   firstName,
   lastName,
   title,
@@ -42,8 +42,6 @@ const GameWidget = ({
   const main = palette.neutral.main;
   const medium = palette.neutral.medium;
 
-
-
   const patchPlayer = async () => {
     const response = await fetch(
       `http://localhost:8080/games/${gameId}/player`,
@@ -58,6 +56,7 @@ const GameWidget = ({
           firstName: user.firstName,
           lastName: user.lastName,
           userImage: user.userImage,
+          position: user.position,
         }),
       }
     );
@@ -65,8 +64,6 @@ const GameWidget = ({
     dispatch(setGame({ game: updatedGame }));
     setIsPlay(!isPlay);
   };
-
- 
 
   const addGameComments = async () => {
     try {
@@ -79,10 +76,11 @@ const GameWidget = ({
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            userId: gameUserId,
+            uerId: user.gameUserId,
+            userImage: user.userImage,
+            firstName: user.firstName,
+            lastName: user.lastName,
             comment: commentText,
-            firstName: firstName,
-            lastName: lastName,
             gameId: gameId,
           }),
         }
@@ -94,18 +92,40 @@ const GameWidget = ({
     }
   };
 
+  const handleDelete = async () => {
+    try {
+      const response = await fetch(
+        `http://localhost:8080/games/delete/${gameId}`,
+        {
+          method: "DELETE",
+          headers: {
+            Authorization: token,
+          },
+        }
+      );
+      const data = await response.json();
+      console.log(data);
+    } catch (error) {
+      console.error(error.message);
+    }
+  };
 
   return (
     <WidgetWrapper mb="1rem">
       <Box>
-        <Typography
-          color={main}
-          variant="h4"
-          fontWeight="500"
-          sx={{ mt: "1rem" }}
-        >
-          {title}
-        </Typography>
+        <FlexBetween justifyContent="space-between" mb="1rem">
+          <Typography
+            color={main}
+            variant="h4"
+            fontWeight="500"
+            sx={{ mt: "1rem" }}
+          >
+            {title}
+          </Typography>
+          <IconButton onClick={handleDelete}>
+            <MoreVertIcon />
+          </IconButton>
+        </FlexBetween>
 
         {gameImage && (
           <img
@@ -137,8 +157,11 @@ const GameWidget = ({
         <FlexBetween gap="1rem">
           <FlexBetween gap="0.3rem">
             <IconButton onClick={patchPlayer}>
-           { !isPlay ? ( <SportsBasketballIcon  />) :
-             ( <SportsBasketballIcon sx={{  color: "#c84117" }} />)}
+              {isPlay ? (
+                <SportsBasketballIcon sx={{ color: "#c84117" }}/>
+              ) : (
+                <SportsBasketballIcon  />
+              )}
             </IconButton>
             <Typography color={main} variant="h6" fontWeight="500">
               {playerCount}
@@ -169,19 +192,19 @@ const GameWidget = ({
         <Box mt="0.5rem">
           {players.map((player) => (
             <>
-              <Box m="1rem" key={player._id}>
+              <Box m="1rem" key={player.userId}>
                 <FlexBetween>
-                  <UserAvatar userImage={player.userImage} size="40px" />
                   <FlexBetween gap="0.5rem">
+                    <UserAvatar userImage={player.userImage} size="40px" />
                     <Typography color={main} variant="h6" fontWeight="500">
-                      {player.firstName}
-                    </Typography>
-                    <Typography color={main} variant="h6" fontWeight="500">
-                      {player.lastName}
+                      {player.firstName} {player.lastName}
                     </Typography>
                   </FlexBetween>
+                  <Typography color={main} variant="h6" fontWeight="500">
+                    {player.position}
+                  </Typography>
                 </FlexBetween>
-                <Divider />
+                <Divider sx={{ m: "0.5rem 0" }} />
               </Box>
             </>
           ))}
@@ -189,7 +212,7 @@ const GameWidget = ({
       )}
       {isComments && (
         <Box mt="0.5rem">
-          {comments.map((comment) => (
+          {comments?.map((comment) => (
             <>
               <Box key={comment._id}>
                 <Box display="flex" justifyContent="start" m="1rem 0">
@@ -198,17 +221,28 @@ const GameWidget = ({
                   </Typography>
                 </Box>
                 <Box m="1rem">
-                  <FlexBetween>
-                    <FlexBetween gap="0.5rem">
-                      <Typography color={medium} variant="h6" fontWeight="500">
-                        {firstName}
-                      </Typography>
-                      <Typography color={medium} variant="h6" fontWeight="500">
-                        {lastName}
-                      </Typography>
+                  <Box display="flex" justifyContent="end">
+                    <FlexBetween>
+                      <UserAvatar userImage={comment.userImage} size="40px" />
+                      <FlexBetween gap="0.5rem">
+                        <Typography
+                          color={medium}
+                          variant="h6"
+                          fontWeight="500"
+                        >
+                          {firstName}
+                        </Typography>
+                        <Typography
+                          color={medium}
+                          variant="h6"
+                          fontWeight="500"
+                        >
+                          {lastName}
+                        </Typography>
+                      </FlexBetween>
                     </FlexBetween>
-                  </FlexBetween>
-                  <Divider />
+                  </Box>
+                  <Divider sx={{ mt: "0.5rem" }} />
                 </Box>
               </Box>
             </>

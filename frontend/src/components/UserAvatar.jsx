@@ -1,7 +1,7 @@
 import PropType from "prop-types";
 import { Box } from "@mui/material";
 
-const UserAvatar = ({ image, size }) => {
+const UserAvatar = ({ userImage, size }) => {
   return (
     <Box width={size} height={size}>
       <img
@@ -9,14 +9,14 @@ const UserAvatar = ({ image, size }) => {
         width={size}
         height={size}
         alt="user"
-        src={image}
+        src={userImage}
       />
     </Box>
   );
 };
 
 UserAvatar.propTypes = {
-  image: PropType.string,
+  userImage: PropType.string,
   size: PropType.string,
 };
 

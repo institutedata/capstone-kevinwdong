@@ -21,19 +21,16 @@ const MyGameWidget = () => {
   const { user, token } = useSelector((state) => state.user);
   const dispatch = useDispatch();
 
-
   const { palette } = useTheme();
   const mediumMain = palette.neutral.mediumMain;
   const medium = palette.neutral.medium;
   const main = palette.neutral.main;
 
-
-
-
   const handleGame = async () => {
     try {
-      const gameImageUrl = await fetch('https://source.unsplash.com/featured/?basketball')
-      .then(response => response.url)
+      const gameImageUrl = await fetch(
+        "https://source.unsplash.com/featured/?basketball"
+      ).then((response) => response.url);
 
       const response = await fetch(`http://localhost:8080/games/create`, {
         method: "POST",
@@ -52,14 +49,16 @@ const MyGameWidget = () => {
           gameImage: gameImageUrl,
         }),
       });
-      const data = await response.json();
+
       if (!response.ok) {
-        console.log(data);
+        console.log(response);
         return;
-      } else {
-        const games = await response.json();
-        dispatch(setGames(games));
       }
+
+      console.log("response; ", response);
+      const data = await response?.json();
+
+      dispatch(setGames(data));
     } catch (error) {
       console.error(error);
     }
@@ -134,7 +133,7 @@ const MyGameWidget = () => {
           onClick={handleGame}
           sx={{
             color: main,
-            backgroundColor: '#c84117',
+            backgroundColor: "#c84117",
             borderRadius: "3rem",
           }}
         >

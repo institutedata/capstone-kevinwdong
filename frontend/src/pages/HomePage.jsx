@@ -8,6 +8,9 @@ import AdvertWidget from "../widgets/AdvetWidget.jsx";
 import GamesWidget from "../widgets/GamesWidget.jsx";
 import GameLinWidget from "../widgets/GameLinkWidget.jsx";
 
+
+
+
 const HomePage = () => {
   const isNonMobileScreens = useMediaQuery("(min-width:1000px)");
   const { user } = useSelector((state) => state.user);

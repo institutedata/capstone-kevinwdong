@@ -111,3 +111,16 @@ export const updateGameComments = async (req, res, next) => {
     next(errorHandler(400, error.message));
   }
 };
+
+
+//@desc     Delete a game
+//@route    DELETE /games/delete/:gameId
+export const deleteGame = async (req, res, next) => {
+    try {
+
+      await Game.findByIdAndDelete(req.params.gameId);
+      res.status(200).json("Game has been deleted");
+    } catch (error) {
+      next(error);
+    }
+  };

@@ -43,13 +43,7 @@ const MyPostWidget = () => {
         }),
       });
       const data = await response.json();
-      if (!response.ok) {
-        console.log(data);
-        return;
-      } else {
-        const posts = await response.json();
-        dispatch(setPosts(posts));
-      }
+        dispatch(setPosts(data));
     } catch (error) {
       console.error(error);
     }

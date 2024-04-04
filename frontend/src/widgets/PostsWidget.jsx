@@ -1,10 +1,10 @@
 import { PropTypes } from "prop-types";
-import { useEffect, } from "react";
+import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { setPosts} from "../redux/postSlice";
+import { setPosts } from "../redux/postSlice";
 import PostWidget from "./PostWidget";
 
-const PostsWidget = ({ userId, isProfile  }) => {
+const PostsWidget = ({ userId, isProfile }) => {
   const dispatch = useDispatch();
   const { token } = useSelector((state) => state.user);
   const { posts } = useSelector((state) => state.post);
@@ -28,7 +28,7 @@ const PostsWidget = ({ userId, isProfile  }) => {
     );
     const data = await response.json();
     dispatch(setPosts({ posts: data }));
-  }
+  };
 
   useEffect(() => {
     if (isProfile) {
@@ -36,11 +36,20 @@ const PostsWidget = ({ userId, isProfile  }) => {
     } else {
       getPosts();
     }
-  }, []);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [posts]);
+
+
+
+  // const arrangedPosts = posts?.sort((a, b) => {
+  //   new Date(b?.createdAt) - new Date(a?.createdAt);
+  // });
+
+
 
   return (
     <>
-      {posts.map(
+      {posts?.map(
         ({
           _id,
           userId,

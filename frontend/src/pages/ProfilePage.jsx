@@ -17,7 +17,7 @@ const ProfilePage = () => {
       width="100%"
       padding="2rem 2rem"
       display={isNonMobileScreens ? "flex" : "block"}
-      gap="0.5rem"
+      gap="1rem"
       justifyContent="space-between"
     >
       <Box

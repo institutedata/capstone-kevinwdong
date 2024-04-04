@@ -22,7 +22,7 @@ import { setLogout } from "../redux/userSlice";
 import { clearPost } from "../redux/postSlice";
 import { clearGame } from "../redux/gameSlice";
 import FlexBetween from "../components/FlexBetween";
-import userAvatar from "../assets/userAvatar.jpg";
+import UserAvatar from "../assets/userAvatar.jpg";
 
 const Navbar = () => {
   const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
@@ -32,6 +32,8 @@ const Navbar = () => {
   const { user, token } = useSelector((state) => state.user);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  const defaultUserImage = 'https://icon-library.com/images/anonymous-avatar-icon/anonymous-avatar-icon-25.jpg'
 
   const theme = useTheme();
   const neutralLight = theme.palette.neutral.light;
@@ -43,11 +45,11 @@ const Navbar = () => {
     if (!token) {
       setFullName("Guest User");
       setIsLoggedin("Log In");
-      setAvatarImage("/broken-image.jpg");
+      setAvatarImage(defaultUserImage);
     } else {
       setFullName(`${user.firstName} ${user.lastName}`);
       setIsLoggedin("Log Out");
-      setAvatarImage(userAvatar);
+      setAvatarImage(user.userImage);
     }
   }, [token, user]);
 
@@ -196,7 +198,7 @@ const Navbar = () => {
             <Avatar
               alt="Remy Sharp"
               onClick={handleLogging}
-              src={user.userImage}
+              src={avatarImage}
               sx={{ width: 30, height: 30 }}
             />
           </FlexBetween>

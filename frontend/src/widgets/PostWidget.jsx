@@ -6,6 +6,7 @@ import {
   FavoriteBorderOutlined,
   FavoriteOutlined,
 } from "@mui/icons-material";
+import MoreVertIcon from "@mui/icons-material/MoreVert";
 import PostAddIcon from "@mui/icons-material/PostAdd";
 import {
   Box,
@@ -29,21 +30,17 @@ const PostWidget = ({
   likes,
   comments,
 }) => {
+  const dispatch = useDispatch();
   const [commentText, setCommentText] = useState("");
   const [isComments, setIsComments] = useState(false);
   const { user, token } = useSelector((state) => state.user);
-  const dispatch = useDispatch();
-  const loggedInUserId = user._id;
-  const isLiked = Boolean(likes[loggedInUserId]);
+  const isLiked = Boolean(likes[user._id]);
   const likeCount = Object.keys(likes).length;
 
   const { palette } = useTheme();
   const dark = palette.neutral.dark;
   const main = palette.neutral.main;
   const medium = palette.neutral.medium;
-
-
-  
 
   const patchLike = async () => {
     const response = await fetch(`http://localhost:8080/posts/${postId}/like`, {
@@ -52,7 +49,7 @@ const PostWidget = ({
         Authorization: token,
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ userId: loggedInUserId }),
+      body: JSON.stringify({ userId: user._id }),
     });
     const updatedPost = await response.json();
     dispatch(setPost({ post: updatedPost }));
@@ -85,11 +82,29 @@ const PostWidget = ({
     }
   };
 
+  const handleDelete = async () => {
+    try {
+      const response = await fetch(
+        `http://localhost:8080/posts/delete/${postId}`,
+        {
+          method: "DELETE",
+          headers: {
+            Authorization: token,
+          },
+        }
+      );
+      const data = await response.json();
+      console.log(data);
+    } catch (error) {
+      console.error(error.message);
+    }
+  };
+
   return (
     <WidgetWrapper mb="1rem">
-      <Box display="flex" justifyContent="start">
+      <FlexBetween justifyContent="space-between">
         <FlexBetween gap="1rem">
-          <UserAvatar image={userImage} size="40px" />
+          <UserAvatar userImage={userImage} size="40px" />
           <Box>
             <Typography
               color={main}
@@ -106,12 +121,16 @@ const PostWidget = ({
             </Typography>
           </Box>
         </FlexBetween>
-      </Box>
+        <IconButton onClick={handleDelete}>
+          <MoreVertIcon />
+        </IconButton>
+      </FlexBetween>
+
       <Typography
         color={main}
-        variant="h5"
+        variant="h4"
         fontWeight="500"
-        sx={{ mt: "1rem" }}
+        sx={{ m: "1rem 0" }}
       >
         {description}
       </Typography>
@@ -151,7 +170,7 @@ const PostWidget = ({
       </FlexBetween>
       {isComments && (
         <Box mt="0.5rem">
-          {comments.map((comment) => (
+          {comments?.map((comment) => (
             <>
               <Box key={comment._id}>
                 <Box display="flex" justifyContent="start" m="1rem 0">
@@ -160,17 +179,30 @@ const PostWidget = ({
                   </Typography>
                 </Box>
                 <Box m="1rem">
-                  <FlexBetween>
-                    <FlexBetween gap="0.5rem">
-                      <Typography color={medium} variant="h6" fontWeight="500">
-                        {comment.firstName}
-                      </Typography>
-                      <Typography color={medium} variant="h6" fontWeight="500">
-                        {comment.lastName}
-                      </Typography>
+                  <Box display="flex" justifyContent="end">
+                    <FlexBetween justifyContent="end">
+                      <FlexBetween gap="0.5rem">
+                        <UserAvatar userImage={comment.userImage} size="40px" />
+                        <FlexBetween gap="0.5rem">
+                          <Typography
+                            color={medium}
+                            variant="h6"
+                            fontWeight="500"
+                          >
+                            {comment.firstName}
+                          </Typography>
+                          <Typography
+                            color={medium}
+                            variant="h6"
+                            fontWeight="500"
+                          >
+                            {comment.lastName}
+                          </Typography>
+                        </FlexBetween>
+                      </FlexBetween>
                     </FlexBetween>
-                  </FlexBetween>
-                  <Divider />
+                  </Box>
+                  <Divider sx={{ mt: "0.5rem " }} />
                 </Box>
               </Box>
             </>

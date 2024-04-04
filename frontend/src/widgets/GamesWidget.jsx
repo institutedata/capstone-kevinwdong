@@ -15,7 +15,7 @@ const GamesWidget = ({ userId, isProfile }) => {
       headers: { Authorization: token },
     });
     const data = await response.json();
-    dispatch(setGames({games: data}));
+    dispatch(setGames({ games: data }));
   };
 
   const getUserGames = async () => {
@@ -27,7 +27,7 @@ const GamesWidget = ({ userId, isProfile }) => {
       }
     );
     const data = await response.json();
-    dispatch(setGames({games: data}));
+    dispatch(setGames({ games: data }));
   };
 
   useEffect(() => {
@@ -36,11 +36,12 @@ const GamesWidget = ({ userId, isProfile }) => {
     } else {
       getGames();
     }
-  }, []); // eslint-disable-next-line react-hooks/exhaustive-deps
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [games]); 
 
   return (
     <>
-      {games.map(
+      {games?.map(
         ({
           _id,
           userId,
