@@ -41,6 +41,8 @@ export const registerUser = async (req, res, next) => {
       height,
       weight,
       userBio,
+      totalGames: Math.floor(Math.random() * 100),
+      totalPoints: Math.floor(Math.random() * 1000),
     });
 
     const user = await newUser.save();

@@ -10,13 +10,12 @@ import {
 } from "@mui/material";
 import { setUpdate, setDelete } from "../redux/userSlice";
 import { useNavigate } from "react-router-dom";
-import { themeSettings } from "../theme";
 import { useDispatch, useSelector } from "react-redux";
 import userAvatar from "../assets/userAvatar.jpg";
 import WidgetWrapper from "../components/WidgetWrapper";
 import FlexBetween from "../components/FlexBetween";
 
-const ProfileWidget = ({editProfile, setEditProfile}) => {
+const ProfileWidget = () => {
   const [error, setError] = useState(null);
   const [formData, setFormData] = useState({});
 
@@ -24,7 +23,9 @@ const ProfileWidget = ({editProfile, setEditProfile}) => {
   const dispatch = useDispatch();
   const isNonMobile = useMediaQuery("(min-width:600px)");
   const { user, token } = useSelector((state) => state.user);
-  const { palette } = useTheme(themeSettings);
+
+  const { palette } = useTheme();
+  const main = palette.neutral.main;
 
 
 
@@ -54,7 +55,6 @@ const ProfileWidget = ({editProfile, setEditProfile}) => {
         setError(data.message);
       } else {
         dispatch(setUpdate(data));
-        setEditProfile(!editProfile);
       }
     } catch (error) {
       setError(error.message);
@@ -191,10 +191,8 @@ const ProfileWidget = ({editProfile, setEditProfile}) => {
                 sx={{
                   width: "25%",
                   m: "2rem 0",
-                  p: "1rem",
-                  backgroundColor: 'red',
-                  color: palette.background.alt,
-                  "&:hover": { color: palette.primary.main },
+                  p: "1rem",                 
+                  color: 'red',
                 }}
               >
                 DELETE
@@ -206,9 +204,8 @@ const ProfileWidget = ({editProfile, setEditProfile}) => {
                   width: "25%",
                   m: "2rem 0",
                   p: "1rem",
-                  backgroundColor: palette.primary.main,
-                  color: palette.background.alt,
-                  "&:hover": { color: palette.primary.main },
+                  backgroundColor: '#c84117',
+                  color: main,
                 }}
               >
                 UPDATE

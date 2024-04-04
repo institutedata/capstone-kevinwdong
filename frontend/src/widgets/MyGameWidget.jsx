@@ -14,16 +14,22 @@ import FlexBetween from "../components/FlexBetween.jsx";
 import WidgetWrapper from "../components/WidgetWrapper.jsx";
 
 const MyGameWidget = () => {
+
   const [gameTitle, setGameTitle] = useState("");
   const [gameLocation, setGameLocation] = useState("");
   const [gameDescription, setGameDescription] = useState("");
   const [game, setGame] = useState(false);
-
   const { user, token } = useSelector((state) => state.user);
-  const { palette } = useTheme();
   const dispatch = useDispatch();
+
+
+  const { palette } = useTheme();
   const mediumMain = palette.neutral.mediumMain;
   const medium = palette.neutral.medium;
+  const main = palette.neutral.main;
+
+
+
 
   const handleGame = async () => {
     try {
@@ -124,8 +130,8 @@ const MyGameWidget = () => {
           disabled={!game}
           onClick={handleGame}
           sx={{
-            color: palette.background.alt,
-            backgroundColor: palette.primary.main,
+            color: main,
+            backgroundColor: '#c84117',
             borderRadius: "3rem",
           }}
         >

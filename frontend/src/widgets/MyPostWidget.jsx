@@ -19,6 +19,7 @@ const MyPostWidget = () => {
   const dispatch = useDispatch();
   const mediumMain = palette.neutral.mediumMain;
   const medium = palette.neutral.medium;
+  const main = palette.neutral.main;
 
   const handlePost = async () => {
     try {
@@ -82,8 +83,8 @@ const MyPostWidget = () => {
           disabled={!post}
           onClick={handlePost}
           sx={{
-            color: palette.background.alt,
-            backgroundColor: palette.primary.main,
+            color: main,
+            backgroundColor: '#c84117',
             borderRadius: "3rem",
           }}
         >

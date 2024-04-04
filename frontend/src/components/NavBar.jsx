@@ -36,8 +36,8 @@ const Navbar = () => {
   const theme = useTheme();
   const neutralLight = theme.palette.neutral.light;
   const dark = theme.palette.neutral.dark;
-  const primaryLight = theme.palette.primary.light;
   const alt = theme.palette.background.alt;
+  const main = theme.palette.neutral.main;
 
   useEffect(() => {
     if (!token) {
@@ -84,11 +84,10 @@ const Navbar = () => {
             <Typography
               fontWeight="bold"
               fontSize="clamp(1rem, 2rem, 2.25rem)"
-              color="primary"
+              color="#c84117"
               onClick={() => navigate("/home")}
               sx={{
                 "&:hover": {
-                  color: primaryLight,
                   cursor: "pointer",
                 },
               }}
@@ -112,11 +111,10 @@ const Navbar = () => {
             <Typography
               fontWeight="bold"
               fontSize="clamp(1rem, 2rem, 2.25rem)"
-              color="primary"
+              color="#c84117"
               onClick={() => navigate("/home")}
               sx={{
                 "&:hover": {
-                  color: primaryLight,
                   cursor: "pointer",
                 },
               }}
@@ -167,16 +165,19 @@ const Navbar = () => {
               input={<InputBase />}
             >
               <MenuItem value={fullName} onClick={() => navigate('/profile')}>
-                <Typography>{fullName}</Typography>
+                <Typography color={main} variant="h5" fontWeight="500">{fullName}</Typography>
               </MenuItem>
-              <MenuItem onClick={handleLogging}>{isLoggedin}</MenuItem>
+              <MenuItem onClick={handleLogging}><Typography color={main} variant="h5" fontWeight="500">
+                {isLoggedin}
+              </Typography>
+                </MenuItem>
             </Select>
           </FormControl>
         </FlexBetween>
       ) : (
         <FlexBetween gap="1rem" mr="2rem">
           <IconButton onClick={handlePostOrGame}>
-            <Switch />
+            <Switch color="#c84117" />
           </IconButton>
           <IconButton onClick={handlePorfile}>
             <ManageAccountsIcon fontSize="large" />

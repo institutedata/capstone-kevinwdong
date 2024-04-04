@@ -13,6 +13,8 @@ const UserSchema = new mongoose.Schema(
     userBio: { type: String },
     location: { type: String },
     position: { type: String },
+    totalGames: { type: Number, default: 0 },
+    totalPoints: { type: Number, default: 0 },
   },
   {
     timestamps: true,

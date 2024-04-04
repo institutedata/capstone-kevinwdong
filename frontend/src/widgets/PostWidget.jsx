@@ -161,8 +161,8 @@ const PostWidget = ({
               disabled={!commentText}
               onClick={addComment}
               sx={{
-                color: palette.background.alt,
-                backgroundColor: palette.primary.main,
+                color: main,
+                backgroundColor: '#c84117',
                 borderRadius: "3rem",
               }}
             >
