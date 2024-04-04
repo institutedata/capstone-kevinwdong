@@ -16,6 +16,7 @@ import WidgetWrapper from "../components/WidgetWrapper";
 import FlexBetween from "../components/FlexBetween";
 
 const ProfileWidget = () => {
+  const isNonMobileScreens = useMediaQuery("(min-width:1000px)");
   const [error, setError] = useState(null);
   const [formData, setFormData] = useState({});
 
@@ -31,7 +32,9 @@ const ProfileWidget = () => {
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.id]: e.target.value.trim() });
+    setError(null);
   };
+
 
   const handleUpdate = async (e) => {
     e.preventDefault();
@@ -101,7 +104,7 @@ const ProfileWidget = () => {
               }}
             >
               <img
-                src={userAvatar}
+                src={user.userImage}
                 rel="user image"
                 style={{ width: "100%", height: "100%", objectFit: "cover" }}
               />

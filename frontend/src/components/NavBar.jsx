@@ -11,7 +11,7 @@ import {
   useTheme,
   useMediaQuery,
 } from "@mui/material";
-import Switch from '@mui/material/Switch';
+import Switch from "@mui/material/Switch";
 import ManageAccountsIcon from "@mui/icons-material/ManageAccounts";
 import { Search, DarkMode, LightMode } from "@mui/icons-material";
 import { useDispatch, useSelector } from "react-redux";
@@ -62,10 +62,19 @@ const Navbar = () => {
     }
   };
 
+
+
   const handlePostOrGame = async () => {
     dispatch(setPostOrGame());
   };
 
+  const handleGuestUser = async () => {
+    if (!token) {
+      navigate("/register");
+    } else {
+      navigate("/profile");
+    }
+  }
 
   const handlePorfile = async () => {
     if (!token) {
@@ -77,50 +86,66 @@ const Navbar = () => {
 
   return (
     <AppBar position="sticky">
-    <FlexBetween padding="1rem 2%" backgroundColor={alt}>
-      <FlexBetween gap="1.75rem" ml="2rem">
-        {isNonMobileScreens ? (
-          <>
-            <Typography
-              fontWeight="bold"
-              fontSize="clamp(1rem, 2rem, 2.25rem)"
-              color="#c84117"
-              onClick={() => navigate("/home")}
-              sx={{
-                "&:hover": {
-                  cursor: "pointer",
-                },
-              }}
-            >
-              HoopsConnect
-            </Typography>
-            <FlexBetween
-              backgroundColor={neutralLight}
-              borderRadius="9px"
-              gap="3rem"
-              padding="0.1rem 1.5rem"
-            >
-              <InputBase placeholder="Search..." />
-              <IconButton>
-                <Search />
+      <FlexBetween padding="1rem 2%" backgroundColor={alt}>
+        <FlexBetween gap="1.75rem" ml="2rem">
+          {isNonMobileScreens ? (
+            <>
+              <Typography
+                fontWeight="bold"
+                fontSize="clamp(1rem, 2rem, 2.25rem)"
+                color="#c84117"
+                onClick={() => navigate("/home")}
+                sx={{
+                  "&:hover": {
+                    cursor: "pointer",
+                  },
+                }}
+              >
+                HoopsConnect
+              </Typography>
+              <FlexBetween
+                backgroundColor={neutralLight}
+                borderRadius="9px"
+                gap="3rem"
+                padding="0.1rem 1.5rem"
+              >
+                <InputBase placeholder="Search..." />
+                <IconButton>
+                  <Search />
+                </IconButton>
+              </FlexBetween>
+            </>
+          ) : (
+            <>
+              <Typography
+                fontWeight="bold"
+                fontSize="clamp(1rem, 2rem, 2.25rem)"
+                color="#c84117"
+                onClick={() => navigate("/home")}
+                sx={{
+                  "&:hover": {
+                    cursor: "pointer",
+                  },
+                }}
+              >
+                HC
+              </Typography>
+              <IconButton onClick={() => dispatch(setMode())}>
+                {theme.palette.mode === "dark" ? (
+                  <DarkMode sx={{ fontSize: "25px" }} />
+                ) : (
+                  <LightMode sx={{ color: dark, fontSize: "25px" }} />
+                )}
               </IconButton>
-            </FlexBetween>
-          </>
-        ) : (
-          <>
-            <Typography
-              fontWeight="bold"
-              fontSize="clamp(1rem, 2rem, 2.25rem)"
-              color="#c84117"
-              onClick={() => navigate("/home")}
-              sx={{
-                "&:hover": {
-                  cursor: "pointer",
-                },
-              }}
-            >
-              HC
-            </Typography>
+            </>
+          )}
+        </FlexBetween>
+
+        {isNonMobileScreens ? (
+          <FlexBetween gap="2rem">
+            <IconButton onClick={handlePostOrGame}>
+              <Switch />
+            </IconButton>
             <IconButton onClick={() => dispatch(setMode())}>
               {theme.palette.mode === "dark" ? (
                 <DarkMode sx={{ fontSize: "25px" }} />
@@ -128,69 +153,55 @@ const Navbar = () => {
                 <LightMode sx={{ color: dark, fontSize: "25px" }} />
               )}
             </IconButton>
-          </>
+
+            <FormControl variant="standard">
+              <Select
+                value={fullName}
+                sx={{
+                  backgroundColor: neutralLight,
+                  width: "150px",
+                  borderRadius: "0.25rem",
+                  p: "0.25rem 1rem",
+                  "& .MuiSvgIcon-root": {
+                    pr: "0.25rem",
+                    width: "3rem",
+                  },
+                  "& .MuiSelect-select:focus": {
+                    backgroundColor: neutralLight,
+                  },
+                }}
+                input={<InputBase />}
+              >
+                <MenuItem value={fullName} onClick={handleGuestUser}>
+                  <Typography color={main} variant="h5" fontWeight="500">
+                    {fullName}
+                  </Typography>
+                </MenuItem>
+                <MenuItem onClick={handleLogging}>
+                  <Typography color={main} variant="h5" fontWeight="500">
+                    {isLoggedin}
+                  </Typography>
+                </MenuItem>
+              </Select>
+            </FormControl>
+          </FlexBetween>
+        ) : (
+          <FlexBetween gap="1rem" mr="2rem">
+            <IconButton onClick={handlePostOrGame}>
+              <Switch color="#c84117" />
+            </IconButton>
+            <IconButton onClick={handlePorfile}>
+              <ManageAccountsIcon fontSize="large" />
+            </IconButton>
+            <Avatar
+              alt="Remy Sharp"
+              onClick={handleLogging}
+              src={user.userImage}
+              sx={{ width: 30, height: 30 }}
+            />
+          </FlexBetween>
         )}
       </FlexBetween>
-
-      {/* DESKTOP NAV */}
-      {isNonMobileScreens ? (
-        <FlexBetween gap="2rem">
-          <IconButton onClick={handlePostOrGame}>
-            <Switch />
-          </IconButton>
-          <IconButton onClick={() => dispatch(setMode())}>
-            {theme.palette.mode === "dark" ? (
-              <DarkMode sx={{ fontSize: "25px" }} />
-            ) : (
-              <LightMode sx={{ color: dark, fontSize: "25px" }} />
-            )}
-          </IconButton>
-
-          <FormControl variant="standard">
-            <Select
-              value={fullName}
-              sx={{
-                backgroundColor: neutralLight,
-                width: "150px",
-                borderRadius: "0.25rem",
-                p: "0.25rem 1rem",
-                "& .MuiSvgIcon-root": {
-                  pr: "0.25rem",
-                  width: "3rem",
-                },
-                "& .MuiSelect-select:focus": {
-                  backgroundColor: neutralLight,
-                },
-              }}
-              input={<InputBase />}
-            >
-              <MenuItem value={fullName} onClick={() => navigate('/profile')}>
-                <Typography color={main} variant="h5" fontWeight="500">{fullName}</Typography>
-              </MenuItem>
-              <MenuItem onClick={handleLogging}><Typography color={main} variant="h5" fontWeight="500">
-                {isLoggedin}
-              </Typography>
-                </MenuItem>
-            </Select>
-          </FormControl>
-        </FlexBetween>
-      ) : (
-        <FlexBetween gap="1rem" mr="2rem">
-          <IconButton onClick={handlePostOrGame}>
-            <Switch color="#c84117" />
-          </IconButton>
-          <IconButton onClick={handlePorfile}>
-            <ManageAccountsIcon fontSize="large" />
-          </IconButton>
-          <Avatar
-            alt="Remy Sharp"
-            onClick={handleLogging}
-            src={avatarImage}
-            sx={{ width: 30, height: 30 }}
-          />
-        </FlexBetween>
-      )}
-    </FlexBetween>
     </AppBar>
   );
 };

@@ -27,19 +27,22 @@ const GameWidget = ({
   description,
   location,
   gameImage,
-  userImage,
   players,
   comments,
 }) => {
   const [showPlayers, setShowPlayers] = useState(false);
+  const [isPlay, setIsPlay] = useState(false);
   const [isComments, setIsComments] = useState(false);
   const [commentText, setCommentText] = useState("");
-  const { token } = useSelector((state) => state.user);
+  const { user, token } = useSelector((state) => state.user);
   const dispatch = useDispatch();
   const playerCount = Object.keys(players).length;
 
   const { palette } = useTheme();
   const main = palette.neutral.main;
+  const medium = palette.neutral.medium;
+
+
 
   const patchPlayer = async () => {
     const response = await fetch(
@@ -51,16 +54,19 @@ const GameWidget = ({
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          userId: gameUserId,
-          firstName: firstName,
-          lastName: lastName,
-          userImage: userImage,
+          userId: user.gameUserId,
+          firstName: user.firstName,
+          lastName: user.lastName,
+          userImage: user.userImage,
         }),
       }
     );
     const updatedGame = await response.json();
     dispatch(setGame({ game: updatedGame }));
+    setIsPlay(!isPlay);
   };
+
+ 
 
   const addGameComments = async () => {
     try {
@@ -87,6 +93,7 @@ const GameWidget = ({
       console.error(error.message);
     }
   };
+
 
   return (
     <WidgetWrapper mb="1rem">
@@ -130,7 +137,8 @@ const GameWidget = ({
         <FlexBetween gap="1rem">
           <FlexBetween gap="0.3rem">
             <IconButton onClick={patchPlayer}>
-              <SportsBasketballIcon />
+           { !isPlay ? ( <SportsBasketballIcon  />) :
+             ( <SportsBasketballIcon sx={{  color: "#c84117" }} />)}
             </IconButton>
             <Typography color={main} variant="h6" fontWeight="500">
               {playerCount}
@@ -163,13 +171,13 @@ const GameWidget = ({
             <>
               <Box m="1rem" key={player._id}>
                 <FlexBetween>
-                  <UserAvatar userImage={userImage} size="40px" />
+                  <UserAvatar userImage={player.userImage} size="40px" />
                   <FlexBetween gap="0.5rem">
                     <Typography color={main} variant="h6" fontWeight="500">
-                      {firstName}
+                      {player.firstName}
                     </Typography>
                     <Typography color={main} variant="h6" fontWeight="500">
-                      {lastName}
+                      {player.lastName}
                     </Typography>
                   </FlexBetween>
                 </FlexBetween>
@@ -189,12 +197,19 @@ const GameWidget = ({
                     {comment.comment}
                   </Typography>
                 </Box>
-                <Box display="flex" justifyContent="end" mb="0.5rem">
-                  <Typography color={main} variant="h6" fontWeight="500">
-                    {comment.firstName} {comment.lastName}
-                  </Typography>
+                <Box m="1rem">
+                  <FlexBetween>
+                    <FlexBetween gap="0.5rem">
+                      <Typography color={medium} variant="h6" fontWeight="500">
+                        {firstName}
+                      </Typography>
+                      <Typography color={medium} variant="h6" fontWeight="500">
+                        {lastName}
+                      </Typography>
+                    </FlexBetween>
+                  </FlexBetween>
+                  <Divider />
                 </Box>
-                <Divider />
               </Box>
             </>
           ))}
@@ -217,7 +232,7 @@ const GameWidget = ({
               onClick={addGameComments}
               sx={{
                 color: main,
-                backgroundColor: '#c84117',
+                backgroundColor: "#c84117",
                 borderRadius: "3rem",
               }}
             >

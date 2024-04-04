@@ -6,18 +6,25 @@ import { errorHandler } from "../utils/error.js";
 //@route    POST /posts/create
 export const createPost = async (req, res, next) => {
   try {
+    const {
+      userId,
+      userImage,
+      firstName,
+      lastName,
+      location,
+      description,
+      postImage,
+    } = req.body;
 
-    const { userId, description, postImage } = req.body;
-  
-    const user = await User.findById(userId);
- 
+    // const user = await User.findById(userId);
+
     const newPost = new Post({
       userId,
-      firstName: user.firstName,
-      lastName: user.lastName,
-      location: user.location,
+      firstName,
+      lastName,
+      location,
       description,
-      userImage: user.userImage,
+      userImage,
       postImage,
       likes: {},
       comments: [],
@@ -31,8 +38,6 @@ export const createPost = async (req, res, next) => {
   }
 };
 
-
-
 //@desc     Get all posts
 //route    GET /posts
 export const getFeedPosts = async (req, res, next) => {
@@ -43,7 +48,6 @@ export const getFeedPosts = async (req, res, next) => {
     next(errorHandler(400, error.message));
   }
 };
-
 
 //@desc     Get a user's posts
 //@route    GET /posts/:userId/posts
@@ -84,23 +88,34 @@ export const likePost = async (req, res, next) => {
   }
 };
 
-
-
 //@desc     Update a post comments
 //@route    PUT /posts/update/:postId/comments
 export const updatePostComments = async (req, res, next) => {
   try {
     const { postId } = req.params;
     const { comments } = req.body;
+
     const updatedPost = await Post.findByIdAndUpdate(
       postId,
-      { $push: {comments: req.body} },
+      { $push: { comments: req.body } },
       { new: true }
     );
 
     res.status(200).json(updatedPost);
-  }
-  catch (error) {
+  } catch (error) {
     next(errorHandler(400, error.message));
   }
-}
+};
+
+
+//@desc     Delete a post
+//@route    DELETE /posts/delete/:postId
+export const deletePost = async (req, res, next) => {
+  try {
+
+    await Post.findByIdAndDelete(req.params.postId);
+    res.status(200).json("Post has been deleted");
+  } catch (error) {
+    next(error);
+  }
+};

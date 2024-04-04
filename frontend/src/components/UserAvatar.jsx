@@ -16,7 +16,7 @@ const UserAvatar = ({ image, size }) => {
 };
 
 UserAvatar.propTypes = {
-  imageURL: PropType.string,
+  image: PropType.string,
   size: PropType.string,
 };
 

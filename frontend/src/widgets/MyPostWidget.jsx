@@ -13,7 +13,7 @@ import FlexBetween from "../components/FlexBetween.jsx";
 import WidgetWrapper from "../components/WidgetWrapper.jsx";
 
 const MyPostWidget = () => {
-  const [post, setPost] = useState("");
+  const [postText, setPostText] = useState("");
   const { user, token } = useSelector((state) => state.user);
   const { palette } = useTheme();
   const dispatch = useDispatch();
@@ -23,6 +23,8 @@ const MyPostWidget = () => {
 
   const handlePost = async () => {
     try {
+      const postImageUrl = await fetch('https://source.unsplash.com/featured/?social')
+      .then(response => response.url)
 
       const response = await fetch(`http://localhost:8080/posts/create`, {
         method: "POST",
@@ -32,9 +34,12 @@ const MyPostWidget = () => {
         },
         body: JSON.stringify({
           userId: user._id,
-          description: post,
+          userImage: user.userImage,
+          description: postText,
           firstName: user.firstName,
           lastName: user.lastName,
+          postImage: postImageUrl,
+          location: user.location,
         }),
       });
       const data = await response.json();
@@ -55,8 +60,8 @@ const MyPostWidget = () => {
       <FlexBetween gap="1.5rem">
         <InputBase
           placeholder="What's on your mind..."
-          onChange={(e) => setPost(e.target.value)}
-          value={post}
+          onChange={(e) => setPostText(e.target.value)}
+          value={postText}
           sx={{
             width: "100%",
             backgroundColor: palette.neutral.light,
@@ -80,7 +85,7 @@ const MyPostWidget = () => {
           </Typography>
         </FlexBetween>
         <Button
-          disabled={!post}
+          disabled={!postText}
           onClick={handlePost}
           sx={{
             color: main,

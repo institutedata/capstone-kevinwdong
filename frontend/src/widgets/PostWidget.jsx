@@ -19,15 +19,12 @@ import FlexBetween from "../components/FlexBetween";
 import WidgetWrapper from "../components/WidgetWrapper";
 import { useDispatch, useSelector } from "react-redux";
 import { setPost } from "../redux/postSlice.js";
-import Friend from "../components/Friend";
+import UserAvatar from "../components/UserAvatar";
 
 const PostWidget = ({
   postId,
-  postUserId,
-  name,
   description,
-  position,
-  picturePath,
+  postImage,
   userImage,
   likes,
   comments,
@@ -43,7 +40,10 @@ const PostWidget = ({
   const { palette } = useTheme();
   const dark = palette.neutral.dark;
   const main = palette.neutral.main;
-  const primary = palette.primary.main;
+  const medium = palette.neutral.medium;
+
+
+  
 
   const patchLike = async () => {
     const response = await fetch(`http://localhost:8080/posts/${postId}/like`, {
@@ -65,10 +65,12 @@ const PostWidget = ({
         {
           method: "PUT",
           headers: {
-            Authorization: token, "Content-Type": "application/json" 
+            Authorization: token,
+            "Content-Type": "application/json",
           },
           body: JSON.stringify({
             userId: user._id,
+            userImage: user.userImage,
             comment: commentText,
             firstName: user.firstName,
             lastName: user.lastName,
@@ -85,22 +87,41 @@ const PostWidget = ({
 
   return (
     <WidgetWrapper mb="1rem">
-      <Friend
-        friendId={postUserId}
-        name={name}
-        subtitle={position}
-        userImage={userImage}
-      />
-      <Typography color={main} variant="h5" fontWeight="500" sx={{ mt: "1rem" }}>
+      <Box display="flex" justifyContent="start">
+        <FlexBetween gap="1rem">
+          <UserAvatar image={userImage} size="40px" />
+          <Box>
+            <Typography
+              color={main}
+              variant="h5"
+              fontWeight="500"
+              sx={{
+                "&:hover": {
+                  color: palette.primary.light,
+                  cursor: "pointer",
+                },
+              }}
+            >
+              {user.firstName} {user.lastName}
+            </Typography>
+          </Box>
+        </FlexBetween>
+      </Box>
+      <Typography
+        color={main}
+        variant="h5"
+        fontWeight="500"
+        sx={{ mt: "1rem" }}
+      >
         {description}
       </Typography>
-      {picturePath && (
+      {postImage && (
         <img
           width="100%"
           height="auto"
           alt="post"
           style={{ borderRadius: "0.75rem", marginTop: "0.75rem" }}
-          src={"#"}
+          src={postImage}
         />
       )}
       <FlexBetween mt="0.25rem">
@@ -108,19 +129,23 @@ const PostWidget = ({
           <FlexBetween gap="0.3rem">
             <IconButton onClick={patchLike}>
               {isLiked ? (
-                <FavoriteOutlined sx={{ color: primary }} />
+                <FavoriteOutlined sx={{ color: "#c84117" }} />
               ) : (
                 <FavoriteBorderOutlined />
               )}
             </IconButton>
-            <Typography color={main} variant="h6" fontWeight="500">{likeCount}</Typography>
+            <Typography color={main} variant="h6" fontWeight="500">
+              {likeCount}
+            </Typography>
           </FlexBetween>
 
           <FlexBetween gap="0.3rem">
             <IconButton onClick={() => setIsComments(!isComments)}>
               <ChatBubbleOutlineOutlined />
             </IconButton>
-            <Typography color={main} variant="h6" fontWeight="500">{comments.length}</Typography>
+            <Typography color={main} variant="h6" fontWeight="500">
+              {comments.length}
+            </Typography>
           </FlexBetween>
         </FlexBetween>
       </FlexBetween>
@@ -134,12 +159,19 @@ const PostWidget = ({
                     {comment.comment}
                   </Typography>
                 </Box>
-                <Box display="flex" justifyContent="end" mb="0.5rem">
-                  <Typography color={main} variant="h6" fontWeight="500">
-                    {comment.firstName} {comment.lastName}
-                  </Typography>
+                <Box m="1rem">
+                  <FlexBetween>
+                    <FlexBetween gap="0.5rem">
+                      <Typography color={medium} variant="h6" fontWeight="500">
+                        {comment.firstName}
+                      </Typography>
+                      <Typography color={medium} variant="h6" fontWeight="500">
+                        {comment.lastName}
+                      </Typography>
+                    </FlexBetween>
+                  </FlexBetween>
+                  <Divider />
                 </Box>
-                <Divider />
               </Box>
             </>
           ))}
@@ -162,7 +194,7 @@ const PostWidget = ({
               onClick={addComment}
               sx={{
                 color: main,
-                backgroundColor: '#c84117',
+                backgroundColor: "#c84117",
                 borderRadius: "3rem",
               }}
             >

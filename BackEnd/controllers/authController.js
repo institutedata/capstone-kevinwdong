@@ -27,6 +27,11 @@ export const registerUser = async (req, res, next) => {
       next(errorHandler(400, "User already exists"));
     }
 
+  const userImageUrl = await fetch('https://source.unsplash.com/featured/?male')
+  .then(response => response.url)
+
+  console.log(userImageUrl)
+
     const hasdedPassword = bcryptjs.hashSync(password, 10);
 
     const newUser = new User({
@@ -34,7 +39,7 @@ export const registerUser = async (req, res, next) => {
       lastName,
       email,
       password: hasdedPassword,
-      userImage,
+      userImage: userImageUrl,
       friends,
       location,
       position,

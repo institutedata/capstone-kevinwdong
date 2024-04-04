@@ -15,20 +15,17 @@ export const createGame = async (req, res, next) => {
       description,
       gameImage,
       userImage,
-      players,
-      comments,
     } = req.body;
 
-    const user = await User.findById(userId);
 
     const newGame = new Game({
       userId,
-      firstName: user.firstName,
-      lastName: user.lastName,
+      firstName,
+      lastName,
       title,
       location,
       description,
-      userImage: user.userImage,
+      userImage,
       gameImage,
       players: [],
       comments: [],

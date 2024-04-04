@@ -8,17 +8,16 @@ import {
   useTheme,
   Button,
 } from "@mui/material";
-import { setPosts } from "../redux/postSlice.js";
+import { setGames } from "../redux/gameSlice.js";
 import { useState } from "react";
 import FlexBetween from "../components/FlexBetween.jsx";
 import WidgetWrapper from "../components/WidgetWrapper.jsx";
 
 const MyGameWidget = () => {
-
   const [gameTitle, setGameTitle] = useState("");
   const [gameLocation, setGameLocation] = useState("");
   const [gameDescription, setGameDescription] = useState("");
-  const [game, setGame] = useState(false);
+  const [gameText, setGameText] = useState(false);
   const { user, token } = useSelector((state) => state.user);
   const dispatch = useDispatch();
 
@@ -33,6 +32,8 @@ const MyGameWidget = () => {
 
   const handleGame = async () => {
     try {
+      const gameImageUrl = await fetch('https://source.unsplash.com/featured/?basketball')
+      .then(response => response.url)
 
       const response = await fetch(`http://localhost:8080/games/create`, {
         method: "POST",
@@ -42,11 +43,13 @@ const MyGameWidget = () => {
         },
         body: JSON.stringify({
           userId: user._id,
+          userImage: user.userImage,
           firstName: user.firstName,
           lastName: user.lastName,
           title: gameTitle,
           location: gameLocation,
           description: gameDescription,
+          gameImage: gameImageUrl,
         }),
       });
       const data = await response.json();
@@ -54,8 +57,8 @@ const MyGameWidget = () => {
         console.log(data);
         return;
       } else {
-        const posts = await response.json();
-        dispatch(setPosts(posts));
+        const games = await response.json();
+        dispatch(setGames(games));
       }
     } catch (error) {
       console.error(error);
@@ -69,7 +72,7 @@ const MyGameWidget = () => {
           placeholder="Game Title..."
           onChange={(e) => {
             setGameTitle(e.target.value);
-            setGame(true);
+            setGameText(true);
           }}
           value={gameTitle}
           sx={{
@@ -84,7 +87,7 @@ const MyGameWidget = () => {
             placeholder="Game Location..."
             onChange={(e) => {
               setGameLocation(e.target.value);
-              setGame(true);
+              setGameText(true);
             }}
             value={gameLocation}
             sx={{
@@ -100,7 +103,7 @@ const MyGameWidget = () => {
             placeholder="Game Description..."
             onChange={(e) => {
               setGameDescription(e.target.value);
-              setGame(true);
+              setGameText(true);
             }}
             value={gameDescription}
             sx={{
@@ -127,7 +130,7 @@ const MyGameWidget = () => {
           </Typography>
         </FlexBetween>
         <Button
-          disabled={!game}
+          disabled={!gameText}
           onClick={handleGame}
           sx={{
             color: main,

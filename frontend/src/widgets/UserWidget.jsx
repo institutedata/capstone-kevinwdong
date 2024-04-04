@@ -1,12 +1,11 @@
 import PropType from "prop-types";
-import { ManageAccountsOutlined, EditOutlined } from "@mui/icons-material";
+import { ManageAccountsOutlined} from "@mui/icons-material";
 import { Box, Typography, Divider, useTheme, IconButton } from "@mui/material";
 import WidgetWrapper from "../components/WidgetWrapper.jsx";
 import FlexBetween from "../components/FlexBetween.jsx";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
-import UserImage from "../components/UserAvatar.jsx";
-import FacebookIcon from "@mui/icons-material/Facebook";
+import UserAvatar from "../components/UserAvatar.jsx";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import SportsBasketballIcon from "@mui/icons-material/SportsBasketball";
 import MonitorWeightIcon from "@mui/icons-material/MonitorWeight";
@@ -15,6 +14,11 @@ import PublishIcon from "@mui/icons-material/Publish";
 const UserWidget = ({ editProfile, setEditProfile }) => {
   const navigate = useNavigate();
   const { user } = useSelector((state) => state.user);
+  const totalGames = user.totalGames;
+  const totalPoints = user.totalPoints;
+
+
+
   const { palette } = useTheme();
   const main = palette.neutral.main;
 
@@ -30,7 +34,7 @@ const UserWidget = ({ editProfile, setEditProfile }) => {
         onClick={() => navigate("/profile")}
       >
         <FlexBetween gap="1rem">
-          <UserImage image={user.userImage} size="40px" />
+          <UserAvatar image={user.userImage} size="40px" />
           <Box>
             <Typography
               color={main}
@@ -70,13 +74,13 @@ const UserWidget = ({ editProfile, setEditProfile }) => {
         <Box display="flex" alignItems="center" gap="1rem" mb="0.5rem">
           <PublishIcon />
           <Typography color={main} variant="h5" fontWeight="500">
-            {user.height}
+            {user.height}{user.height && " cm"}
           </Typography>
         </Box>
         <Box display="flex" alignItems="center" gap="1rem" mb="0.5rem">
           <MonitorWeightIcon />
           <Typography color={main} variant="h5" fontWeight="500">
-            {user.weight} lbs
+            {user.weight}{user.weight && " lbs"}
           </Typography>
         </Box>
       </Box>
@@ -90,19 +94,19 @@ const UserWidget = ({ editProfile, setEditProfile }) => {
 
         <FlexBetween gap="1rem" mb="0.5rem">
           <Typography color={main} variant="h5" fontWeight="500">
-            Total Games:
+            Total Games
           </Typography>
           <Typography color={main} variant="h5" fontWeight="500">
-            TikTok
+            {totalGames}
           </Typography>
         </FlexBetween>
 
         <FlexBetween gap="1rem">
           <Typography color={main} variant="h5" fontWeight="500">
-            Total Points:
+            Total Points
           </Typography>
           <Typography color={main} variant="h5" fontWeight="500">
-            Facebook
+            {totalPoints}
           </Typography>
         </FlexBetween>
       </Box>

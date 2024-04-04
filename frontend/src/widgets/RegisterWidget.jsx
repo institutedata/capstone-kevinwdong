@@ -11,19 +11,19 @@ import {
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { themeSettings } from "../theme";
 import { setRegister } from "../redux/userSlice";
 import WidgetWrapper from "../components/WidgetWrapper";
 import FlexBetween from "../components/FlexBetween";
 
 const RegisterWidget = () => {
+  const isNonMobile = useMediaQuery("(min-width:600px)");
   const [error, setError] = useState(null);
   const [formData, setFormData] = useState({});
-
-  const { palette } = useTheme(themeSettings);
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const isNonMobile = useMediaQuery("(min-width:600px)");
+
+  const { palette } = useTheme();
+  const main = palette.neutral.main;
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.id]: e.target.value.trim() });
@@ -60,9 +60,14 @@ const RegisterWidget = () => {
   };
 
   return (
-    <WidgetWrapper >
-      <Typography fontWeight="500" variant="h5" sx={{ mb: "1.5rem" }}>
-        Welcom to Hoops Connect!
+    <WidgetWrapper>
+      <Typography
+        color={main}
+        variant="h4"
+        fontWeight="500"
+        sx={{ mb: "1.5rem" }}
+      >
+        Welcom to Hoops Connect
       </Typography>
       <form onSubmit={handleSubmit}>
         <Box
@@ -114,19 +119,20 @@ const RegisterWidget = () => {
         {error && <Alert severity="error">{error}</Alert>}
         <FlexBetween>
           <Typography
+            variant="h5"
+            fontWeight="500"
             onClick={() => {
               navigate("/login");
             }}
             sx={{
               textDecoration: "underline",
-              color: palette.primary.main,
+              color: "#c84117",
               "&:hover": {
                 cursor: "pointer",
-                color: palette.primary.light,
               },
             }}
           >
-            Already have an account? Login
+            Sign In Here
           </Typography>
           <Button
             type="submit"
@@ -134,12 +140,13 @@ const RegisterWidget = () => {
               width: "25%",
               m: "2rem 0",
               p: "1rem",
-              backgroundColor: palette.primary.main,
-              color: palette.background.alt,
-              "&:hover": { color: palette.primary.main },
+              backgroundColor: "#c84117",
+              color: main,
             }}
           >
-            REGISTER
+            <Typography variant="h5" fontWeight="500">
+              Sign Up
+            </Typography>
           </Button>
         </FlexBetween>
       </form>

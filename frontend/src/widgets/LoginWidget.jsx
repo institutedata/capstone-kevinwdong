@@ -7,25 +7,28 @@ import {
   Button,
   TextField,
   Typography,
+  useMediaQuery,
   useTheme,
   Alert,
 } from "@mui/material";
-import { themeSettings } from "../theme";
 import { useDispatch } from "react-redux";
 import { setLogin } from "../redux/userSlice";
 import WidgetWrapper from "../components/WidgetWrapper";
 import FlexBetween from "../components/FlexBetween";
 
 const LoginWidget = () => {
+  const isNonMobileScreens = useMediaQuery("(min-width:1000px)");
   const { token } = useSelector((state) => state.user);
   const [formData, setFormData] = useState({});
   const [error, setError] = useState(null);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { palette } = useTheme(themeSettings);
+  const { palette } = useTheme();
+  const main = palette.neutral.main;
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.id]: e.target.value.trim() });
+    setError(null);
   };
 
   const handleSubmit = async (e) => {
@@ -56,8 +59,8 @@ const LoginWidget = () => {
 
   return (
     <WidgetWrapper>
-      <Typography fontWeight="500" variant="h5" sx={{ mb: "1.5rem" }}>
-        Welcom to Hoops Connect!
+      <Typography color={main} variant="h4" fontWeight="500" sx={{ mb: "1.5rem" }}>
+        Welcom to Hoops Connect
       </Typography>
       <Box>
         <form onSubmit={handleSubmit}>
@@ -83,36 +86,42 @@ const LoginWidget = () => {
           </Box>
           {error && <Alert severity="error">{error}</Alert>}
           <FlexBetween>
-            
-            <Typography
+          <Typography
+              variant="h5"
+              fontWeight="500"
               onClick={() => {
                 navigate("/register");
               }}
               sx={{
                 textDecoration: "underline",
-                color: palette.primary.main,
+                color: "#c84117",
                 "&:hover": {
                   cursor: "pointer",
-                  color: palette.primary.light,
                 },
               }}
             >
-              Don&apos;t have an account? Sign Up here.
-            </Typography>
+            Sign Up Here
+          </Typography>
+
+
+
             <Button
-              
               type="submit"
               sx={{
                 width: "25%",
                 m: "2rem 0",
                 p: "1rem",
-                backgroundColor: palette.primary.main,
-                color: palette.background.alt,
-                "&:hover": { color: palette.primary.main },
+                backgroundColor: "#c84117",
+                color: main,
               }}
             >
-              LOGIN
-            </Button>
+            <Typography
+              variant="h5"
+              fontWeight="500"
+            >
+            LOGIN
+            </Typography>
+          </Button>
           </FlexBetween>
         </form>
       </Box>
