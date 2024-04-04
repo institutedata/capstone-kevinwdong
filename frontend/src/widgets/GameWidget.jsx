@@ -3,7 +3,6 @@ import { useState } from "react";
 import { ChatBubbleOutlineOutlined } from "@mui/icons-material";
 import SportsBasketballIcon from "@mui/icons-material/SportsBasketball";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
-import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import PostAddIcon from "@mui/icons-material/PostAdd";
 import {
   Box,
@@ -21,49 +20,40 @@ import UserAvatar from "../components/UserAvatar";
 
 const GameWidget = ({
   gameId,
-  firstName,
-  lastName,
+  gameUserImage,
+  gameUserName,
   title,
-  description,
   location,
+  description,
   gameImage,
   players,
   comments,
 }) => {
-  const [showPlayers, setShowPlayers] = useState(false);
-  const [isPlay, setIsPlay] = useState(false);
   const [isComments, setIsComments] = useState(false);
   const [commentText, setCommentText] = useState("");
   const { user, token } = useSelector((state) => state.user);
   const dispatch = useDispatch();
+  const isPlayed = Boolean(players[user._id]);
   const playerCount = Object.keys(players).length;
 
   const { palette } = useTheme();
   const main = palette.neutral.main;
   const medium = palette.neutral.medium;
 
+
   const patchPlayer = async () => {
-    const response = await fetch(
-      `http://localhost:8080/games/${gameId}/player`,
-      {
-        method: "PATCH",
-        headers: {
-          Authorization: token,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          userId: user.gameUserId,
-          firstName: user.firstName,
-          lastName: user.lastName,
-          userImage: user.userImage,
-          position: user.position,
-        }),
-      }
-    );
+    const response = await fetch(`http://localhost:8080/posts/${gameId}/like`, {
+      method: "PATCH",
+      headers: {
+        Authorization: token,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ userId: user._id }),
+    });
     const updatedGame = await response.json();
-    dispatch(setGame({ game: updatedGame }));
-    setIsPlay(!isPlay);
+    dispatch(setGame({ post: updatedGame }));
   };
+
 
   const addGameComments = async () => {
     try {
@@ -138,7 +128,7 @@ const GameWidget = ({
         )}
         <Typography
           color={main}
-          variant="h6"
+          variant="h5"
           fontWeight="500"
           sx={{ mt: "1rem" }}
         >
@@ -146,21 +136,43 @@ const GameWidget = ({
         </Typography>
         <Typography
           color={main}
-          variant="h6"
+          variant="h5"
           fontWeight="500"
           sx={{ mt: "1rem" }}
         >
           {description}
         </Typography>
       </Box>
+      <Box display="flex" justifyContent="end" mt="1rem">
+        <FlexBetween gap="1rem">
+          <UserAvatar userImage={gameUserImage} size="40px" />
+          <Box>
+            <Typography
+              color={main}
+              variant="h5"
+              fontWeight="500"
+              sx={{
+                "&:hover": {
+                  color: palette.primary.light,
+                  cursor: "pointer",
+                },
+              }}
+            >
+              {gameUserName}
+            </Typography>
+          </Box>
+        </FlexBetween>
+
+        
+      </Box>
       <FlexBetween mt="0.25rem">
         <FlexBetween gap="1rem">
           <FlexBetween gap="0.3rem">
             <IconButton onClick={patchPlayer}>
-              {isPlay ? (
-                <SportsBasketballIcon sx={{ color: "#c84117" }}/>
+              {isPlayed ? (
+                <SportsBasketballIcon sx={{ color: "#c84117" }} />
               ) : (
-                <SportsBasketballIcon  />
+                <SportsBasketballIcon />
               )}
             </IconButton>
             <Typography color={main} variant="h6" fontWeight="500">
@@ -180,36 +192,7 @@ const GameWidget = ({
             </Typography>
           </FlexBetween>
         </FlexBetween>
-        <IconButton
-          onClick={() => {
-            setShowPlayers(!showPlayers);
-          }}
-        >
-          <ArrowDropDownIcon />
-        </IconButton>
       </FlexBetween>
-      {showPlayers && (
-        <Box mt="0.5rem">
-          {players.map((player) => (
-            <>
-              <Box m="1rem" key={player.userId}>
-                <FlexBetween>
-                  <FlexBetween gap="0.5rem">
-                    <UserAvatar userImage={player.userImage} size="40px" />
-                    <Typography color={main} variant="h6" fontWeight="500">
-                      {player.firstName} {player.lastName}
-                    </Typography>
-                  </FlexBetween>
-                  <Typography color={main} variant="h6" fontWeight="500">
-                    {player.position}
-                  </Typography>
-                </FlexBetween>
-                <Divider sx={{ m: "0.5rem 0" }} />
-              </Box>
-            </>
-          ))}
-        </Box>
-      )}
       {isComments && (
         <Box mt="0.5rem">
           {comments?.map((comment) => (
@@ -230,14 +213,14 @@ const GameWidget = ({
                           variant="h6"
                           fontWeight="500"
                         >
-                          {firstName}
+                          {comment.firstName}
                         </Typography>
                         <Typography
                           color={medium}
                           variant="h6"
                           fontWeight="500"
                         >
-                          {lastName}
+                          {comment.lastName}
                         </Typography>
                       </FlexBetween>
                     </FlexBetween>
@@ -282,13 +265,12 @@ const GameWidget = ({
 GameWidget.propTypes = {
   gameId: PropTypes.string,
   gameUserId: PropTypes.string,
-  firstName: PropTypes.string,
-  lastName: PropTypes.string,
+  gameUserName: PropTypes.string,
   title: PropTypes.string,
   description: PropTypes.string,
   location: PropTypes.string,
   gameImage: PropTypes.string,
-  userImage: PropTypes.string,
+  gameUserImage: PropTypes.string,
   players: PropTypes.array,
   player: PropTypes.object,
   comments: PropTypes.array,

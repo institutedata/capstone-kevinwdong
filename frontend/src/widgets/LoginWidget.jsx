@@ -7,7 +7,6 @@ import {
   Button,
   TextField,
   Typography,
-  useMediaQuery,
   useTheme,
   Alert,
 } from "@mui/material";
@@ -17,7 +16,6 @@ import WidgetWrapper from "../components/WidgetWrapper";
 import FlexBetween from "../components/FlexBetween";
 
 const LoginWidget = () => {
-  const isNonMobileScreens = useMediaQuery("(min-width:1000px)");
   const { token } = useSelector((state) => state.user);
   const [formData, setFormData] = useState({});
   const [error, setError] = useState(null);
@@ -76,6 +74,7 @@ const LoginWidget = () => {
             />
             <TextField
               fullWidth
+              autoComplete="current-password"
               label="Password"
               type="password"
               id="password"

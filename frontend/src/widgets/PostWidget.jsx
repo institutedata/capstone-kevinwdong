@@ -24,6 +24,7 @@ import UserAvatar from "../components/UserAvatar";
 
 const PostWidget = ({
   postId,
+  name,
   description,
   postImage,
   userImage,
@@ -36,6 +37,7 @@ const PostWidget = ({
   const { user, token } = useSelector((state) => state.user);
   const isLiked = Boolean(likes[user._id]);
   const likeCount = Object.keys(likes).length;
+
 
   const { palette } = useTheme();
   const dark = palette.neutral.dark;
@@ -117,7 +119,7 @@ const PostWidget = ({
                 },
               }}
             >
-              {user.firstName} {user.lastName}
+              {name}
             </Typography>
           </Box>
         </FlexBetween>
@@ -147,7 +149,7 @@ const PostWidget = ({
         <FlexBetween gap="1rem">
           <FlexBetween gap="0.3rem">
             <IconButton onClick={patchLike}>
-              {isLiked ? (
+              { isLiked ? (
                 <FavoriteOutlined sx={{ color: "#c84117" }} />
               ) : (
                 <FavoriteBorderOutlined />

@@ -38,6 +38,7 @@ const GamesWidget = ({ userId, isProfile }) => {
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [games]); 
+  
 
   return (
     <>
@@ -59,13 +60,12 @@ const GamesWidget = ({ userId, isProfile }) => {
             key={_id}
             gameId={_id}
             gameUserId={userId}
-            firstName={firstName}
-            lastName={lastName}
+            gameUserImage={userImage}
+            gameUserName={`${firstName} ${lastName}`}
             title={title}
-            description={description}
             location={location}
-            gameImage={gameImage}
-            userImage={userImage}
+            description={description}      
+            gameImage={gameImage}          
             players={players}
             comments={comments}
           />

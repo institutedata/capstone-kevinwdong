@@ -24,21 +24,29 @@ const ProfilePage = () => {
         flexBasis={isNonMobileScreens ? "26%" : undefined}
         mt={isNonMobileScreens ? undefined : "2rem"}
       >
-        { !isNonMobileScreens && editProfile && <ProfileWidget editProfile={editProfile} setEditProfile={setEditProfile} userId={user._id} /> }
+        {!isNonMobileScreens && editProfile && (
+          <ProfileWidget
+            editProfile={editProfile}
+            setEditProfile={setEditProfile}
+            userId={user._id}
+          />
+        )}
         <UserWidget editProfile={editProfile} setEditProfile={setEditProfile} />
       </Box>
       <Box
         flexBasis={isNonMobileScreens ? "40%" : undefined}
         mt={isNonMobileScreens ? undefined : "2rem"}
       >
-        {editProfile && isNonMobileScreens && <ProfileWidget userId={user._id} />}
-        <GamesWidget userId={user._id} isProfile={true} />
+        {editProfile && isNonMobileScreens && (
+          <ProfileWidget userId={user._id} />
+        )}
+        <PostsWidget userId={user._id} isProfile={true} />
       </Box>
       <Box
         flexBasis={isNonMobileScreens ? "40%" : undefined}
         mt={isNonMobileScreens ? undefined : "2rem"}
       >
-        <PostsWidget userId={user._id} isProfile={true} />
+        <GamesWidget userId={user._id} isProfile={true} />
         <Box m="2rem 0" />
       </Box>
     </Box>

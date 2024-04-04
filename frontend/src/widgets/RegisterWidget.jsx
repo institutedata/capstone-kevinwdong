@@ -36,7 +36,7 @@ const RegisterWidget = () => {
       setError("Passwords do not match");
       return;
     }
-    if (formData.password.length < 7) {
+    if (formData.password.length < 8) {
       setError("Password must be at least 8 characters");
       return;
     }
@@ -101,6 +101,7 @@ const RegisterWidget = () => {
           />
           <TextField
             label="Password"
+            autoComplete="new-password"
             type="password"
             onChange={handleChange}
             id="password"
@@ -109,6 +110,7 @@ const RegisterWidget = () => {
           />
           <TextField
             label="Confirm Password"
+            autoComplete="new-password"
             type="password"
             onChange={handleChange}
             id="confirmPassword"

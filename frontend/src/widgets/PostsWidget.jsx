@@ -40,13 +40,6 @@ const PostsWidget = ({ userId, isProfile }) => {
   }, [posts]);
 
 
-
-  // const arrangedPosts = posts?.sort((a, b) => {
-  //   new Date(b?.createdAt) - new Date(a?.createdAt);
-  // });
-
-
-
   return (
     <>
       {posts?.map(
