@@ -1,39 +1,28 @@
 import express from "express";
-import bodyParser from "body-parser";
-import mongoose from "mongoose";
 import cors from "cors";
-import { config as dotenvConfig } from "dotenv";
-import multer from "multer";
-import helmet from "helmet";
-import morgan from "morgan";
-import path from "path";
-import { fileURLToPath } from "url";
+// import { config as dotenvConfig } from "dotenv";
 import { dbConnect } from './dbConnect.js'
 import userRoutes from "./routes/userRoutes.js";
 import postRoutes from "./routes/postRoutes.js";
 import authRoutes from "./routes/authRoutes.js";
 import gameRoutes from "./routes/gameRoutes.js";
-import cookieParser from "cookie-parser";
+// import cookieParser from "cookie-parser";
 import colors from 'colors'
 
 
-dotenvConfig();
+// dotenvConfig();
 
 const app = express();
 app.use(express.json());
-app.use(cookieParser());
+// app.use(cookieParser());
 app.use(cors());
 
-
-//@desc     Routes without file upload functionality
-// app.use('/auth', authRoutes);
 
 app.use("/auth", authRoutes);
 app.use("/users", userRoutes);
 app.use("/posts", postRoutes);
 app.use("/games", gameRoutes);
 
-//@desc     Setup mongodb database
 
 // const PORT = process.env.PORT || 8080;
 // mongoose

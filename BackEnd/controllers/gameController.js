@@ -20,14 +20,14 @@ export const createGame = async (req, res, next) => {
 
     const newGame = new Game({
       userId,
+      userImage,
       firstName,
       lastName,
       title,
       location,
       description,
-      userImage,
       gameImage,
-      players: [],
+      players: {},
       comments: [],
     });
     await newGame.save();

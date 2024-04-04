@@ -20,11 +20,11 @@ export const createPost = async (req, res, next) => {
 
     const newPost = new Post({
       userId,
+      userImage,
       firstName,
       lastName,
       location,
       description,
-      userImage,
       postImage,
       likes: {},
       comments: [],

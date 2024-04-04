@@ -10,14 +10,7 @@ const gameSchema = new mongoose.Schema(
     description: { type: String, required: true },
     gameImage: { type: String },
     userImage: { type: String },
-    players: [
-      {
-        userId: { type: String },
-        firstName: { type: String },
-        lastName: { type: String },
-        userImage: { type: String },
-      }
-    ],
+    players: { type: Map, of: Boolean },
     comments: [{ 
       userId: { type: String },
       firstName: { type: String },

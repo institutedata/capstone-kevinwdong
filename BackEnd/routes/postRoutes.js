@@ -1,12 +1,17 @@
 import express from "express";
-import { createPost, getFeedPosts, getUserPosts, likePost, updatePostComments, deletePost} from "../controllers/postController.js";
-import { verifyToken } from "../utils/verifyToken.js";
-
+import {
+  createPost,
+  getFeedPosts,
+  getUserPosts,
+  likePost,
+  updatePostComments,
+  deletePost,
+} from "../controllers/postController.js";
 
 const router = express.Router();
 
 //@desc    Create a post
-router.post('/create', verifyToken, createPost);
+router.post("/create", createPost);
 
 //@desc    Get all posts
 router.get("/", getFeedPosts);
@@ -22,6 +27,5 @@ router.patch("/:id/like", likePost);
 
 //@desc     Delete a post
 router.delete("/delete/:postId", deletePost);
-
 
 export default router;
