@@ -21,6 +21,7 @@ import WidgetWrapper from "../components/WidgetWrapper";
 import { useDispatch, useSelector } from "react-redux";
 import { setPost } from "../redux/postSlice.js";
 import UserAvatar from "../components/UserAvatar";
+import { setPosts } from "../redux/postSlice.js";
 
 const PostWidget = ({
   postId,
@@ -54,9 +55,14 @@ const PostWidget = ({
       body: JSON.stringify({ userId: user._id }),
     });
     const updatedPost = await response.json();
+    console.log("updatedPost : ", updatedPost);
     dispatch(setPost({ post: updatedPost }));
-  };
 
+  };
+  console.log("clicked like id : ", user._id);
+  
+  
+  
   const addComment = async () => {
     try {
       const response = await fetch(
@@ -96,7 +102,7 @@ const PostWidget = ({
         }
       );
       const data = await response.json();
-      console.log(data);
+      dispatch(setPosts({ posts: data}))
     } catch (error) {
       console.error(error.message);
     }

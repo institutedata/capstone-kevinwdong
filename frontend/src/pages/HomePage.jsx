@@ -37,13 +37,13 @@ const HomePage = () => {
       >
         {postOrGame === "game" ? (
           <>
-            <MyGameWidget userImage={user.userImage} />
+            <MyGameWidget  />
             <GamesWidget isProfile={false} />
           </>
         ) : (
           <>
-            <MyPostWidget userImage={user.userImage} />
-            <PostsWidget isProfile={false} />{" "}
+            <MyPostWidget  />
+            <PostsWidget isProfile={false} />
           </>
         )}
       </Box>

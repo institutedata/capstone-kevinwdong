@@ -23,7 +23,7 @@ router.get("/:userId/posts", getUserPosts);
 router.put("/update/:postId/comments", updatePostComments);
 
 //@desc     Like a post
-router.patch("/:id/like", likePost);
+router.patch("/:postId/like", likePost);
 
 //@desc     Delete a post
 router.delete("/delete/:postId", deletePost);

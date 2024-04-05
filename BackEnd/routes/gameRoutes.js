@@ -20,7 +20,7 @@ router.get("/", getFeedGames);
 router.get("/:userId/games", getUserGames);
 
 //@desc     Add or remove a player from a game
-router.patch("/:id/player", addOrRemovePlayer);
+router.patch("/:gameId/players", addOrRemovePlayer);
 
 //@desc     Add a game comment
 router.put("/update/:gameId/comments", updateGameComments);

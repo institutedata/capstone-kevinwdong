@@ -6,11 +6,14 @@ import PostsWidget from "../widgets/PostsWidget.jsx";
 // import FriendListWidget from "../widgets/FriendListWidget.jsx";
 import ProfileWidget from "../widgets/ProfileWidget.jsx";
 import GamesWidget from "../widgets/GamesWidget.jsx";
+import MyPostWidget from "../widgets/MyPostWidget.jsx";
+import MyGameWidget from "../widgets/MyGameWidget.jsx";
 
 const ProfilePage = () => {
   const isNonMobileScreens = useMediaQuery("(min-width:1000px)");
   const { user } = useSelector((state) => state.user);
   const [editProfile, setEditProfile] = useState(false);
+  const { postOrGame } = useSelector((state) => state.mode);
 
   return (
     <Box
@@ -24,6 +27,7 @@ const ProfilePage = () => {
         flexBasis={isNonMobileScreens ? "26%" : undefined}
         mt={isNonMobileScreens ? undefined : "2rem"}
       >
+        {postOrGame === "game" ? <MyGameWidget /> : <MyPostWidget />}
         {!isNonMobileScreens && editProfile && (
           <ProfileWidget
             editProfile={editProfile}
@@ -38,7 +42,11 @@ const ProfilePage = () => {
         mt={isNonMobileScreens ? undefined : "2rem"}
       >
         {editProfile && isNonMobileScreens && (
-          <ProfileWidget userId={user._id} />
+          <ProfileWidget
+            editProfile={editProfile}
+            setEditProfile={setEditProfile}
+            userId={user._id}
+          />
         )}
         <PostsWidget userId={user._id} isProfile={true} />
       </Box>

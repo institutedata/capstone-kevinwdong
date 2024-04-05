@@ -65,9 +65,9 @@ export const getUserPosts = async (req, res, next) => {
 //@route    PATCH /posts/:id/like
 export const likePost = async (req, res, next) => {
   try {
-    const { id } = req.params;
+    const { postId } = req.params;
     const { userId } = req.body;
-    const post = await Post.findById(id);
+    const post = await Post.findById(postId);
     const isLiked = post.likes.get(userId);
 
     if (isLiked) {
@@ -77,7 +77,7 @@ export const likePost = async (req, res, next) => {
     }
 
     const updatedPost = await Post.findByIdAndUpdate(
-      id,
+      postId,
       { likes: post.likes },
       { new: true }
     );
@@ -114,7 +114,8 @@ export const deletePost = async (req, res, next) => {
   try {
 
     await Post.findByIdAndDelete(req.params.postId);
-    res.status(200).json("Post has been deleted");
+    const posts = await Post.find();
+    res.status(200).json(posts);
   } catch (error) {
     next(error);
   }

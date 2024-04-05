@@ -7,9 +7,9 @@ const LandingPage = () => {
 const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
  
     return (
-      <Box mt={isNonMobileScreens ? "15rem" : "5rem"}>
+      <Box mt={isNonMobileScreens ? "25rem" : "10rem"}>
         <Box
-          width={isNonMobileScreens ? "100" : "93%"}
+          width={isNonMobileScreens ? "50%" : "93%"}
           p="2rem"
           m="3rem auto"
           borderRadius="1.5rem"

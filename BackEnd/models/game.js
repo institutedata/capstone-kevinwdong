@@ -11,13 +11,15 @@ const gameSchema = new mongoose.Schema(
     gameImage: { type: String },
     userImage: { type: String },
     players: { type: Map, of: Boolean },
-    comments: [{ 
-      userId: { type: String },
-      firstName: { type: String },
-      lastName: { type: String },
-      comment: { type: String },
-      userImage: { type: String },
-    }],
+    comments: [
+      {
+        userId: { type: String },
+        firstName: { type: String },
+        lastName: { type: String },
+        comment: { type: String },
+        userImage: { type: String },
+      },
+    ],
   },
   {
     timestamps: true,

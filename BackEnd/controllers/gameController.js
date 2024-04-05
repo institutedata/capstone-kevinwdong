@@ -63,31 +63,26 @@ export const getUserGames = async (req, res, next) => {
 };
 
 //@desc     Play a game
-//@route    PATCH /games/:id/play
+//@route    PATCH /games/:gameId/players
 export const addOrRemovePlayer = async (req, res, next) => {
   try {
-    const { id } = req.params;
+    const { gameId } = req.params;
     const { userId } = req.body;
-    const game = await Game.findById(id);
-    const isPlay = game.players.filter((player) => player.userId === userId)[0];
-
+    const game = await Game.findById(gameId);
+    const isPlay = game.players.get(userId);
+  
     if (!isPlay) {
-      const updatedGame = await Game.findByIdAndUpdate(
-        id,
-        {
-          $push: { players: req.body },
-        },
-        { new: true }
-      );
-      res.status(200).json(updatedGame);
+      game.players.delete(userId);
     } else {
-      const updatedGame = await Game.findByIdAndUpdate(
-        id,
-        { $pull: { players: { _id: isPlay._id } } },
-        { new: true }
-      );
-      res.status(200).json(updatedGame);
+      game.players.set(userId, true);
     }
+
+    const updatedGame = await Game.findByIdAndUpdate(
+      gameId,
+      { players: game.players },
+      { new: true }
+    );
+    res.status(200).json(updatedGame);
   } catch (error) {
     next(errorHandler(400, error.message));
   }
@@ -119,7 +114,8 @@ export const deleteGame = async (req, res, next) => {
     try {
 
       await Game.findByIdAndDelete(req.params.gameId);
-      res.status(200).json("Game has been deleted");
+      const games = await Game.find();
+      res.status(200).json(games);
     } catch (error) {
       next(error);
     }

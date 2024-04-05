@@ -17,6 +17,7 @@ import WidgetWrapper from "../components/WidgetWrapper";
 import { useDispatch, useSelector } from "react-redux";
 import { setGame } from "../redux/gameSlice";
 import UserAvatar from "../components/UserAvatar";
+import { setGames } from "../redux/gameSlice";
 
 const GameWidget = ({
   gameId,
@@ -33,26 +34,34 @@ const GameWidget = ({
   const [commentText, setCommentText] = useState("");
   const { user, token } = useSelector((state) => state.user);
   const dispatch = useDispatch();
-  const isPlayed = Boolean(players[user._id]);
+  const isPlayed = Boolean(players[user.userId]);
   const playerCount = Object.keys(players).length;
 
   const { palette } = useTheme();
   const main = palette.neutral.main;
   const medium = palette.neutral.medium;
 
-
   const patchPlayer = async () => {
-    const response = await fetch(`http://localhost:8080/posts/${gameId}/like`, {
-      method: "PATCH",
-      headers: {
-        Authorization: token,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ userId: user._id }),
-    });
+    const response = await fetch(
+      `http://localhost:8080/games/${gameId}/players`,
+      {
+        method: "PATCH",
+        headers: {
+          Authorization: token,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          userId: user._id,
+        }),
+      }
+    );
+    
     const updatedGame = await response.json();
-    dispatch(setGame({ post: updatedGame }));
+    console.log("updatedGame : ", updatedGame);
+    dispatch(setGame({ game: updatedGame }));
   };
+console.log("clicked player id : ", user._id);
+
 
 
   const addGameComments = async () => {
@@ -94,7 +103,7 @@ const GameWidget = ({
         }
       );
       const data = await response.json();
-      console.log(data);
+      dispatch(setGames({ games: data }));
     } catch (error) {
       console.error(error.message);
     }
@@ -162,12 +171,10 @@ const GameWidget = ({
             </Typography>
           </Box>
         </FlexBetween>
-
-        
       </Box>
       <FlexBetween mt="0.25rem">
         <FlexBetween gap="1rem">
-          <FlexBetween gap="0.3rem">
+          {/* <FlexBetween gap="0.3rem">
             <IconButton onClick={patchPlayer}>
               {isPlayed ? (
                 <SportsBasketballIcon sx={{ color: "#c84117" }} />
@@ -178,7 +185,7 @@ const GameWidget = ({
             <Typography color={main} variant="h6" fontWeight="500">
               {playerCount}
             </Typography>
-          </FlexBetween>
+          </FlexBetween> */}
           <FlexBetween gap="0.3rem">
             <IconButton
               onClick={() => {
@@ -192,7 +199,33 @@ const GameWidget = ({
             </Typography>
           </FlexBetween>
         </FlexBetween>
+        {/* <IconButton
+          onClick={() => {
+            setShowPlayers(!showPlayers);
+          }}
+        >
+          <ArrowDropDownIcon />
+        </IconButton> */}
       </FlexBetween>
+      {/* {showPlayers && (
+        <Box mt="0.5rem">
+          {players?.map((player) => (
+            <>
+              <Box m="0.5rem">
+                <FlexBetween>
+                  <UserAvatar userImage={player.userImage} size="40px" />
+                  <FlexBetween gap="0.5rem">
+                    <Typography>{player.firstName}</Typography>
+                    <Typography>{player.lastName}</Typography>
+                  </FlexBetween>
+                  <Typography>{player.position}</Typography>
+                </FlexBetween>
+                <Divider />
+              </Box>
+            </>
+          ))}
+        </Box>
+      )} */}
       {isComments && (
         <Box mt="0.5rem">
           {comments?.map((comment) => (

@@ -4,23 +4,23 @@ import FlexBetween from "../components/FlexBetween.jsx";
 import WidgetWrapper from "../components/WidgetWrapper.jsx";
 
 const AdvetWidget = () => {
-  // const [randomImageUrl, setRandomImageUrl] = useState("");
+  const [randomImageUrl, setRandomImageUrl] = useState("");
 
   const { palette } = useTheme();
   const medium = palette.neutral.medium;
   const main = palette.neutral.main;
 
-  // useEffect(() => {
-  //   const intervalId = setInterval(() => {
-  //     fetch("https://source.unsplash.com/featured/?sports").then((response) => {
-  //       setRandomImageUrl(response.url);
-  //       console.log("Random basketball image URL:", response.url);
-  //     });
-  //   }, 5000);
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      fetch("https://source.unsplash.com/featured/?sports").then((response) => {
+        setRandomImageUrl(response.url);
+        console.log("Random basketball image URL:", response.url);
+      });
+    }, 10000);
 
-  //   return () => clearInterval(intervalId);
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, []);
+    return () => clearInterval(intervalId);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <WidgetWrapper mb="1rem">
@@ -36,7 +36,7 @@ const AdvetWidget = () => {
         width="100%"
         height="auto"
         alt="advert"
-        // src={randomImageUrl}
+        src={randomImageUrl}
         style={{ borderRadius: "0.75rem", margin: "0.75rem 0" }}
       />
     </WidgetWrapper>

@@ -8,7 +8,7 @@ const GamesWidget = ({ userId, isProfile }) => {
   const dispatch = useDispatch();
   const { token } = useSelector((state) => state.user);
   const { games } = useSelector((state) => state.game);
-
+  
   const getGames = async () => {
     const response = await fetch("http://localhost:8080/games", {
       method: "GET",
@@ -37,7 +37,7 @@ const GamesWidget = ({ userId, isProfile }) => {
       getGames();
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [games]); 
+  }, []); 
   
 
   return (
