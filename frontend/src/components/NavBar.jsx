@@ -64,7 +64,14 @@ const Navbar = () => {
     }
   };
 
+  const handleLogoClick = async () => {
+    if (!token) {
+      navigate("/");
+    } else {
+      navigate("/home");
+    }
 
+  };
 
   const handlePostOrGame = async () => {
     dispatch(setPostOrGame());
@@ -96,14 +103,14 @@ const Navbar = () => {
                 fontWeight="bold"
                 fontSize="clamp(1rem, 2rem, 2.25rem)"
                 color="#c84117"
-                onClick={() => navigate("/home")}
+                onClick={handleLogoClick}
                 sx={{
                   "&:hover": {
                     cursor: "pointer",
                   },
                 }}
               >
-                HoopsConnect
+                SportConnect
               </Typography>
               <FlexBetween
                 backgroundColor={neutralLight}
@@ -130,7 +137,7 @@ const Navbar = () => {
                   },
                 }}
               >
-                HC
+                SC
               </Typography>
               <IconButton onClick={() => dispatch(setMode())}>
                 {theme.palette.mode === "dark" ? (

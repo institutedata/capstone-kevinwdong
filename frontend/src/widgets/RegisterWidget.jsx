@@ -67,7 +67,7 @@ const RegisterWidget = () => {
         fontWeight="500"
         sx={{ mb: "1.5rem" }}
       >
-        Welcom to Hoops Connect
+        Welcom to Sport Connect
       </Typography>
       <form onSubmit={handleSubmit}>
         <Box
@@ -121,7 +121,7 @@ const RegisterWidget = () => {
         {error && <Alert severity="error">{error}</Alert>}
         <FlexBetween>
           <Typography
-            variant="h5"
+            variant="h4"
             fontWeight="500"
             onClick={() => {
               navigate("/login");

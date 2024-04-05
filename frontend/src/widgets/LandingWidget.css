@@ -1,0 +1,49 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+}
+
+.homeBox {
+  width: 400px;
+  height: 200px;
+  position: relative;
+  z-index: 0;
+}
+
+.logoBack {
+  width: 200px;
+  height: 200px;
+  transform: rotate(45deg);
+  position: fixed;
+  animation: glow 2s infinite;
+}
+
+.logoFront {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: auto;
+  height: 200px;
+  z-index: 2;
+}
+
+.logo {
+
+  text-decoration: none;
+  color: #999;
+}
+
+@keyframes glow {
+  0% {
+    box-shadow: 0 0 10px #999;
+  }
+  50% {
+    box-shadow: 0 0 50px #999, 0 0 30px #999;
+  }
+  100% {
+    box-shadow: 0 0 10px #999;
+  }
+}
