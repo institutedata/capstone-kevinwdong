@@ -44,6 +44,7 @@ const MyPostWidget = () => {
       });
       const data = await response.json();
         dispatch(setPosts({ posts: data}));
+        setPostText("");
     } catch (error) {
       console.error(error);
     }

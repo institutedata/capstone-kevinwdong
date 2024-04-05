@@ -64,9 +64,7 @@ export const updateUser = async (req, res, next) => {
 //@route    DELETE /users/delete/:userId
 export const deleteUser = async (req, res, next) => {
   try {
-    if (req.user.id !== req.params.userId) {
-      return next(errorHandler(403, "Not allow to delete this user"));
-    }
+
     await User.findByIdAndDelete(req.params.userId);
     res.status(200).json("User has been deleted");
   } catch (error) {
@@ -75,24 +73,5 @@ export const deleteUser = async (req, res, next) => {
 };
 
 
-//@desc     Get a user's friends
-//@route    GET /users/:id/friends
-export const getUserFriends = async (req, res, next) => {
-  try {
-    const { id } = req.params;
-    const user = await User.findById(id);
 
-    const friends = await Promise.all(
-      user.friends.map((id) => User.findById(id))
-    );
-    const formattedFriends = friends.map(
-      ({ _id, firstName, lastName, position, location, userImage }) => {
-        return { _id, firstName, lastName, position, location, userImage };
-      }
-    );
-    res.status(200).json(formattedFriends);
-  } catch (error) {
-    next(error);
-  }
-};
 

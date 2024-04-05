@@ -3,7 +3,6 @@ import { Box, useMediaQuery } from "@mui/material";
 import { useSelector } from "react-redux";
 import UserWidget from "../widgets/UserWidget.jsx";
 import PostsWidget from "../widgets/PostsWidget.jsx";
-// import FriendListWidget from "../widgets/FriendListWidget.jsx";
 import ProfileWidget from "../widgets/ProfileWidget.jsx";
 import GamesWidget from "../widgets/GamesWidget.jsx";
 import MyPostWidget from "../widgets/MyPostWidget.jsx";

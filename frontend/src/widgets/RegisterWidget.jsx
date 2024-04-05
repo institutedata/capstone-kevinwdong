@@ -147,7 +147,7 @@ const RegisterWidget = () => {
             }}
           >
             <Typography variant="h5" fontWeight="500">
-              Logout
+              SignUp
             </Typography>
           </Button>
         </FlexBetween>

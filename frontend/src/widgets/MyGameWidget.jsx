@@ -59,6 +59,9 @@ const MyGameWidget = () => {
       const data = await response?.json();
       console.log("handleGame response data: ", data);
       dispatch(setGames({ games: data }));
+      setGameTitle("");
+      setGameLocation("");
+      setGameDescription("");
     } catch (error) {
       console.error(error);
     }
