@@ -28,7 +28,7 @@ const Navbar = () => {
   const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
   const [fullName, setFullName] = useState("");
   const [isLoggedin, setIsLoggedin] = useState("");
-  const [avatarImage, setAvatarImage] = useState("");
+  const [avatarImage, setAvatarImage] = useState(UserAvatar);
   const { user, token } = useSelector((state) => state.user);
   const dispatch = useDispatch();
   const navigate = useNavigate();

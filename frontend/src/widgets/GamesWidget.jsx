@@ -68,6 +68,7 @@ const GamesWidget = ({ userId, isProfile }) => {
             gameImage={gameImage}          
             players={players}
             comments={comments}
+            isProfile={isProfile}
           />
         )
       )}

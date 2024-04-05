@@ -31,6 +31,7 @@ const PostWidget = ({
   userImage,
   likes,
   comments,
+  isProfile,
 }) => {
   const dispatch = useDispatch();
   const [commentText, setCommentText] = useState("");
@@ -129,9 +130,11 @@ const PostWidget = ({
             </Typography>
           </Box>
         </FlexBetween>
+        {isProfile && (<Box>
         <IconButton onClick={handleDelete}>
           <MoreVertIcon />
         </IconButton>
+        </Box>)}
       </FlexBetween>
 
       <Typography
@@ -189,7 +192,7 @@ const PostWidget = ({
                 <Box m="1rem">
                   <Box display="flex" justifyContent="end">
                     <FlexBetween justifyContent="end">
-                      <FlexBetween gap="0.5rem">
+                      <FlexBetween gap="1rem">
                         <UserAvatar userImage={comment.userImage} size="40px" />
                         <FlexBetween gap="0.5rem">
                           <Typography

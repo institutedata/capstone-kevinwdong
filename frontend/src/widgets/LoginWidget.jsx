@@ -107,9 +107,9 @@ const LoginWidget = () => {
             <Button
               type="submit"
               sx={{
-                width: "25%",
+                width: "30%",
                 m: "2rem 0",
-                p: "1rem",
+                p: "0.5rem",
                 backgroundColor: "#c84117",
                 color: main,
               }}

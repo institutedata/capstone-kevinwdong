@@ -29,6 +29,7 @@ const GameWidget = ({
   gameImage,
   players,
   comments,
+  isProfile,
 }) => {
   const [isComments, setIsComments] = useState(false);
   const [commentText, setCommentText] = useState("");
@@ -121,9 +122,11 @@ console.log("clicked player id : ", user._id);
           >
             {title}
           </Typography>
+         {isProfile && (<Box>
           <IconButton onClick={handleDelete}>
             <MoreVertIcon />
           </IconButton>
+          </Box>)}
         </FlexBetween>
 
         {gameImage && (
@@ -238,9 +241,9 @@ console.log("clicked player id : ", user._id);
                 </Box>
                 <Box m="1rem">
                   <Box display="flex" justifyContent="end">
-                    <FlexBetween>
+                    <FlexBetween gap='0.5rem'>
                       <UserAvatar userImage={comment.userImage} size="40px" />
-                      <FlexBetween gap="0.5rem">
+                      <FlexBetween gap="1rem">
                         <Typography
                           color={medium}
                           variant="h6"
