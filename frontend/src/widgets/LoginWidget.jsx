@@ -10,10 +10,11 @@ import {
   useTheme,
   Alert,
 } from "@mui/material";
+import GoogleIcon from "@mui/icons-material/Google";
 import { useDispatch } from "react-redux";
 import { setLogin } from "../redux/userSlice";
 import WidgetWrapper from "../components/WidgetWrapper";
-import FlexBetween from "../components/FlexBetween";
+import GoogleAuth from "../components/GoogleAuth";
 
 const LoginWidget = () => {
   const { token } = useSelector((state) => state.user);
@@ -57,7 +58,12 @@ const LoginWidget = () => {
 
   return (
     <WidgetWrapper>
-      <Typography color={main} variant="h4" fontWeight="500" sx={{ mb: "1.5rem" }}>
+      <Typography
+        color={main}
+        variant="h4"
+        fontWeight="500"
+        sx={{ mb: "1.5rem" }}
+      >
         Welcom to Sport Connect
       </Typography>
       <Box>
@@ -68,6 +74,7 @@ const LoginWidget = () => {
               label="Email"
               type="email"
               id="email"
+              autoComplete="email"
               onChange={handleChange}
               name="email"
               sx={{ mb: "2rem" }}
@@ -84,9 +91,25 @@ const LoginWidget = () => {
             />
           </Box>
           {error && <Alert severity="error">{error}</Alert>}
-          <FlexBetween>
-          <Typography
-              variant="h4"
+          <Box>
+            <Button
+              type="submit"
+              sx={{
+                width: "100%",
+                m: "1rem 0",
+                p: "0.5rem",
+                backgroundColor: "#c84117",
+                color: main,
+              }}
+            >
+              <Typography variant="h5" fontWeight="500">
+                LOGIN
+              </Typography>
+            </Button>
+            <GoogleAuth />
+            <Typography
+              mt="1rem"
+              variant="h5"
               fontWeight="500"
               onClick={() => {
                 navigate("/register");
@@ -99,29 +122,9 @@ const LoginWidget = () => {
                 },
               }}
             >
-            Sign Up Here
-          </Typography>
-
-
-
-            <Button
-              type="submit"
-              sx={{
-                width: "30%",
-                m: "2rem 0",
-                p: "0.5rem",
-                backgroundColor: "#c84117",
-                color: main,
-              }}
-            >
-            <Typography
-              variant="h5"
-              fontWeight="500"
-            >
-            LOGIN
+              Don&apos;t have an account? Sign Up here
             </Typography>
-          </Button>
-          </FlexBetween>
+          </Box>
         </form>
       </Box>
     </WidgetWrapper>

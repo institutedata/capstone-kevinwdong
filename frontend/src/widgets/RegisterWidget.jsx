@@ -9,11 +9,13 @@ import {
   useTheme,
   Alert,
 } from "@mui/material";
+
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { setRegister } from "../redux/userSlice";
 import WidgetWrapper from "../components/WidgetWrapper";
-import FlexBetween from "../components/FlexBetween";
+import GoogleAuth from "../components/GoogleAuth";
+
 
 const RegisterWidget = () => {
   const isNonMobile = useMediaQuery("(min-width:600px)");
@@ -80,6 +82,7 @@ const RegisterWidget = () => {
         >
           <TextField
             label="First Name"
+            autoComplete="first-name"
             onChange={handleChange}
             id="firstName"
             name="firstName"
@@ -87,6 +90,7 @@ const RegisterWidget = () => {
           />
           <TextField
             label="Last Name"
+            autoComplete="last-name"
             onChange={handleChange}
             id="lastName"
             name="lastName"
@@ -94,6 +98,7 @@ const RegisterWidget = () => {
           />
           <TextField
             label="Email"
+            autoComplete="email"
             onChange={handleChange}
             id="email"
             name="email"
@@ -119,38 +124,40 @@ const RegisterWidget = () => {
           />
         </Box>
         {error && <Alert severity="error">{error}</Alert>}
-        <FlexBetween>
-          <Typography
-            variant="h4"
-            fontWeight="500"
-            onClick={() => {
-              navigate("/login");
-            }}
-            sx={{
-              textDecoration: "underline",
-              color: "#c84117",
-              "&:hover": {
-                cursor: "pointer",
-              },
-            }}
-          >
-            Sign In Here
-          </Typography>
-          <Button
-            type="submit"
-            sx={{
-              width: "30%",
-              m: "2rem 0",
-              p: "0.5rem",
-              backgroundColor: "#c84117",
-              color: main,
-            }}
-          >
-            <Typography variant="h5" fontWeight="500">
-              SignUp
+        <Box>
+            <Button
+              type="submit"
+              sx={{
+                width: "100%",
+                m: "1rem 0",
+                p: "0.5rem",
+                backgroundColor: "#c84117",
+                color: main,
+              }}
+            >
+              <Typography variant="h5" fontWeight="500">
+                Register
+              </Typography>
+            </Button>
+            <GoogleAuth />
+            <Typography
+              mt="1rem"
+              variant="h5"
+              fontWeight="500"
+              onClick={() => {
+                navigate("/login");
+              }}
+              sx={{
+                textDecoration: "underline",
+                color: "#c84117",
+                "&:hover": {
+                  cursor: "pointer",
+                },
+              }}
+            >
+              Already have an account? Login here
             </Typography>
-          </Button>
-        </FlexBetween>
+          </Box>
       </form>
     </WidgetWrapper>
   );

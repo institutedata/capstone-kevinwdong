@@ -130,7 +130,7 @@ const Navbar = () => {
                 fontWeight="bold"
                 fontSize="clamp(1rem, 2rem, 2.25rem)"
                 color="#c84117"
-                onClick={() => navigate("/home")}
+                onClick={handleLogoClick}
                 sx={{
                   "&:hover": {
                     cursor: "pointer",
@@ -186,7 +186,7 @@ const Navbar = () => {
                     {fullName}
                   </Typography>
                 </MenuItem>
-                <MenuItem onClick={handleLogging}>
+                <MenuItem onClick={(handleLogging)}>
                   <Typography color={main} variant="h5" fontWeight="500">
                     {isLoggedin}
                   </Typography>

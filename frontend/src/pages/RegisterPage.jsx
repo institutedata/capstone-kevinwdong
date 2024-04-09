@@ -7,7 +7,7 @@ const RegisterPage = () => {
   return (
     <Box>
       <Box
-        width={isNonMobileScreens ? "40%" : "93%"}
+        width={isNonMobileScreens ? "30%" : "93%"}
         p="2rem"
         m="3rem auto"
         borderRadius="1.5rem"

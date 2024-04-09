@@ -30,6 +30,8 @@ const userSlice = createSlice({
       state.token = action.payload.token;
     },
     setDelete: (state) => {
+      state.game = null;
+      state.past = null;
       state.user = null;
       state.token = null;
     },
