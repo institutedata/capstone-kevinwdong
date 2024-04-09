@@ -48,7 +48,7 @@ const GameWidget = ({
       {
         method: "PATCH",
         headers: {
-          Authorization: token,
+          Authorisation: token,
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
@@ -72,7 +72,7 @@ console.log("clicked player id : ", user._id);
         {
           method: "PUT",
           headers: {
-            Authorization: token,
+            Authorisation: token,
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
@@ -99,7 +99,7 @@ console.log("clicked player id : ", user._id);
         {
           method: "DELETE",
           headers: {
-            Authorization: token,
+            Authorisation: token,
           },
         }
       );
@@ -177,7 +177,7 @@ console.log("clicked player id : ", user._id);
       </Box>
       <FlexBetween mt="0.25rem">
         <FlexBetween gap="1rem">
-          {/* <FlexBetween gap="0.3rem">
+          <FlexBetween gap="0.3rem">
             <IconButton onClick={patchPlayer}>
               {isPlayed ? (
                 <SportsBasketballIcon sx={{ color: "#c84117" }} />
@@ -188,7 +188,7 @@ console.log("clicked player id : ", user._id);
             <Typography color={main} variant="h6" fontWeight="500">
               {playerCount}
             </Typography>
-          </FlexBetween> */}
+          </FlexBetween>
           <FlexBetween gap="0.3rem">
             <IconButton
               onClick={() => {
@@ -310,6 +310,7 @@ GameWidget.propTypes = {
   players: PropTypes.array,
   player: PropTypes.object,
   comments: PropTypes.array,
+  isProfile: PropTypes.bool,
 };
 
 export default GameWidget;

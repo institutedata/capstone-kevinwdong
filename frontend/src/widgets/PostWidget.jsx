@@ -50,7 +50,7 @@ const PostWidget = ({
     const response = await fetch(`http://localhost:8080/posts/${postId}/like`, {
       method: "PATCH",
       headers: {
-        Authorization: token,
+        Authorisation: token,
         "Content-Type": "application/json",
       },
       body: JSON.stringify({ userId: user._id }),
@@ -71,7 +71,7 @@ const PostWidget = ({
         {
           method: "PUT",
           headers: {
-            Authorization: token,
+            Authorisation: token,
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
@@ -98,7 +98,7 @@ const PostWidget = ({
         {
           method: "DELETE",
           headers: {
-            Authorization: token,
+            Authorisation: token,
           },
         }
       );

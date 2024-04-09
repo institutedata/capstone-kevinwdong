@@ -12,7 +12,7 @@ const PostsWidget = ({ userId, isProfile }) => {
   const getPosts = async () => {
     const response = await fetch("http://localhost:8080/posts", {
       method: "GET",
-      headers: { Authorization: token },
+      headers: { Authorisation: token },
     });
     const data = await response.json();
     dispatch(setPosts({ posts: data }));
@@ -23,7 +23,7 @@ const PostsWidget = ({ userId, isProfile }) => {
       `http://localhost:8080/posts/${userId}/posts`,
       {
         method: "GET",
-        headers: { Authorization: token },
+        headers: { Authorisation: token },
       }
     );
     const data = await response.json();

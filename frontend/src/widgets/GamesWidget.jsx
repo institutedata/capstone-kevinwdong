@@ -12,7 +12,7 @@ const GamesWidget = ({ userId, isProfile }) => {
   const getGames = async () => {
     const response = await fetch("http://localhost:8080/games", {
       method: "GET",
-      headers: { Authorization: token },
+      headers: { Authorisation: token },
     });
     const data = await response.json();
     dispatch(setGames({ games: data }));
@@ -23,7 +23,7 @@ const GamesWidget = ({ userId, isProfile }) => {
       `http://localhost:8080/games/${userId}/games`,
       {
         method: "GET",
-        headers: { Authorization: token },
+        headers: { Authorisation: token },
       }
     );
     const data = await response.json();

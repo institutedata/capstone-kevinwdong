@@ -1,11 +1,12 @@
 import { Button, Typography } from "@mui/material";
-import { useDispatch, useNavigate } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
 import GoogleIcon from "@mui/icons-material/Google";
 import { useTheme } from "@mui/material/styles";
 import { GoogleAuthProvider } from "firebase/auth";
 import { getAuth, signInWithPopup } from "firebase/auth";
 import { app } from "../firebase";
-import { setLogin, setError } from "../redux/userSlice";
+import { setLogin } from "../redux/userSlice";
 
 const GoogleAuth = () => {
   const { palette } = useTheme();
@@ -19,21 +20,19 @@ const GoogleAuth = () => {
     provider.setCustomParameters({ prompt: "select_account" });
     try {
       const resultsFromGoogle = await signInWithPopup(auth, provider);
-      console.log(resultsFromGoogle);
       const response = await fetch("http://localhost:8080/auth/google", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
+          firstName: resultsFromGoogle.user.displayName.toLowerCase().split(" ")[0],
+          lastName: resultsFromGoogle.user.displayName.toLowerCase().split(" ")[1],
           email: resultsFromGoogle.user.email,
           userImage: resultsFromGoogle.user.photoURL,
         }),
       }); 
       const data = await response.json();
-      if (data.success === false) {
-        setError(data.message);
-      }
       if (response.ok) {
         dispatch(setLogin(data));
         navigate("/home");
@@ -42,7 +41,6 @@ const GoogleAuth = () => {
       console.log(error);
     }
   }
-
   return (
     <Button
       onClick={handleGoogle}
