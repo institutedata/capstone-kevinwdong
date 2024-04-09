@@ -1,6 +1,5 @@
 import Game from "../models/game.js";
-import User from "../models/user.js";
-import { errorHandler } from "../utils/error.js";
+import { errorHandler } from "../utils/error.js"
 
 //@desc     Create a post
 //@route    POST /posts/create
@@ -93,7 +92,6 @@ export const addOrRemovePlayer = async (req, res, next) => {
 export const updateGameComments = async (req, res, next) => {
   try {
     const { gameId } = req.params;
-    const { comments } = req.body;
 
     const updatedGame = await Game.findByIdAndUpdate(
       gameId,

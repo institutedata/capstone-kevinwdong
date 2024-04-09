@@ -45,6 +45,8 @@ export const updateUser = async (req, res, next) => {
           email: req.body.email,
           userImage: req.body.userImage,
           password: req.body.password,
+          totalGames: req.body.totalGames,
+          totalPoints: req.body.totalPoints,
         },
       },
       { new: true }

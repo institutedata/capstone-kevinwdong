@@ -1,5 +1,4 @@
 import Post from "../models/post.js";
-import User from "../models/user.js";
 import { errorHandler } from "../utils/error.js";
 
 //@desc     Create a post
