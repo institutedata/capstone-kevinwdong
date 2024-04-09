@@ -9,7 +9,6 @@ import {
   useTheme,
   Alert,
 } from "@mui/material";
-
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { setRegister } from "../redux/userSlice";

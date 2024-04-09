@@ -10,7 +10,6 @@ import {
   useTheme,
   Alert,
 } from "@mui/material";
-import GoogleIcon from "@mui/icons-material/Google";
 import { useDispatch } from "react-redux";
 import { setLogin } from "../redux/userSlice";
 import WidgetWrapper from "../components/WidgetWrapper";
