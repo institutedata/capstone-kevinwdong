@@ -161,7 +161,7 @@ const PostWidget = ({
               { isLiked ? (
                 <FavoriteOutlined sx={{ color: "#c84117" }} />
               ) : (
-                <FavoriteBorderOutlined />
+                <FavoriteBorderOutlined fontSize="large" />
               )}
             </IconButton>
             <Typography color={main} variant="h6" fontWeight="500">
@@ -171,7 +171,7 @@ const PostWidget = ({
 
           <FlexBetween gap="0.3rem">
             <IconButton onClick={() => setIsComments(!isComments)}>
-              <ChatBubbleOutlineOutlined />
+              <ChatBubbleOutlineOutlined fontSize="large"/>
             </IconButton>
             <Typography color={main} variant="h6" fontWeight="500">
               {comments.length}

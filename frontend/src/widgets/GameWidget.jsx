@@ -12,6 +12,8 @@ import {
   useTheme,
   InputBase,
 } from "@mui/material";
+import FmdGoodOutlinedIcon from '@mui/icons-material/FmdGoodOutlined';
+import LocationOnIcon from "@mui/icons-material/LocationOn";
 import FlexBetween from "../components/FlexBetween";
 import WidgetWrapper from "../components/WidgetWrapper";
 import { useDispatch, useSelector } from "react-redux";
@@ -27,7 +29,6 @@ const GameWidget = ({
   location,
   description,
   gameImage,
-  players,
   comments,
   isProfile,
 }) => {
@@ -35,8 +36,6 @@ const GameWidget = ({
   const [commentText, setCommentText] = useState("");
   const { user, token } = useSelector((state) => state.user);
   const dispatch = useDispatch();
-  const isPlayed = Boolean(players[user.userId]);
-  const playerCount = Object.keys(players).length;
 
   const { palette } = useTheme();
   const main = palette.neutral.main;
@@ -178,16 +177,9 @@ console.log("clicked player id : ", user._id);
       <FlexBetween mt="0.25rem">
         <FlexBetween gap="1rem">
           <FlexBetween gap="0.3rem">
-            <IconButton onClick={patchPlayer}>
-              {isPlayed ? (
-                <SportsBasketballIcon sx={{ color: "#c84117" }} />
-              ) : (
-                <SportsBasketballIcon />
-              )}
+            <IconButton onClick={() => console.log('location clicked')}>
+              <FmdGoodOutlinedIcon fontSize="large"/>
             </IconButton>
-            <Typography color={main} variant="h6" fontWeight="500">
-              {playerCount}
-            </Typography>
           </FlexBetween>
           <FlexBetween gap="0.3rem">
             <IconButton
@@ -195,40 +187,14 @@ console.log("clicked player id : ", user._id);
                 setIsComments(!isComments);
               }}
             >
-              <ChatBubbleOutlineOutlined />
+              <ChatBubbleOutlineOutlined  fontSize="large"/>
             </IconButton>
             <Typography color={main} variant="h6" fontWeight="500">
               {comments.length}
             </Typography>
           </FlexBetween>
         </FlexBetween>
-        {/* <IconButton
-          onClick={() => {
-            setShowPlayers(!showPlayers);
-          }}
-        >
-          <ArrowDropDownIcon />
-        </IconButton> */}
       </FlexBetween>
-      {/* {showPlayers && (
-        <Box mt="0.5rem">
-          {players?.map((player) => (
-            <>
-              <Box m="0.5rem">
-                <FlexBetween>
-                  <UserAvatar userImage={player.userImage} size="40px" />
-                  <FlexBetween gap="0.5rem">
-                    <Typography>{player.firstName}</Typography>
-                    <Typography>{player.lastName}</Typography>
-                  </FlexBetween>
-                  <Typography>{player.position}</Typography>
-                </FlexBetween>
-                <Divider />
-              </Box>
-            </>
-          ))}
-        </Box>
-      )} */}
       {isComments && (
         <Box mt="0.5rem">
           {comments?.map((comment) => (
