@@ -50,7 +50,7 @@ const GamesWidget = ({ userId, isProfile }) => {
           lastName,
           title,
           description,
-          location,
+          locationName,
           gameImage,
           userImage,
           players,
@@ -63,7 +63,7 @@ const GamesWidget = ({ userId, isProfile }) => {
             gameUserImage={userImage}
             gameUserName={`${firstName} ${lastName}`}
             title={title}
-            location={location}
+            locationName={locationName}
             description={description}      
             gameImage={gameImage}          
             players={players}

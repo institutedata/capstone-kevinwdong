@@ -10,17 +10,17 @@ const AdvetWidget = () => {
   const medium = palette.neutral.medium;
   const main = palette.neutral.main;
 
-  useEffect(() => {
-    const intervalId = setInterval(() => {
-      fetch("https://source.unsplash.com/featured/?sports").then((response) => {
-        setRandomImageUrl(response.url);
-        console.log("Random basketball image URL:", response.url);
-      });
-    }, 10000);
+  // useEffect(() => {
+  //   const intervalId = setInterval(() => {
+  //     fetch("https://source.unsplash.com/featured/?sports").then((response) => {
+  //       setRandomImageUrl(response.url);
+  //       console.log("Random basketball image URL:", response.url);
+  //     });
+  //   }, 10000);
 
-    return () => clearInterval(intervalId);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  //   return () => clearInterval(intervalId);
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, []);
 
   return (
     <WidgetWrapper mb="1rem">

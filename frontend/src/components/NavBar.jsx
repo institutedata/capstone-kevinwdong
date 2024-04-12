@@ -21,7 +21,6 @@ import { setPostOrGame } from "../redux/modeSlice";
 import { setLogout } from "../redux/userSlice";
 import { clearPost } from "../redux/postSlice";
 import { clearGame } from "../redux/gameSlice";
-import { clearLocation } from "../redux/locationSlice";
 import FlexBetween from "../components/FlexBetween";
 import UserAvatar from "../assets/userAvatar.jpg";
 
@@ -61,7 +60,6 @@ const Navbar = () => {
       dispatch(setLogout());
       dispatch(clearPost());
       dispatch(clearGame());
-      dispatch(clearLocation())
       navigate("/");
     }
   };

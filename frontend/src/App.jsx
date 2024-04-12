@@ -5,7 +5,6 @@ import ProfilePage from "./pages/ProfilePage";
 import LandingPage from "./pages/LandingPage";
 import PageNotFound from "./pages/PageNotFound";
 import HomePage from "./pages/HomePage";
-import LocationPage from "./pages/LocationPage";
 import { useMemo } from "react";
 import { useSelector } from "react-redux";
 import { CssBaseline, ThemeProvider } from "@mui/material";
@@ -29,7 +28,6 @@ function App() {
             <Route path="/register" element={<RegisterPage />} />
             <Route path="/home" element={<HomePage />} />
             <Route path="/profile" element={<ProfilePage />} />
-            <Route path="/location" element={<LocationPage />} />
             <Route path="*" element={<PageNotFound />} />
           </Routes>
         </ThemeProvider>

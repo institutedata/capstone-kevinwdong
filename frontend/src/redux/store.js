@@ -3,7 +3,6 @@ import userReducer from "./userSlice";
 import modeReducer from "./modeSlice";
 import postReducer from "./postSlice";
 import gameReducer from "./gameSlice";
-import locationReducer from "./locationSlice";
 import { persistReducer, persistStore } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
 
@@ -12,7 +11,6 @@ const rootReducer = combineReducers({
   mode: modeReducer,
   post: postReducer,
   game: gameReducer,
-  location: locationReducer,
 });
 
 const persistConfig = {

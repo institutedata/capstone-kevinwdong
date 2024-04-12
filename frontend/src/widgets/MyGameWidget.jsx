@@ -16,11 +16,11 @@ import LocationSearch from "../components/LocationSearch.jsx";
 
 const MyGameWidget = () => {
   const [gameTitle, setGameTitle] = useState("");
-  const [gameLocation, setGameLocation] = useState("");
+  const [gameLocation, setGameLocation] = useState({ name: "", lat: "", lng: ""});
   const [gameDescription, setGameDescription] = useState("");
+  const [clearLocation, setClearLocation] = useState(false);
   const [gameText, setGameText] = useState(false);
   const { user, token } = useSelector((state) => state.user);
-  const { name, lat, lng } = useSelector((state) => state.location);
   const dispatch = useDispatch();
 
   const { palette } = useTheme();
@@ -28,7 +28,6 @@ const MyGameWidget = () => {
   const medium = palette.neutral.medium;
   const main = palette.neutral.main;
 
-  console.log(name, lat, lng);
 
   const handleGame = async () => {
     try {
@@ -48,23 +47,26 @@ const MyGameWidget = () => {
           firstName: user.firstName,
           lastName: user.lastName,
           title: gameTitle,
-          location: name,
+          locationName: gameLocation.name,
+          locationLat: gameLocation.lat,
+          locationLng: gameLocation.lng,
           description: gameDescription,
           gameImage: gameImageUrl,
         }),
       });
 
-      // if (!response.ok) {
-      //   console.log(response);
-      //   return;
-      // }
+      if (!response.ok) {
+        console.log(response);
+        return;
+      }
 
      
       const data = await response?.json();
     
       dispatch(setGames({ games: data }));
       setGameTitle("");
-      setGameLocation("");
+      setGameLocation({ name: "", lat: "", lng: ""});
+      setClearLocation(true);
       setGameDescription("");
     } catch (error) {
       console.error(error);
@@ -89,25 +91,9 @@ const MyGameWidget = () => {
           }}
         />
         <Box>
-        <LocationSearch setGameText={setGameText} gameLocation={gameLocation} setGameLocation={setGameLocation}/>
+        <LocationSearch setGameLocation={setGameLocation} clearLocation={clearLocation}/>
         </Box>
       
-          {/* <InputBase
-            placeholder="Game Location..."
-            onChange={(e) => {
-              setGameLocation(e.target.value);
-              setGameText(true);
-            }}
-            value={gameLocation}
-            sx={{
-              width: "100%",
-              backgroundColor: palette.neutral.light,
-              borderRadius: "2rem",
-              padding: "0.5rem 1rem",
-            }}
-          /> */}
-  
-     
           <InputBase
             placeholder="Game Description..."
             onChange={(e) => {

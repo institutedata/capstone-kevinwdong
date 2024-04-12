@@ -2,12 +2,10 @@ import PropType from "prop-types";
 import { useRef } from "react";
 import { useTheme, InputBase } from "@mui/material";
 import { StandaloneSearchBox, LoadScript } from "@react-google-maps/api";
-import { useDispatch } from "react-redux";
-import { setLocation } from "../redux/locationSlice";
-// import { setGame } from "redux/gameSlice";
 
-const LocationSearch = () => {
-  const dispatch = useDispatch();
+
+const LocationSearch = ({setGameLocation, clearLocation }) => {
+
 
   const inputRef = useRef();
   const { palette } = useTheme();
@@ -18,15 +16,17 @@ const LocationSearch = () => {
       console.log(place.formatted_address);
       console.log(place.geometry.location.lat());
       console.log(place.geometry.location.lng());
-      dispatch(
-        setLocation({
-          name: place.formatted_address,
-          lat: place.geometry.location.lat(),
-          lng: place.geometry.location.lng(),
-      })
-      );
+      setGameLocation({
+        name: place.formatted_address,
+        lat: place.geometry.location.lat(),
+        lng: place.geometry.location.lng(),
+      });
     }
   };
+
+  if (clearLocation) {
+    inputRef.current.value = "";
+  }
   
   
 
@@ -40,6 +40,7 @@ const LocationSearch = () => {
         onPlacesChanged={handlePlacesChanged}
       >
         <InputBase
+          ref={inputRef}
           type="text"
           className="form-control"
           placeholder="Game Location..."
@@ -56,9 +57,8 @@ const LocationSearch = () => {
 };
 
 LocationSearch.propTypes = {
-  gameLocation: PropType.string,
+  clearLocation : PropType.bool,
   setGameLocation: PropType.func,
-  setGameText: PropType.func,
 };
 
 export default LocationSearch;

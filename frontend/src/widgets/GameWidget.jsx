@@ -1,6 +1,5 @@
 import PropTypes from "prop-types";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { ChatBubbleOutlineOutlined } from "@mui/icons-material";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import PostAddIcon from "@mui/icons-material/PostAdd";
@@ -12,20 +11,19 @@ import {
   useTheme,
   InputBase,
 } from "@mui/material";
-import FmdGoodOutlinedIcon from '@mui/icons-material/FmdGoodOutlined';
 import FlexBetween from "../components/FlexBetween";
 import WidgetWrapper from "../components/WidgetWrapper";
 import { useDispatch, useSelector } from "react-redux";
-import { setGame } from "../redux/gameSlice";
+import { LocationModal } from "../components/LocationModal";
 import UserAvatar from "../components/UserAvatar";
 import { setGames } from "../redux/gameSlice";
-
+import { setGame } from "../redux/gameSlice";
 const GameWidget = ({
   gameId,
   gameUserImage,
   gameUserName,
   title,
-  location,
+  locationName,
   description,
   gameImage,
   comments,
@@ -35,29 +33,9 @@ const GameWidget = ({
   const [commentText, setCommentText] = useState("");
   const { user, token } = useSelector((state) => state.user);
   const dispatch = useDispatch();
-  const navigate = useNavigate();
   const { palette } = useTheme();
   const main = palette.neutral.main;
   const medium = palette.neutral.medium;
-
-  const patchPlayer = async () => {
-    const response = await fetch(
-      `http://localhost:8080/games/${gameId}/players`,
-      {
-        method: "PATCH",
-        headers: {
-          Authorisation: token,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          userId: user._id,
-        }),
-      }
-    );
-    
-    const updatedGame = await response.json();
-    dispatch(setGame({ game: updatedGame }));
-  };
 
   const addGameComments = async () => {
     try {
@@ -138,7 +116,7 @@ const GameWidget = ({
           fontWeight="500"
           sx={{ mt: "1rem" }}
         >
-          {location}
+          {locationName}
         </Typography>
         <Typography
           color={main}
@@ -157,12 +135,6 @@ const GameWidget = ({
               color={main}
               variant="h5"
               fontWeight="500"
-              sx={{
-                "&:hover": {
-                  color: palette.primary.light,
-                  cursor: "pointer",
-                },
-              }}
             >
               {gameUserName}
             </Typography>
@@ -172,9 +144,7 @@ const GameWidget = ({
       <FlexBetween mt="0.25rem">
         <FlexBetween gap="1rem">
           <FlexBetween gap="0.3rem">
-            <IconButton onClick={() => navigate('/location')}>
-              <FmdGoodOutlinedIcon fontSize="large"/>
-            </IconButton>
+            <LocationModal gameId={gameId}/>
           </FlexBetween>
           <FlexBetween gap="0.3rem">
             <IconButton
@@ -265,7 +235,7 @@ GameWidget.propTypes = {
   gameUserName: PropTypes.string,
   title: PropTypes.string,
   description: PropTypes.string,
-  location: PropTypes.string,
+  locationName: PropTypes.string,
   gameImage: PropTypes.string,
   gameUserImage: PropTypes.string,
   comments: PropTypes.array,
