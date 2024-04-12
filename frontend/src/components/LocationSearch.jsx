@@ -4,7 +4,7 @@ import { useTheme, InputBase } from "@mui/material";
 import { StandaloneSearchBox, LoadScript } from "@react-google-maps/api";
 
 
-const LocationSearch = ({setGameLocation, clearLocation }) => {
+const LocationSearch = ({setGameLocation }) => {
 
 
   const inputRef = useRef();
@@ -23,11 +23,6 @@ const LocationSearch = ({setGameLocation, clearLocation }) => {
       });
     }
   };
-
-  if (clearLocation) {
-    inputRef.current.value = "";
-  }
-  
   
 
   return (
@@ -40,7 +35,6 @@ const LocationSearch = ({setGameLocation, clearLocation }) => {
         onPlacesChanged={handlePlacesChanged}
       >
         <InputBase
-          ref={inputRef}
           type="text"
           className="form-control"
           placeholder="Game Location..."

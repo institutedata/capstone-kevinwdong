@@ -18,7 +18,6 @@ const MyGameWidget = () => {
   const [gameTitle, setGameTitle] = useState("");
   const [gameLocation, setGameLocation] = useState({ name: "", lat: "", lng: ""});
   const [gameDescription, setGameDescription] = useState("");
-  const [clearLocation, setClearLocation] = useState(false);
   const [gameText, setGameText] = useState(false);
   const { user, token } = useSelector((state) => state.user);
   const dispatch = useDispatch();
@@ -66,7 +65,6 @@ const MyGameWidget = () => {
       dispatch(setGames({ games: data }));
       setGameTitle("");
       setGameLocation({ name: "", lat: "", lng: ""});
-      setClearLocation(true);
       setGameDescription("");
     } catch (error) {
       console.error(error);
@@ -91,7 +89,7 @@ const MyGameWidget = () => {
           }}
         />
         <Box>
-        <LocationSearch setGameLocation={setGameLocation} clearLocation={clearLocation}/>
+        <LocationSearch setGameLocation={setGameLocation}/>
         </Box>
       
           <InputBase
