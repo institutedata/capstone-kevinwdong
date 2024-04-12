@@ -56,11 +56,10 @@ const PostWidget = ({
       body: JSON.stringify({ userId: user._id }),
     });
     const updatedPost = await response.json();
-    console.log("updatedPost : ", updatedPost);
     dispatch(setPost({ post: updatedPost }));
 
   };
-  console.log("clicked like id : ", user._id);
+  
   
   
   

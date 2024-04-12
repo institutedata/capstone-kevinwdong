@@ -1,7 +1,7 @@
 import PropTypes from "prop-types";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { ChatBubbleOutlineOutlined } from "@mui/icons-material";
-import SportsBasketballIcon from "@mui/icons-material/SportsBasketball";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import PostAddIcon from "@mui/icons-material/PostAdd";
 import {
@@ -13,7 +13,6 @@ import {
   InputBase,
 } from "@mui/material";
 import FmdGoodOutlinedIcon from '@mui/icons-material/FmdGoodOutlined';
-import LocationOnIcon from "@mui/icons-material/LocationOn";
 import FlexBetween from "../components/FlexBetween";
 import WidgetWrapper from "../components/WidgetWrapper";
 import { useDispatch, useSelector } from "react-redux";
@@ -36,7 +35,7 @@ const GameWidget = ({
   const [commentText, setCommentText] = useState("");
   const { user, token } = useSelector((state) => state.user);
   const dispatch = useDispatch();
-
+  const navigate = useNavigate();
   const { palette } = useTheme();
   const main = palette.neutral.main;
   const medium = palette.neutral.medium;
@@ -57,12 +56,8 @@ const GameWidget = ({
     );
     
     const updatedGame = await response.json();
-    console.log("updatedGame : ", updatedGame);
     dispatch(setGame({ game: updatedGame }));
   };
-console.log("clicked player id : ", user._id);
-
-
 
   const addGameComments = async () => {
     try {
@@ -177,7 +172,7 @@ console.log("clicked player id : ", user._id);
       <FlexBetween mt="0.25rem">
         <FlexBetween gap="1rem">
           <FlexBetween gap="0.3rem">
-            <IconButton onClick={() => console.log('location clicked')}>
+            <IconButton onClick={() => navigate('/location')}>
               <FmdGoodOutlinedIcon fontSize="large"/>
             </IconButton>
           </FlexBetween>
@@ -273,8 +268,6 @@ GameWidget.propTypes = {
   location: PropTypes.string,
   gameImage: PropTypes.string,
   gameUserImage: PropTypes.string,
-  players: PropTypes.array,
-  player: PropTypes.object,
   comments: PropTypes.array,
   isProfile: PropTypes.bool,
 };

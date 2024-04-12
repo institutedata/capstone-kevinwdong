@@ -12,6 +12,7 @@ import { setGames } from "../redux/gameSlice.js";
 import { useState } from "react";
 import FlexBetween from "../components/FlexBetween.jsx";
 import WidgetWrapper from "../components/WidgetWrapper.jsx";
+import LocationSearch from "../components/LocationSearch.jsx";
 
 const MyGameWidget = () => {
   const [gameTitle, setGameTitle] = useState("");
@@ -19,12 +20,15 @@ const MyGameWidget = () => {
   const [gameDescription, setGameDescription] = useState("");
   const [gameText, setGameText] = useState(false);
   const { user, token } = useSelector((state) => state.user);
+  const { name, lat, lng } = useSelector((state) => state.location);
   const dispatch = useDispatch();
 
   const { palette } = useTheme();
   const mediumMain = palette.neutral.mediumMain;
   const medium = palette.neutral.medium;
   const main = palette.neutral.main;
+
+  console.log(name, lat, lng);
 
   const handleGame = async () => {
     try {
@@ -44,20 +48,20 @@ const MyGameWidget = () => {
           firstName: user.firstName,
           lastName: user.lastName,
           title: gameTitle,
-          location: gameLocation,
+          location: name,
           description: gameDescription,
           gameImage: gameImageUrl,
         }),
       });
 
-      if (!response.ok) {
-        console.log(response);
-        return;
-      }
+      // if (!response.ok) {
+      //   console.log(response);
+      //   return;
+      // }
 
-      console.log("response; ", response);
+     
       const data = await response?.json();
-      console.log("handleGame response data: ", data);
+    
       dispatch(setGames({ games: data }));
       setGameTitle("");
       setGameLocation("");
@@ -85,7 +89,10 @@ const MyGameWidget = () => {
           }}
         />
         <Box>
-          <InputBase
+        <LocationSearch setGameText={setGameText} gameLocation={gameLocation} setGameLocation={setGameLocation}/>
+        </Box>
+      
+          {/* <InputBase
             placeholder="Game Location..."
             onChange={(e) => {
               setGameLocation(e.target.value);
@@ -98,9 +105,9 @@ const MyGameWidget = () => {
               borderRadius: "2rem",
               padding: "0.5rem 1rem",
             }}
-          />
-        </Box>
-        <Box>
+          /> */}
+  
+     
           <InputBase
             placeholder="Game Description..."
             onChange={(e) => {
@@ -115,7 +122,6 @@ const MyGameWidget = () => {
               padding: "0.5rem 1rem",
             }}
           />
-        </Box>
       </Box>
 
       <Divider sx={{ margin: "1.25rem 0" }} />
