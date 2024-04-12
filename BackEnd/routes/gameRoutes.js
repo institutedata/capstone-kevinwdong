@@ -3,7 +3,7 @@ import {
   createGame,
   getFeedGames,
   getUserGames,
-  addOrRemovePlayer,
+  getOneGame,
   updateGameComments,
   deleteGame,
 } from "../controllers/gameController.js";
@@ -19,6 +19,9 @@ router.get("/", verifyToken, getFeedGames);
 
 //@desc    Get a user's games
 router.get("/:userId/games", verifyToken, getUserGames);
+
+//@desc    Get a game
+router.get("/:gameId", verifyToken, getOneGame);
 
 //@desc     Add a game comment
 router.put("/update/:gameId/comments", verifyToken, updateGameComments);

@@ -65,6 +65,19 @@ export const getUserGames = async (req, res, next) => {
 };
 
 
+//@desc     Get a game
+//@route    GET /games/:gameId
+export const getOneGame = async (req, res, next) => {
+  try {
+    const { gameId } = req.params;
+    const game = await Game.findById(gameId);
+    res.status(200).json(game);
+  } catch (error) {
+    next(errorHandler(400, error.message));
+  }
+}
+
+
 //@desc     Update a game comments
 //@route    PATCH/games/update/:gameId/comments
 export const updateGameComments = async (req, res, next) => {
