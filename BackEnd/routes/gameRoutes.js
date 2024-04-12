@@ -20,9 +20,6 @@ router.get("/", verifyToken, getFeedGames);
 //@desc    Get a user's games
 router.get("/:userId/games", verifyToken, getUserGames);
 
-//@desc     Add or remove a player from a game
-router.patch("/:gameId/players", verifyToken, addOrRemovePlayer);
-
 //@desc     Add a game comment
 router.put("/update/:gameId/comments", verifyToken, updateGameComments);
 

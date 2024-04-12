@@ -6,11 +6,12 @@ const gameSchema = new mongoose.Schema(
     firstName: { type: String, required: true },
     lastName: { type: String, required: true },
     title: { type: String, required: true },
-    location: { type: String, required: true },
+    locationName: { type: String, required: true },
+    locationLat: { type: Number, required: true },
+    locationLng: { type: Number, required: true },
     description: { type: String, required: true },
     gameImage: { type: String },
     userImage: { type: String },
-    players: { type: Map, of: Boolean },
     comments: [
       {
         userId: { type: String },

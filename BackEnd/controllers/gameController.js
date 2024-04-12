@@ -10,7 +10,9 @@ export const createGame = async (req, res, next) => {
       firstName,
       lastName,
       title,
-      location,
+      locationName,
+      locationLat,
+      locationLng,
       description,
       gameImage,
       userImage,
@@ -23,10 +25,11 @@ export const createGame = async (req, res, next) => {
       firstName,
       lastName,
       title,
-      location,
+      locationName,
+      locationLat,
+      locationLng,
       description,
       gameImage,
-      players: {},
       comments: [],
     });
     await newGame.save();
@@ -61,31 +64,6 @@ export const getUserGames = async (req, res, next) => {
   }
 };
 
-//@desc     Play a game
-//@route    PATCH /games/:gameId/players
-export const addOrRemovePlayer = async (req, res, next) => {
-  try {
-    const { gameId } = req.params;
-    const { userId } = req.body;
-    const game = await Game.findById(gameId);
-    const isPlay = game.players.get(userId);
-  
-    if (!isPlay) {
-      game.players.delete(userId);
-    } else {
-      game.players.set(userId, true);
-    }
-
-    const updatedGame = await Game.findByIdAndUpdate(
-      gameId,
-      { players: game.players },
-      { new: true }
-    );
-    res.status(200).json(updatedGame);
-  } catch (error) {
-    next(errorHandler(400, error.message));
-  }
-};
 
 //@desc     Update a game comments
 //@route    PATCH/games/update/:gameId/comments
