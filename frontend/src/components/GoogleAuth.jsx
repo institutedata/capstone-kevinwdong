@@ -29,7 +29,6 @@ const GoogleAuth = () => {
           firstName: resultsFromGoogle.user.displayName.toLowerCase().split(" ")[0],
           lastName: resultsFromGoogle.user.displayName.toLowerCase().split(" ")[1],
           email: resultsFromGoogle.user.email,
-          userImage: resultsFromGoogle.user.photoURL,
         }),
       }); 
       const data = await response.json();

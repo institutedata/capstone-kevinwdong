@@ -22,13 +22,13 @@ import { setLogout } from "../redux/userSlice";
 import { clearPost } from "../redux/postSlice";
 import { clearGame } from "../redux/gameSlice";
 import FlexBetween from "../components/FlexBetween";
-import UserAvatar from "../assets/userAvatar.jpg";
+
 
 const Navbar = () => {
   const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
   const [fullName, setFullName] = useState("");
   const [isLoggedin, setIsLoggedin] = useState("");
-  const [avatarImage, setAvatarImage] = useState(UserAvatar);
+  const [avatarImage, setAvatarImage] = useState();
   const { user, token } = useSelector((state) => state.user);
   const dispatch = useDispatch();
   const navigate = useNavigate();

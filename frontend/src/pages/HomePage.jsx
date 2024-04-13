@@ -7,6 +7,7 @@ import PostsWidget from "../widgets/PostsWidget.jsx";
 import AdvertWidget from "../widgets/AdvetWidget.jsx";
 import GamesWidget from "../widgets/GamesWidget.jsx";
 import GameLinWidget from "../widgets/GameLinkWidget.jsx";
+import WeatherWidget from "../widgets/WeatherWidget.jsx";
 
 
 
@@ -27,6 +28,7 @@ const HomePage = () => {
       {isNonMobileScreens && (
         <Box flexBasis="26%">
           <UserWidget userId={user._id} userImage={user.userImage} isProfile={false} />
+          <WeatherWidget />
           <GameLinWidget />
         </Box>
       )}

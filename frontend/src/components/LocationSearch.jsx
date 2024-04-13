@@ -4,7 +4,7 @@ import { useTheme, InputBase } from "@mui/material";
 import { StandaloneSearchBox, LoadScript } from "@react-google-maps/api";
 
 
-const LocationSearch = ({setGameLocation }) => {
+const LocationSearch = ({ setLocation }) => {
 
 
   const inputRef = useRef();
@@ -16,7 +16,7 @@ const LocationSearch = ({setGameLocation }) => {
       console.log(place.formatted_address);
       console.log(place.geometry.location.lat());
       console.log(place.geometry.location.lng());
-      setGameLocation({
+      setLocation({
         name: place.formatted_address,
         lat: place.geometry.location.lat(),
         lng: place.geometry.location.lng(),
@@ -37,7 +37,7 @@ const LocationSearch = ({setGameLocation }) => {
         <InputBase
           type="text"
           className="form-control"
-          placeholder="Game Location..."
+          placeholder="Search Location..."
           sx={{
             width: "100%",
             backgroundColor: palette.neutral.light,

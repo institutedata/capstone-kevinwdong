@@ -1,8 +1,7 @@
 import { Link } from "react-router-dom";
 import { Typography, useTheme, Box } from "@mui/material";
 import WidgetWrapper from "../components/WidgetWrapper.jsx";
-import trophy from "../assets/trophy.png";
-import basketball from '../assets/basketball.jpg';
+import bbcourt from "../assets/bbcourt.png";
 
 
 const GameLinWidget = () => {
@@ -17,7 +16,7 @@ const GameLinWidget = () => {
           width="100%"
           height="auto"
           alt="advert"
-          src={basketball}
+          src={bbcourt}
           style={{ borderRadius: "0.75rem", margin: "0.75rem 0" }}
         /></Link>
       </Box>

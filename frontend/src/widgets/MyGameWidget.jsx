@@ -17,7 +17,7 @@ import ImageUpload from "../components/ImageUpload.jsx";
 
 const MyGameWidget = () => {
   const [gameTitle, setGameTitle] = useState("");
-  const [gameLocation, setGameLocation] = useState({ name: "", lat: "", lng: ""});
+  const [location, setLocation] = useState({ name: "", lat: "", lng: ""});
   const [gameDescription, setGameDescription] = useState("");
   const [file, setFile] = useState();
   const [upload, setUpload] = useState(false);
@@ -33,9 +33,6 @@ const MyGameWidget = () => {
 
   const handleGame = async () => {
     try {
-      // const gameImageUrl = await fetch(
-      //   "https://source.unsplash.com/featured/?basketball"
-      // ).then((response) => response.url);
 
       const formData = new FormData();
       formData.append("userId", user._id);
@@ -43,9 +40,9 @@ const MyGameWidget = () => {
       formData.append("firstName", user.firstName);
       formData.append("lastName", user.lastName);
       formData.append("title", gameTitle);
-      formData.append("locationName", gameLocation.name);
-      formData.append("locationLat", gameLocation.lat);
-      formData.append("locationLng", gameLocation.lng);
+      formData.append("locationName", location.name);
+      formData.append("locationLat", location.lat);
+      formData.append("locationLng", location.lng);
       formData.append("description", gameDescription);
       formData.append("file", file);
 
@@ -53,21 +50,8 @@ const MyGameWidget = () => {
         method: "POST",
         headers: {
           Authorisation: token,
-          // "Content-Type": "application/json",
         },
         body: formData,
-        // body: JSON.stringify({
-        //   userId: user._id,
-        //   userImage: user.userImage,
-        //   firstName: user.firstName,
-        //   lastName: user.lastName,
-        //   title: gameTitle,
-        //   locationName: gameLocation.name,
-        //   locationLat: gameLocation.lat,
-        //   locationLng: gameLocation.lng,
-        //   description: gameDescription,
-        //   gameImage: gameImageUrl,
-        // }),
       });
 
       if (!response.ok) {
@@ -81,7 +65,7 @@ const MyGameWidget = () => {
       dispatch(setGames({ games: data }));
       setUpload(!upload)
       setGameTitle("");
-      setGameLocation({ name: "", lat: "", lng: ""});
+      setLocation({ name: "", lat: "", lng: ""});
       setGameDescription("");
     } catch (error) {
       console.error(error);
@@ -106,7 +90,7 @@ const MyGameWidget = () => {
           }}
         />
         <Box>
-        <LocationSearch setGameLocation={setGameLocation}/>
+        <LocationSearch setGameLocation={setLocation}/>
         </Box>
       
           <InputBase
