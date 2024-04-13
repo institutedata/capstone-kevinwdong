@@ -1,6 +1,5 @@
 import express from "express";
 import {
-  createPost,
   getFeedPosts,
   getUserPosts,
   likePost,
@@ -11,8 +10,6 @@ import { verifyToken } from "../utils/verifyToken.js";
 
 const router = express.Router();
 
-//@desc    Create a post
-router.post("/create", verifyToken, createPost);
 
 //@desc    Get all posts
 router.get("/", verifyToken, getFeedPosts);

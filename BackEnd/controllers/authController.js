@@ -12,13 +12,11 @@ export const registerUser = async (req, res, next) => {
       lastName,
       email,
       password,
-      userImage,
-      friends,
       location,
       position,
+      userImage,
       height,
       weight,
-      userBio,
     } = req.body;
 
     const exsitUser = await User.findOne({ email });
@@ -27,12 +25,6 @@ export const registerUser = async (req, res, next) => {
       next(errorHandler(400, "User already exists"));
     }
 
-    const userImageUrl = await fetch(
-      "https://source.unsplash.com/featured/?male"
-    ).then((response) => response.url);
-
-    console.log(userImageUrl);
-
     const hasdedPassword = bcryptjs.hashSync(password, 10);
 
     const newUser = new User({
@@ -40,13 +32,11 @@ export const registerUser = async (req, res, next) => {
       lastName,
       email,
       password: hasdedPassword,
-      userImage: userImageUrl,
-      friends,
+      userImage,
       location,
       position,
       height,
       weight,
-      userBio,
       totalGames: Math.floor(Math.random() * 100),
       totalPoints: Math.floor(Math.random() * 1000),
     });

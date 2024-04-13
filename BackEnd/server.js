@@ -1,38 +1,43 @@
 import express from "express";
+import colors from 'colors'
+import multer from "multer";
+import path from "path";
 import cors from "cors";
-// import { config as dotenvConfig } from "dotenv";
 import { dbConnect } from './dbConnect.js'
+import { verifyToken } from "./utils/verifyToken.js";
+import { createGame } from "./controllers/gameController.js";
+import { createPost } from "./controllers/postController.js";
+import { updateUser } from "./controllers/userController.js";
 import userRoutes from "./routes/userRoutes.js";
 import postRoutes from "./routes/postRoutes.js";
 import authRoutes from "./routes/authRoutes.js";
 import gameRoutes from "./routes/gameRoutes.js";
-// import cookieParser from "cookie-parser";
-import colors from 'colors'
 
-
-// dotenvConfig();
 
 const app = express();
 app.use(express.json());
-// app.use(cookieParser());
 app.use(cors());
+app.use(express.static("public"));
 
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, "public/images");
+  },
+  filename: (req, file, cb) => {
+    cb(null, file.fieldname + '_' + Date.now() + path.extname(file.originalname));
+  },
+});
+const upload = multer({ storage: storage });
+
+app.patch("/users/update/:userId", verifyToken, upload.single('file'), updateUser);
+app.post("/games/create", verifyToken, upload.single('file'), createGame);
+app.post("/posts/create", verifyToken, upload.single('file'), createPost);
 
 app.use("/auth", authRoutes);
 app.use("/users", userRoutes);
 app.use("/posts", postRoutes);
 app.use("/games", gameRoutes);
 
-
-// const PORT = process.env.PORT || 8080;
-// mongoose
-//   .connect(process.env.MONGODB)
-//   .then(() => {
-//     console.log("MongoDB is connected!");
-//     app.listen(PORT, () => console.log(`Server is running on port: ${PORT}`));
-
-//   })
-//   .catch((error) => console.log(`${error} did not connect`));
 
 const PORT = process.env.PORT || 8080
 app.listen(PORT, () => {
@@ -43,7 +48,6 @@ app.listen(PORT, () => {
   process.exit()
  }
 })
-
 
 
 app.use((err, req, res, next) => {

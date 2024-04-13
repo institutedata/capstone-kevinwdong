@@ -10,21 +10,18 @@ export const createPost = async (req, res, next) => {
       userImage,
       firstName,
       lastName,
-      location,
       description,
-      postImage,
     } = req.body;
 
-    // const user = await User.findById(userId);
+    const postImage = req.file.filename;
 
     const newPost = new Post({
       userId,
       userImage,
       firstName,
       lastName,
-      location,
       description,
-      postImage,
+      postImage: req.file.filename,
       likes: {},
       comments: [],
     });
@@ -106,12 +103,10 @@ export const updatePostComments = async (req, res, next) => {
   }
 };
 
-
 //@desc     Delete a post
 //@route    DELETE /posts/delete/:postId
 export const deletePost = async (req, res, next) => {
   try {
-
     await Post.findByIdAndDelete(req.params.postId);
     const posts = await Post.find();
     res.status(200).json(posts);

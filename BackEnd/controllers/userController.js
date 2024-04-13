@@ -43,7 +43,7 @@ export const updateUser = async (req, res, next) => {
           position: req.body.position,
           location: req.body.location,
           email: req.body.email,
-          userImage: req.body.userImage,
+          userImage: req.file.filename,
           password: req.body.password,
           totalGames: req.body.totalGames,
           totalPoints: req.body.totalPoints,

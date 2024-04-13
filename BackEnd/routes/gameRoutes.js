@@ -11,9 +11,6 @@ import { verifyToken } from "../utils/verifyToken.js";
 
 const router = express.Router();
 
-//@desc    Create a game
-router.post("/create", verifyToken, createGame);
-
 //@desc    Get all games
 router.get("/", verifyToken, getFeedGames);
 
