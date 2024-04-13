@@ -109,3 +109,15 @@ export const deleteGame = async (req, res, next) => {
       next(error);
     }
   };
+
+//@desc     Delete a user's games
+//@route    DELETE /games/delete/:userId/games
+export const deleteUserGame = async (req, res, next) => {
+  try {
+    await Game.deleteMany({ userId: req.params.userId });
+    const games = await Game.find();
+    res.status(200).json(games);
+  } catch (error) {
+    next(errorHandler(400, error.message));
+  }
+};

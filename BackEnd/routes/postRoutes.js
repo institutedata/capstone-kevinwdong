@@ -5,6 +5,7 @@ import {
   likePost,
   updatePostComments,
   deletePost,
+  deleteUserPost,
 } from "../controllers/postController.js";
 import { verifyToken } from "../utils/verifyToken.js";
 
@@ -25,5 +26,8 @@ router.patch("/:postId/like", verifyToken, likePost);
 
 //@desc     Delete a post
 router.delete("/delete/:postId", verifyToken, deletePost);
+
+//@desc    Delete a user's posts
+router.delete("/delete/:userId/posts", verifyToken, deleteUserPost);
 
 export default router;

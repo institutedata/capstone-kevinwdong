@@ -6,6 +6,7 @@ import {
   getOneGame,
   updateGameComments,
   deleteGame,
+  deleteUserGame,
 } from "../controllers/gameController.js";
 import { verifyToken } from "../utils/verifyToken.js";
 
@@ -25,5 +26,9 @@ router.put("/update/:gameId/comments", verifyToken, updateGameComments);
 
 //@desc    Delete a game
 router.delete("/delete/:gameId", verifyToken, deleteGame);
+
+//@desc    Delete a user's games
+router.delete("/delete/:userId/games", verifyToken, deleteUserGame);
+
 
 export default router;

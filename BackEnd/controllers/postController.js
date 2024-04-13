@@ -114,3 +114,16 @@ export const deletePost = async (req, res, next) => {
     next(error);
   }
 };
+
+//@desc     Delete a user's posts
+//@route    DELETE /posts/delete/:userId/posts
+export const deleteUserPost = async (req, res, next) => {
+  try {
+    await Post.deleteMany({ userId: req.params.userId });
+    const posts = await Post.find();
+    res.status(200).json(posts);
+  } catch (error) {
+    next(error);
+  }
+};
+
