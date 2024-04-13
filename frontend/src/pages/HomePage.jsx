@@ -26,7 +26,7 @@ const HomePage = () => {
     >
       {isNonMobileScreens && (
         <Box flexBasis="26%">
-          <UserWidget userId={user._id} userImage={user.userImage} />
+          <UserWidget userId={user._id} userImage={user.userImage} isProfile={false} />
           <GameLinWidget />
         </Box>
       )}

@@ -7,6 +7,7 @@ import {
   useMediaQuery,
   useTheme,
   Alert,
+  Tooltip,
 } from "@mui/material";
 import { setUpdate, setDelete } from "../redux/userSlice";
 import { useNavigate } from "react-router-dom";
@@ -28,6 +29,13 @@ const ProfileWidget = ({ userImage }) => {
 
   const { palette } = useTheme();
   const main = palette.neutral.main;
+
+  const deltelText = (
+    <h2>
+      By clicking the delete button, you will delete your account and all the
+      data associated with it. Are you sure you want to delete your account?
+    </h2>
+  );
 
   const handleChange = (e) => {
     setProfileData({ ...profileData, [e.target.id]: e.target.value.trim() });
@@ -69,30 +77,34 @@ const ProfileWidget = ({ userImage }) => {
     }
   };
 
-  // const handleDelete = async () => {
-  //   try {
-  //     const res = await fetch(
-  //       `http://localhost:8080/users/delete/${user._id}`,
-  //       {
-  //         method: "DELETE",
-  //         headers: {
-  //           Authorisation: token,
-  //           "Content-Type": "application/json",
-  //         },
-  //         body: JSON.stringify(formData),
-  //       }
-  //     );
-  //     const data = await res.json();
-  //     if (!res.ok) {
-  //       setError(data.message);
-  //     } else {
-  //       dispatch(setDelete());
-  //       navigate("/");
-  //     }
-  //   } catch (error) {
-  //     setError(error.message);
-  //   }
-  // };
+  const handleDelete = async () => {
+    try {
+      await fetch(`http://localhost:8080/games/delete/${user._id}/games`, {
+        method: "DELETE",
+        headers: {
+          Authorisation: token,
+        },
+      });
+
+      await fetch(`http://localhost:8080/posts/delete/${user._id}/posts`, {
+        method: "DELETE",
+        headers: {
+          Authorisation: token,
+        },
+      });
+      await fetch(`http://localhost:8080/users/delete/${user._id}`, {
+        method: "DELETE",
+        headers: {
+          Authorisation: token,
+        },
+      });
+
+        dispatch(setDelete());
+        navigate("/");
+    } catch (error) {
+      console.error(error.message);
+    }
+  };
 
   return (
     <WidgetWrapper mb="1rem">
@@ -189,19 +201,21 @@ const ProfileWidget = ({ userImage }) => {
         <Box mt={3}>{error && <Alert severity="error">{error}</Alert>}</Box>
 
         <FlexBetween>
-          <Button
-            fullWidth
-            // onClick={handleDelete}
-            type="submit"
-            sx={{
-              width: "25%",
-              m: "2rem 0",
-              p: "1rem",
-              color: "red",
-            }}
-          >
-            DELETE
-          </Button>
+          <Tooltip title={deltelText}>
+            <Button
+              fullWidth
+              onClick={handleDelete}
+              type="submit"
+              sx={{
+                width: "25%",
+                m: "2rem 0",
+                p: "1rem",
+                color: "red",
+              }}
+            >
+              DELETE
+            </Button>
+          </Tooltip>
           <Button
             fullWidth
             type="submit"

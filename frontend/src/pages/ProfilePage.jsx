@@ -34,7 +34,7 @@ const ProfilePage = () => {
             userId={user._id}
           />
         )}
-        <UserWidget editProfile={editProfile} setEditProfile={setEditProfile} />
+        <UserWidget editProfile={editProfile} setEditProfile={setEditProfile} isProfile={true} />
       </Box>
       <Box
         flexBasis={isNonMobileScreens ? "40%" : undefined}

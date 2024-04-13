@@ -26,8 +26,6 @@ const MyPostWidget = () => {
   const medium = palette.neutral.medium;
   const main = palette.neutral.main;
 
-  console.log(file);
-
   const handlePost = async () => {
     try {
       const formData = new FormData();

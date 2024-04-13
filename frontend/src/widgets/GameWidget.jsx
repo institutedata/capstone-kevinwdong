@@ -37,8 +37,6 @@ const GameWidget = ({
   const main = palette.neutral.main;
   const medium = palette.neutral.medium;
 
-  console.log(gameUserImage)
-
   const addGameComments = async () => {
     try {
       const response = await fetch(

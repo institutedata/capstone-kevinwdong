@@ -11,7 +11,7 @@ import SportsBasketballIcon from "@mui/icons-material/SportsBasketball";
 import MonitorWeightIcon from "@mui/icons-material/MonitorWeight";
 import PublishIcon from "@mui/icons-material/Publish";
 
-const UserWidget = ({ editProfile, setEditProfile }) => {
+const UserWidget = ({ editProfile, setEditProfile, isProfile }) => {
   const navigate = useNavigate();
   const { user } = useSelector((state) => state.user);
   const totalGames = user.totalGames;
@@ -51,9 +51,9 @@ const UserWidget = ({ editProfile, setEditProfile }) => {
             </Typography>
           </Box>
         </FlexBetween>
-        <IconButton onClick={handleupdate}>
+        {isProfile && <IconButton onClick={handleupdate}>
           <ManageAccountsOutlined />
-        </IconButton>
+        </IconButton>}
       </FlexBetween>
 
       <Divider />
@@ -115,6 +115,7 @@ const UserWidget = ({ editProfile, setEditProfile }) => {
 };
 
 UserWidget.propTypes = {
+  isProfile: PropType.bool,
   userId: PropType.string,
   userImage: PropType.string,
   editProfile: PropType.bool,
