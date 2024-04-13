@@ -37,6 +37,8 @@ const GameWidget = ({
   const main = palette.neutral.main;
   const medium = palette.neutral.medium;
 
+  console.log(gameUserImage)
+
   const addGameComments = async () => {
     try {
       const response = await fetch(
@@ -107,7 +109,7 @@ const GameWidget = ({
             height="auto"
             alt="game"
             style={{ borderRadius: "0.75rem", marginTop: "0.75rem" }}
-            src={gameImage}
+            src={`http://localhost:8080/images/${gameImage}`}
           />
         )}
         <Typography
@@ -174,7 +176,7 @@ const GameWidget = ({
                   <Box display="flex" justifyContent="end">
                     <FlexBetween gap='0.5rem'>
                       <UserAvatar userImage={comment.userImage} size="40px" />
-                      <FlexBetween gap="1rem">
+                      <FlexBetween gap="0.5rem">
                         <Typography
                           color={medium}
                           variant="h6"

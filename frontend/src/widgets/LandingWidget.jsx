@@ -16,11 +16,11 @@ const HoopsConnect = () => {
           onClick={() => navigate("/login")}
           className="logo"
           color="#c84117"
-          fontSize="6rem"
+          fontSize="8rem"
           fontWeight="800"
           sx={{ mb: "1.5rem" }}
         >
-          {isNonMobileScreens ? 'Sport Connect' : 'SC'}
+          SC
         </Typography>
       </Box>
     </Box>

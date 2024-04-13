@@ -45,6 +45,7 @@ const ProfilePage = () => {
             editProfile={editProfile}
             setEditProfile={setEditProfile}
             userId={user._id}
+            userImage={user.userImage}
           />
         )}
         <PostsWidget userId={user._id} isProfile={true} />

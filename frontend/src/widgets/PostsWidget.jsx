@@ -18,6 +18,7 @@ const PostsWidget = ({ userId, isProfile }) => {
     dispatch(setPosts({ posts: data }));
   };
 
+
   const getUserPosts = async () => {
     const response = await fetch(
       `http://localhost:8080/posts/${userId}/posts`,
@@ -49,7 +50,6 @@ const PostsWidget = ({ userId, isProfile }) => {
           firstName,
           lastName,
           description,
-          position,
           postImage,
           userImage,
           likes,
@@ -61,7 +61,6 @@ const PostsWidget = ({ userId, isProfile }) => {
             postUserId={userId}
             name={`${firstName} ${lastName}`}
             description={description}
-            position={position}
             postImage={postImage}
             userImage={userImage}
             likes={likes}

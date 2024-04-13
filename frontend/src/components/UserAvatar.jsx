@@ -9,7 +9,7 @@ const UserAvatar = ({ userImage, size }) => {
         width={size}
         height={size}
         alt="user"
-        src={userImage}
+        src={`http://localhost:8080/images/${userImage}`}
       />
     </Box>
   );

@@ -11,40 +11,44 @@ import { setPosts } from "../redux/postSlice.js";
 import { useState } from "react";
 import FlexBetween from "../components/FlexBetween.jsx";
 import WidgetWrapper from "../components/WidgetWrapper.jsx";
+import ImageUpload from "../components/ImageUpload.jsx";
 
 const MyPostWidget = () => {
   const [postText, setPostText] = useState("");
+  const [file, setFile] = useState();
+  const [upload, setUpload] = useState(false);
   const { user, token } = useSelector((state) => state.user);
-  const { palette } = useTheme();
   const dispatch = useDispatch();
+  
+  
+  const { palette } = useTheme();
   const mediumMain = palette.neutral.mediumMain;
   const medium = palette.neutral.medium;
   const main = palette.neutral.main;
 
+  console.log(file);
+
   const handlePost = async () => {
     try {
-      const postImageUrl = await fetch('https://source.unsplash.com/featured/?social')
-      .then(response => response.url)
+      const formData = new FormData();
+      formData.append("userId", user._id);
+      formData.append("userImage", user.userImage);
+      formData.append("description", postText);
+      formData.append("firstName", user.firstName);
+      formData.append("lastName", user.lastName);
+      formData.append("file", file);
 
       const response = await fetch(`http://localhost:8080/posts/create`, {
         method: "POST",
         headers: {
           Authorisation: token,
-          "Content-Type": "application/json",
         },
-        body: JSON.stringify({
-          userId: user._id,
-          userImage: user.userImage,
-          description: postText,
-          firstName: user.firstName,
-          lastName: user.lastName,
-          postImage: postImageUrl,
-          location: user.location,
-        }),
+        body: formData,
       });
       const data = await response.json();
-        dispatch(setPosts({ posts: data}));
-        setPostText("");
+      dispatch(setPosts({ posts: data }));
+      setPostText("");
+      setUpload(!upload);
     } catch (error) {
       console.error(error);
     }
@@ -69,7 +73,7 @@ const MyPostWidget = () => {
       <Divider sx={{ margin: "1.25rem 0" }} />
 
       <FlexBetween>
-        <FlexBetween gap="0.25rem" onClick={() => console.log("upload image")}>
+        <FlexBetween gap="0.25rem" onClick={() => setUpload(!upload)}>
           <ImageOutlined sx={{ color: mediumMain }} />
           <Typography
             color={mediumMain}
@@ -84,13 +88,14 @@ const MyPostWidget = () => {
           onClick={handlePost}
           sx={{
             color: main,
-            backgroundColor: '#c84117',
+            backgroundColor: "#c84117",
             borderRadius: "3rem",
           }}
         >
           POST
         </Button>
       </FlexBetween>
+      <ImageUpload upload={upload} setFile={setFile}/>
     </WidgetWrapper>
   );
 };
