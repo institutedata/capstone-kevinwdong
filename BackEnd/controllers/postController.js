@@ -13,7 +13,7 @@ export const createPost = async (req, res, next) => {
       description,
     } = req.body;
 
-    const postImage = req.file.filename;
+    const postImage = req.file ? req.file.filename : null;
 
     const newPost = new Post({
       userId,
@@ -21,7 +21,7 @@ export const createPost = async (req, res, next) => {
       firstName,
       lastName,
       description,
-      postImage: req.file.filename,
+      postImage: postImage,
       likes: {},
       comments: [],
     });

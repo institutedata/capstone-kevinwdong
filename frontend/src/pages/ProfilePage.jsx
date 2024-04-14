@@ -5,8 +5,6 @@ import UserWidget from "../widgets/UserWidget.jsx";
 import PostsWidget from "../widgets/PostsWidget.jsx";
 import ProfileWidget from "../widgets/ProfileWidget.jsx";
 import GamesWidget from "../widgets/GamesWidget.jsx";
-import MyPostWidget from "../widgets/MyPostWidget.jsx";
-import MyGameWidget from "../widgets/MyGameWidget.jsx";
 
 const ProfilePage = () => {
   const isNonMobileScreens = useMediaQuery("(min-width:1000px)");
@@ -22,41 +20,58 @@ const ProfilePage = () => {
       gap="1rem"
       justifyContent="space-between"
     >
-      <Box
-        flexBasis={isNonMobileScreens ? "26%" : undefined}
-        mt={isNonMobileScreens ? undefined : "2rem"}
-      >
-        {postOrGame === "game" ? <MyGameWidget /> : <MyPostWidget />}
-        {!isNonMobileScreens && editProfile && (
-          <ProfileWidget
-            editProfile={editProfile}
-            setEditProfile={setEditProfile}
-            userId={user._id}
-          />
-        )}
-        <UserWidget editProfile={editProfile} setEditProfile={setEditProfile} isProfile={true} />
-      </Box>
-      <Box
-        flexBasis={isNonMobileScreens ? "40%" : undefined}
-        mt={isNonMobileScreens ? undefined : "2rem"}
-      >
-        {editProfile && isNonMobileScreens && (
-          <ProfileWidget
-            editProfile={editProfile}
-            setEditProfile={setEditProfile}
-            userId={user._id}
-            userImage={user.userImage}
-          />
-        )}
-        <PostsWidget userId={user._id} isProfile={true} />
-      </Box>
-      <Box
-        flexBasis={isNonMobileScreens ? "40%" : undefined}
-        mt={isNonMobileScreens ? undefined : "2rem"}
-      >
-        <GamesWidget userId={user._id} isProfile={true} />
-        <Box m="2rem 0" />
-      </Box>
+      {isNonMobileScreens ? (
+        <>
+          <Box flexBasis="26%">
+            <UserWidget
+              editProfile={editProfile}
+              setEditProfile={setEditProfile}
+              isProfile={true}
+            />
+            {editProfile && (
+              <ProfileWidget
+                editProfile={editProfile}
+                setEditProfile={setEditProfile}
+                userId={user._id}
+                userImage={user.userImage}
+              />
+            )}
+          </Box>
+          <Box flexBasis="40%">
+            <PostsWidget userId={user._id} isProfile={true} />
+          </Box>
+          <Box flexBasis="40%">
+            <GamesWidget userId={user._id} isProfile={true} />
+          </Box>
+        </>
+      ) : (
+        <>
+          <Box>
+            <UserWidget
+              editProfile={editProfile}
+              setEditProfile={setEditProfile}
+              isProfile={true}
+            />
+            {editProfile && (
+              <ProfileWidget
+                editProfile={editProfile}
+                setEditProfile={setEditProfile}
+                userId={user._id}
+                userImage={user.userImage}
+              />
+            )}
+          </Box>
+          {postOrGame === "post" ? (
+            <Box>
+              <PostsWidget userId={user._id} isProfile={true} />
+            </Box>
+          ) : (
+            <Box>
+              <GamesWidget userId={user._id} isProfile={true} />
+            </Box>
+          )}
+        </>
+      )}
     </Box>
   );
 };

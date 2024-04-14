@@ -40,6 +40,7 @@ const Navbar = () => {
   const dark = theme.palette.neutral.dark;
   const alt = theme.palette.background.alt;
   const main = theme.palette.neutral.main;
+  const primary = theme.palette.primary.main;
 
   useEffect(() => {
     if (!token) {
@@ -85,13 +86,6 @@ const Navbar = () => {
     }
   }
 
-  const handlePorfile = async () => {
-    if (!token) {
-      navigate("/login");
-    } else {
-      navigate("/profile");
-    }
-  };
 
   return (
     <AppBar position="sticky">
@@ -102,7 +96,7 @@ const Navbar = () => {
               <Typography
                 fontWeight="bold"
                 fontSize="clamp(1rem, 2rem, 2.25rem)"
-                color="#c84117"
+                color={primary}
                 onClick={handleLogoClick}
                 sx={{
                   "&:hover": {
@@ -129,7 +123,7 @@ const Navbar = () => {
               <Typography
                 fontWeight="bold"
                 fontSize="clamp(1rem, 2rem, 2.25rem)"
-                color="#c84117"
+                color={primary}
                 onClick={handleLogoClick}
                 sx={{
                   "&:hover": {
@@ -150,19 +144,21 @@ const Navbar = () => {
           )}
         </FlexBetween>
 
-        {isNonMobileScreens ? (
+        
           <FlexBetween gap="2rem">
-            <IconButton onClick={handlePostOrGame}>
-              <Switch />
-            </IconButton>
+{isNonMobileScreens ? (
             <IconButton onClick={() => dispatch(setMode())}>
               {theme.palette.mode === "dark" ? (
                 <DarkMode sx={{ fontSize: "25px" }} />
               ) : (
                 <LightMode sx={{ color: dark, fontSize: "25px" }} />
               )}
-            </IconButton>
+            </IconButton> ): (
 
+            <IconButton onClick={handlePostOrGame}>
+              <Switch color={primary} />
+            </IconButton>
+            )}
             <FormControl variant="standard">
               <Select
                 value={fullName}
@@ -194,22 +190,6 @@ const Navbar = () => {
               </Select>
             </FormControl>
           </FlexBetween>
-        ) : (
-          <FlexBetween gap="1rem" mr="2rem">
-            <IconButton onClick={handlePostOrGame}>
-              <Switch color="#c84117" />
-            </IconButton>
-            <IconButton onClick={handlePorfile}>
-              <ManageAccountsIcon fontSize="large" />
-            </IconButton>
-            <Avatar
-              alt="Remy Sharp"
-              onClick={handleLogging}
-              src={avatarImage}
-              sx={{ width: 30, height: 30 }}
-            />
-          </FlexBetween>
-        )}
       </FlexBetween>
     </AppBar>
   );

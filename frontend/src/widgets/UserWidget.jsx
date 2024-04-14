@@ -31,7 +31,6 @@ const UserWidget = ({ editProfile, setEditProfile, isProfile }) => {
       <FlexBetween
         gap="0.5rem"
         pb="1.1rem"
-        onClick={() => navigate("/profile")}
       >
         <FlexBetween gap="1rem">
           <UserAvatar userImage={user.userImage} size="40px" />
@@ -40,12 +39,6 @@ const UserWidget = ({ editProfile, setEditProfile, isProfile }) => {
               color={main}
               variant="h5"
               fontWeight="500"
-              sx={{
-                "&:hover": {
-                  color: palette.primary.light,
-                  cursor: "pointer",
-                },
-              }}
             >
               {user.firstName} {user.lastName}
             </Typography>

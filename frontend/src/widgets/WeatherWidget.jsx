@@ -1,4 +1,3 @@
-import PropTypes from "prop-types";
 import { useEffect, useState } from "react";
 import { Typography, useTheme, Box, Divider } from "@mui/material";
 import OpacityIcon from "@mui/icons-material/Opacity";
@@ -40,8 +39,7 @@ const WeatherWidget = () => {
       setWindDegree(data.wind.deg);
       setHumidity(data.main.humidity);
       setPressure(data.main.pressure);
-      console.log(data);
-    } catch (error) {
+ } catch (error) {
       console.log(error);
     }
   };
@@ -53,8 +51,6 @@ const windDirection = (windDegree) => {
   const index = Math.round((windDegree % 360) / 45);
   return directions[index];
 };
-
-  console.log(feelsLike, windSpeed, humidity, pressure);
 
   return (
     <WidgetWrapper mb="1rem">

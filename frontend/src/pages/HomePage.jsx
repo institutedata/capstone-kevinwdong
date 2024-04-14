@@ -9,9 +9,6 @@ import GamesWidget from "../widgets/GamesWidget.jsx";
 import GameLinWidget from "../widgets/GameLinkWidget.jsx";
 import WeatherWidget from "../widgets/WeatherWidget.jsx";
 
-
-
-
 const HomePage = () => {
   const isNonMobileScreens = useMediaQuery("(min-width:1000px)");
   const { user } = useSelector((state) => state.user);
@@ -25,47 +22,45 @@ const HomePage = () => {
       gap="1rem"
       justifyContent="space-between"
     >
-      {isNonMobileScreens && (
-        <Box flexBasis="26%">
-          <UserWidget userId={user._id} userImage={user.userImage} isProfile={false} />
-          <WeatherWidget />
-          <GameLinWidget />
-        </Box>
-      )}
-
-      <Box
-        flexBasis={isNonMobileScreens ? "40%" : undefined}
-        mt={isNonMobileScreens ? undefined : "1rem"}
-      >
-        {postOrGame === "game" ? (
-          <>
-            <MyGameWidget  />
+      {isNonMobileScreens ? (
+        <>
+          <Box flexBasis="26%">
+            <UserWidget
+              userId={user._id}
+              userImage={user.userImage}
+              isProfile={false}
+            />
+            <WeatherWidget />
+            <AdvertWidget />
+            <GameLinWidget />
+          </Box>
+          <Box flexBasis="40%">
+            <MyGameWidget />
             <GamesWidget isProfile={false} />
-          </>
-        ) : (
-          <>
-            <MyPostWidget  />
+          </Box>
+          <Box flexBasis="40%">
+            <MyPostWidget />
             <PostsWidget isProfile={false} />
-          </>
-        )}
-      </Box>
+          </Box>
+        </>
+      ) : (
+        <>
+          <Box>
+            <UserWidget />
+          </Box>
 
-      {isNonMobileScreens && (
-        <Box
-          flexBasis={isNonMobileScreens ? "40%" : undefined}
-          mt={isNonMobileScreens ? undefined : "1rem"}
-        >
-          {postOrGame === "game" ? (
-            <>
-              <AdvertWidget />
-              <PostsWidget isProfile={false} />{" "}
-            </>
+          {postOrGame === "post" ? (
+            <Box>
+              <MyPostWidget />
+              <PostsWidget />
+            </Box>
           ) : (
-            <>
-              <AdvertWidget /> <GamesWidget isProfile={false} />
-            </>
+            <Box>
+              <MyGameWidget />
+              <GamesWidget />
+            </Box>
           )}
-        </Box>
+        </>
       )}
     </Box>
   );

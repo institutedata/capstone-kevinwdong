@@ -44,7 +44,7 @@ const ProfileWidget = ({ userImage }) => {
 
   const handleUpdate = async (e) => {
     e.preventDefault();
-    if (Object.keys(profileData).length === 0) {
+    if (Object.keys(profileData).length === 0 && !file) {
       return;
     }
     try {
@@ -53,8 +53,10 @@ const ProfileWidget = ({ userImage }) => {
       Object.entries(profileData).forEach(([key, value]) => {
         formData.append(key, value);
       });
-
-      formData.append("file", file);
+      if (file) {
+          formData.append("file", file);
+      }
+    
 
       const response = await fetch(
         `http://localhost:8080/users/update/${user._id}`,

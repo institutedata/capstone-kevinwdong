@@ -34,7 +34,10 @@ const MyPostWidget = () => {
       formData.append("description", postText);
       formData.append("firstName", user.firstName);
       formData.append("lastName", user.lastName);
-      formData.append("file", file);
+      if (file) {
+        formData.append("file", file);
+      }
+      
 
       const response = await fetch(`http://localhost:8080/posts/create`, {
         method: "POST",
@@ -46,7 +49,6 @@ const MyPostWidget = () => {
       const data = await response.json();
       dispatch(setPosts({ posts: data }));
       setPostText("");
-      setUpload(!upload);
     } catch (error) {
       console.error(error);
     }
@@ -86,7 +88,7 @@ const MyPostWidget = () => {
           onClick={handlePost}
           sx={{
             color: main,
-            backgroundColor: "#c84117",
+            backgroundColor: palette.primary.main,
             borderRadius: "3rem",
           }}
         >

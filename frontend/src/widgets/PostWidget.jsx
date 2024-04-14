@@ -118,12 +118,6 @@ const PostWidget = ({
               color={main}
               variant="h5"
               fontWeight="500"
-              sx={{
-                "&:hover": {
-                  color: palette.primary.light,
-                  cursor: "pointer",
-                },
-              }}
             >
               {name}
             </Typography>
@@ -236,7 +230,7 @@ const PostWidget = ({
               onClick={addComment}
               sx={{
                 color: main,
-                backgroundColor: "#c84117",
+                backgroundColor: palette.primary.main,
                 borderRadius: "3rem",
               }}
             >

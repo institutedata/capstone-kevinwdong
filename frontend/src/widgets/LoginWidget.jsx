@@ -97,7 +97,7 @@ const LoginWidget = () => {
                 width: "100%",
                 m: "1rem 0",
                 p: "0.5rem",
-                backgroundColor: "#c84117",
+                backgroundColor: palette.primary.main,
                 color: main,
               }}
             >
@@ -115,7 +115,7 @@ const LoginWidget = () => {
               }}
               sx={{
                 textDecoration: "underline",
-                color: "#c84117",
+                color: palette.primary.main,
                 "&:hover": {
                   cursor: "pointer",
                 },

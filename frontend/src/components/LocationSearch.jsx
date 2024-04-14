@@ -51,8 +51,7 @@ const LocationSearch = ({ setLocation }) => {
 };
 
 LocationSearch.propTypes = {
-  clearLocation : PropType.bool,
-  setGameLocation: PropType.func,
+  setLocation: PropType.func,
 };
 
 export default LocationSearch;

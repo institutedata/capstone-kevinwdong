@@ -17,7 +17,7 @@ export const createGame = async (req, res, next) => {
       userImage,
     } = req.body;
 
-    const gameImage = req.file.filename;
+    const gameImage = req.file ? req.file.filename : null;
 
     const newGame = new Game({
       userId,
@@ -29,7 +29,7 @@ export const createGame = async (req, res, next) => {
       locationLat,
       locationLng,
       description,
-      gameImage: req.file.filename,
+      gameImage: gameImage,
       comments: [],
     });
     await newGame.save();

@@ -44,7 +44,10 @@ const MyGameWidget = () => {
       formData.append("locationLat", location.lat);
       formData.append("locationLng", location.lng);
       formData.append("description", gameDescription);
-      formData.append("file", file);
+      if (file) {
+        formData.append("file", file);
+      }
+      
 
       const response = await fetch(`http://localhost:8080/games/create`, {
         method: "POST",
@@ -63,7 +66,6 @@ const MyGameWidget = () => {
       const data = await response?.json();
     
       dispatch(setGames({ games: data }));
-      setUpload(!upload)
       setGameTitle("");
       setLocation({ name: "", lat: "", lng: ""});
       setGameDescription("");
@@ -90,7 +92,7 @@ const MyGameWidget = () => {
           }}
         />
         <Box>
-        <LocationSearch setGameLocation={setLocation}/>
+        <LocationSearch setLocation={setLocation}/>
         </Box>
       
           <InputBase
@@ -127,7 +129,7 @@ const MyGameWidget = () => {
           onClick={handleGame}
           sx={{
             color: main,
-            backgroundColor: "#c84117",
+            backgroundColor: palette.primary.main,
             borderRadius: "3rem",
           }}
         >

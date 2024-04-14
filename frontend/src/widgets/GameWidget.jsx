@@ -216,7 +216,7 @@ const GameWidget = ({
               onClick={addGameComments}
               sx={{
                 color: main,
-                backgroundColor: "#c84117",
+                backgroundColor: palette.primary.main,
                 borderRadius: "3rem",
               }}
             >

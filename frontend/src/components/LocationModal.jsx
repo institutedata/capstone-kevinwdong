@@ -84,7 +84,7 @@ export const LocationModal = ({ gameId }) => {
               onLoad={onLoad}
             >
               <Marker position={center} />
-              {/* Child components, such as markers, info windows, etc. */}
+
               <></>
             </GoogleMap>
           </Box>

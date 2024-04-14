@@ -31,6 +31,7 @@ export const updateUser = async (req, res, next) => {
       req.body.password = bcryptjs.hashSync(req.body.password, 10);
     }
 
+    const userImage = req.file ? req.file.filename : null;
 
     const user = await User.findByIdAndUpdate(
       req.params.userId,
@@ -43,7 +44,7 @@ export const updateUser = async (req, res, next) => {
           position: req.body.position,
           location: req.body.location,
           email: req.body.email,
-          userImage: req.file.filename,
+          userImage: userImage,
           password: req.body.password,
           totalGames: req.body.totalGames,
           totalPoints: req.body.totalPoints,
