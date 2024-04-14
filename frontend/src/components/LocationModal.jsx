@@ -76,7 +76,7 @@ export const LocationModal = ({ gameId }) => {
             <GoogleMap
               mapContainerStyle={containerStyle}
               center={center}
-              zoom={8}
+              zoom={10}
               options={{
                 disableDefaultUI: false,
                 zoomControl: true,
