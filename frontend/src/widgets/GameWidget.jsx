@@ -18,6 +18,8 @@ import { LocationModal } from "../components/LocationModal";
 import UserAvatar from "../components/UserAvatar";
 import { setGames } from "../redux/gameSlice";
 import { setGame } from "../redux/gameSlice";
+import apiClient from "../utils/apiClient.js";
+
 const GameWidget = ({
   gameId,
   gameUserImage,
@@ -39,26 +41,29 @@ const GameWidget = ({
 
   const addGameComments = async () => {
     try {
-      const response = await fetch(
-        `http://localhost:8080/games/update/${gameId}/comments`,
+      const response = await apiClient.patch(
+        `/games/update/${gameId}/comments`,
         {
-          method: "PUT",
+          uerId: user.gameUserId,
+          userImage: user.userImage,
+          firstName: user.firstName,
+          lastName: user.lastName,
+          comment: commentText,
+          gameId: gameId,
+        },
+        {
           headers: {
             Authorisation: token,
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({
-            uerId: user.gameUserId,
-            userImage: user.userImage,
-            firstName: user.firstName,
-            lastName: user.lastName,
-            comment: commentText,
-            gameId: gameId,
-          }),
         }
       );
-      const updatedGame = await response.json();
-      dispatch(setGame({ game: updatedGame }));
+      const data = response.data;
+      if (response.status === 200) {
+        dispatch(setGame({ game: data }));
+      } else {
+        console.error(data.message);
+      }
     } catch (error) {
       console.error(error.message);
     }
@@ -66,17 +71,17 @@ const GameWidget = ({
 
   const handleDelete = async () => {
     try {
-      const response = await fetch(
-        `http://localhost:8080/games/delete/${gameId}`,
-        {
-          method: "DELETE",
-          headers: {
-            Authorisation: token,
-          },
-        }
-      );
-      const data = await response.json();
-      dispatch(setGames({ games: data }));
+      const response = await apiClient.delete(`/games/delete/${gameId}`, {
+        headers: {
+          Authorisation: token,
+        },
+      });
+      const data = response.data;
+      if (response.status === 200) {
+        dispatch(setGames({ games: data }));
+      } else {
+        console.error(data.message);
+      }
     } catch (error) {
       console.error(error.message);
     }
@@ -94,11 +99,13 @@ const GameWidget = ({
           >
             {title}
           </Typography>
-         {isProfile && (<Box>
-          <IconButton onClick={handleDelete}>
-            <MoreVertIcon />
-          </IconButton>
-          </Box>)}
+          {isProfile && (
+            <Box>
+              <IconButton onClick={handleDelete}>
+                <MoreVertIcon />
+              </IconButton>
+            </Box>
+          )}
         </FlexBetween>
 
         {gameImage && (
@@ -131,11 +138,7 @@ const GameWidget = ({
         <FlexBetween gap="1rem">
           <UserAvatar userImage={gameUserImage} size="40px" />
           <Box>
-            <Typography
-              color={main}
-              variant="h5"
-              fontWeight="500"
-            >
+            <Typography color={main} variant="h5" fontWeight="500">
               {gameUserName}
             </Typography>
           </Box>
@@ -144,7 +147,7 @@ const GameWidget = ({
       <FlexBetween mt="0.25rem">
         <FlexBetween gap="1rem">
           <FlexBetween gap="0.3rem">
-            <LocationModal gameId={gameId}/>
+            <LocationModal gameId={gameId} />
           </FlexBetween>
           <FlexBetween gap="0.3rem">
             <IconButton
@@ -152,7 +155,7 @@ const GameWidget = ({
                 setIsComments(!isComments);
               }}
             >
-              <ChatBubbleOutlineOutlined  fontSize="large"/>
+              <ChatBubbleOutlineOutlined fontSize="large" />
             </IconButton>
             <Typography color={main} variant="h6" fontWeight="500">
               {comments.length}
@@ -172,7 +175,7 @@ const GameWidget = ({
                 </Box>
                 <Box m="1rem">
                   <Box display="flex" justifyContent="end">
-                    <FlexBetween gap='0.5rem'>
+                    <FlexBetween gap="0.5rem">
                       <UserAvatar userImage={comment.userImage} size="40px" />
                       <FlexBetween gap="0.5rem">
                         <Typography

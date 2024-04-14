@@ -1,6 +1,7 @@
 
 import PropType from "prop-types";
 import { useState, useCallback } from "react";
+import apiClient from "../utils/apiClient.js"
 import { useSelector } from "react-redux";
 import { Box, IconButton, Modal, useMediaQuery } from "@mui/material";
 import { GoogleMap, useJsApiLoader, Marker } from "@react-google-maps/api";
@@ -16,13 +17,12 @@ export const LocationModal = ({ gameId }) => {
 
   const handleOpen = async () => {
     try {
-      const response = await fetch(`http://localhost:8080/games/${gameId}`, {
-        method: "GET",
+      const response = await apiClient.get(`/games/${gameId}`, {
         headers: {
           Authorisation: token,
         },
       });
-      const game = await response.json();
+      const game = response.data;
       setLat(game.locationLat);
       setLng(game.locationLng);
       setOpen(true);

@@ -14,7 +14,7 @@ import { useDispatch } from "react-redux";
 import { setRegister } from "../redux/userSlice";
 import WidgetWrapper from "../components/WidgetWrapper";
 import GoogleAuth from "../components/GoogleAuth";
-
+import apiClient from "../utils/apiClient.js";
 
 const RegisterWidget = () => {
   const isNonMobile = useMediaQuery("(min-width:600px)");
@@ -42,18 +42,13 @@ const RegisterWidget = () => {
       return;
     }
     try {
-      const response = await fetch("http://localhost:8080/auth/register", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
-      });
-      const data = await response.json();
-      if (data.success === false) {
-        setError(data.message);
-      }
-      if (response.ok) {
+      const response = await apiClient.post("/auth/register", formData);
+      const data = response.data;
+      if (response.status === 200) {
         dispatch(setRegister(data));
         navigate("/home");
+      } else {
+        setError(data.message);
       }
     } catch (error) {
       setError(error.message);
@@ -124,39 +119,39 @@ const RegisterWidget = () => {
         </Box>
         {error && <Alert severity="error">{error}</Alert>}
         <Box>
-            <Button
-              type="submit"
-              sx={{
-                width: "100%",
-                m: "1rem 0",
-                p: "0.5rem",
-                backgroundColor: palette.primary.main,
-                color: main,
-              }}
-            >
-              <Typography variant="h5" fontWeight="500">
-                Register
-              </Typography>
-            </Button>
-            <GoogleAuth />
-            <Typography
-              mt="1rem"
-              variant="h5"
-              fontWeight="500"
-              onClick={() => {
-                navigate("/login");
-              }}
-              sx={{
-                textDecoration: "underline",
-                color: palette.primary.main,
-                "&:hover": {
-                  cursor: "pointer",
-                },
-              }}
-            >
-              Already have an account? Login here
+          <Button
+            type="submit"
+            sx={{
+              width: "100%",
+              m: "1rem 0",
+              p: "0.5rem",
+              backgroundColor: palette.primary.main,
+              color: main,
+            }}
+          >
+            <Typography variant="h5" fontWeight="500">
+              Register
             </Typography>
-          </Box>
+          </Button>
+          <GoogleAuth />
+          <Typography
+            mt="1rem"
+            variant="h5"
+            fontWeight="500"
+            onClick={() => {
+              navigate("/login");
+            }}
+            sx={{
+              textDecoration: "underline",
+              color: palette.primary.main,
+              "&:hover": {
+                cursor: "pointer",
+              },
+            }}
+          >
+            Already have an account? Login here
+          </Typography>
+        </Box>
       </form>
     </WidgetWrapper>
   );

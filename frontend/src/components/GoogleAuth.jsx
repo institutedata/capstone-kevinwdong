@@ -1,11 +1,12 @@
 import { Button, Typography } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
+import apiClient from "../utils/apiClient.js"
 import GoogleIcon from "@mui/icons-material/Google";
 import { useTheme } from "@mui/material/styles";
 import { GoogleAuthProvider } from "firebase/auth";
 import { getAuth, signInWithPopup } from "firebase/auth";
-import { app } from "../firebase";
+import { app } from "../utils/firebase";
 import { setLogin } from "../redux/userSlice";
 
 const GoogleAuth = () => {
@@ -20,21 +21,21 @@ const GoogleAuth = () => {
     provider.setCustomParameters({ prompt: "select_account" });
     try {
       const resultsFromGoogle = await signInWithPopup(auth, provider);
-      const response = await fetch("http://localhost:8080/auth/google", {
-        method: "POST",
+      const response = await apiClient.post("/auth/google", {
+        firstName: resultsFromGoogle.user.displayName.toLowerCase().split(" ")[0],
+        lastName: resultsFromGoogle.user.displayName.toLowerCase().split(" ")[1],
+        email: resultsFromGoogle.user.email,
+      }, {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({
-          firstName: resultsFromGoogle.user.displayName.toLowerCase().split(" ")[0],
-          lastName: resultsFromGoogle.user.displayName.toLowerCase().split(" ")[1],
-          email: resultsFromGoogle.user.email,
-        }),
       }); 
-      const data = await response.json();
-      if (response.ok) {
+      const data = response.data;
+      if (response.status === 200) {
         dispatch(setLogin(data));
         navigate("/home");
+      } else {
+        console.error(data.message);
       }
     } catch (error) {
       console.log(error);

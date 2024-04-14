@@ -9,7 +9,7 @@ import { useMemo } from "react";
 import { useSelector } from "react-redux";
 import { CssBaseline, ThemeProvider } from "@mui/material";
 import { createTheme } from "@mui/material/styles";
-import { themeSettings } from "./theme";
+import { themeSettings } from "./utils/theme";
 import Navbar from "./components/NavBar";
 
 function App() {

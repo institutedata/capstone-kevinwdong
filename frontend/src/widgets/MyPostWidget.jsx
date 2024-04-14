@@ -12,6 +12,7 @@ import { useState } from "react";
 import FlexBetween from "../components/FlexBetween.jsx";
 import WidgetWrapper from "../components/WidgetWrapper.jsx";
 import ImageUpload from "../components/ImageUpload.jsx";
+import apiClient from "../utils/apiClient.js";
 
 const MyPostWidget = () => {
   const [postText, setPostText] = useState("");
@@ -39,12 +40,10 @@ const MyPostWidget = () => {
       }
       
 
-      const response = await fetch(`http://localhost:8080/posts/create`, {
-        method: "POST",
+      const response = await apiClient.post(`/posts/create`, formData, {
         headers: {
           Authorisation: token,
         },
-        body: formData,
       });
       const data = await response.json();
       dispatch(setPosts({ posts: data }));

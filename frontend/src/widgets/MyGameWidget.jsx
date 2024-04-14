@@ -14,10 +14,11 @@ import FlexBetween from "../components/FlexBetween.jsx";
 import WidgetWrapper from "../components/WidgetWrapper.jsx";
 import LocationSearch from "../components/LocationSearch.jsx";
 import ImageUpload from "../components/ImageUpload.jsx";
+import apiClient from "../utils/apiClient.js";
 
 const MyGameWidget = () => {
   const [gameTitle, setGameTitle] = useState("");
-  const [location, setLocation] = useState({ name: "", lat: "", lng: ""});
+  const [location, setLocation] = useState({ name: "", lat: "", lng: "" });
   const [gameDescription, setGameDescription] = useState("");
   const [file, setFile] = useState();
   const [upload, setUpload] = useState(false);
@@ -30,10 +31,8 @@ const MyGameWidget = () => {
   const medium = palette.neutral.medium;
   const main = palette.neutral.main;
 
-
   const handleGame = async () => {
     try {
-
       const formData = new FormData();
       formData.append("userId", user._id);
       formData.append("userImage", user.userImage);
@@ -47,27 +46,27 @@ const MyGameWidget = () => {
       if (file) {
         formData.append("file", file);
       }
-      
 
-      const response = await fetch(`http://localhost:8080/games/create`, {
-        method: "POST",
-        headers: {
-          Authorisation: token,
-        },
-        body: formData,
-      });
+      const response = await apiClient.post(
+        `http://localhost:8080/games/create`,
+        formData,
+        {
+          headers: {
+            Authorisation: token,
+          },
+        }
+      );
 
       if (!response.ok) {
         console.log(response);
         return;
       }
 
-     
       const data = await response?.json();
-    
+
       dispatch(setGames({ games: data }));
       setGameTitle("");
-      setLocation({ name: "", lat: "", lng: ""});
+      setLocation({ name: "", lat: "", lng: "" });
       setGameDescription("");
     } catch (error) {
       console.error(error);
@@ -92,23 +91,23 @@ const MyGameWidget = () => {
           }}
         />
         <Box>
-        <LocationSearch setLocation={setLocation}/>
+          <LocationSearch setLocation={setLocation} />
         </Box>
-      
-          <InputBase
-            placeholder="Game Description..."
-            onChange={(e) => {
-              setGameDescription(e.target.value);
-              setGameText(true);
-            }}
-            value={gameDescription}
-            sx={{
-              width: "100%",
-              backgroundColor: palette.neutral.light,
-              borderRadius: "2rem",
-              padding: "0.5rem 1rem",
-            }}
-          />
+
+        <InputBase
+          placeholder="Game Description..."
+          onChange={(e) => {
+            setGameDescription(e.target.value);
+            setGameText(true);
+          }}
+          value={gameDescription}
+          sx={{
+            width: "100%",
+            backgroundColor: palette.neutral.light,
+            borderRadius: "2rem",
+            padding: "0.5rem 1rem",
+          }}
+        />
       </Box>
 
       <Divider sx={{ margin: "1.25rem 0" }} />
@@ -136,7 +135,7 @@ const MyGameWidget = () => {
           GAME
         </Button>
       </FlexBetween>
-      <ImageUpload upload={upload} setFile={setFile}/>
+      <ImageUpload upload={upload} setFile={setFile} />
     </WidgetWrapper>
   );
 };

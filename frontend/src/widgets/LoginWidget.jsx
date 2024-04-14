@@ -14,6 +14,7 @@ import { useDispatch } from "react-redux";
 import { setLogin } from "../redux/userSlice";
 import WidgetWrapper from "../components/WidgetWrapper";
 import GoogleAuth from "../components/GoogleAuth";
+import apiClient from "../utils/apiClient.js"
 
 const LoginWidget = () => {
   const { token } = useSelector((state) => state.user);
@@ -36,20 +37,19 @@ const LoginWidget = () => {
       return;
     }
     try {
-      const response = await fetch("http://localhost:8080/auth/login", {
-        method: "POST",
-        headers: { Authorisation: token, "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
+      const response = await apiClient.post("/auth/login", formData,{
+        headers: { Authorisation: token},
       });
-      const data = await response.json();
+      const data = response.data;
 
-      if (data.success === false) {
-        setError(data.message);
-      }
-      if (response.ok) {
-        dispatch(setLogin(data));
+      if (response.status ===200) {
+           dispatch(setLogin(data));
         navigate("/home");
+      } else {
+          setError(data.message);
       }
+
+
     } catch (error) {
       setError(error.message);
     }

@@ -3,6 +3,7 @@ import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { setPosts } from "../redux/postSlice";
 import PostWidget from "./PostWidget";
+import apiClient from "../utils/apiClient.js"
 
 const PostsWidget = ({ userId, isProfile }) => {
   const dispatch = useDispatch();
@@ -10,24 +11,22 @@ const PostsWidget = ({ userId, isProfile }) => {
   const { posts } = useSelector((state) => state.post);
 
   const getPosts = async () => {
-    const response = await fetch("http://localhost:8080/posts", {
-      method: "GET",
+    const response = await apiClient.get("/posts", {
       headers: { Authorisation: token },
     });
-    const data = await response.json();
+    const data = response.data;
     dispatch(setPosts({ posts: data }));
   };
 
 
   const getUserPosts = async () => {
-    const response = await fetch(
-      `http://localhost:8080/posts/${userId}/posts`,
+    const response = await apiClient.get(
+      `/posts/${userId}/posts`,
       {
-        method: "GET",
         headers: { Authorisation: token },
       }
     );
-    const data = await response.json();
+    const data = response.data;
     dispatch(setPosts({ posts: data }));
   };
 

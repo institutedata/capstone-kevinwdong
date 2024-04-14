@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import axios from "axios";
 import { Typography, useTheme, Box, Divider } from "@mui/material";
 import OpacityIcon from "@mui/icons-material/Opacity";
 import ThermostatIcon from "@mui/icons-material/Thermostat";
@@ -26,14 +27,14 @@ const WeatherWidget = () => {
   useEffect(() => {
   const handleSearch = async () => {
     try {
-      const response = await fetch(
+      const response = await axios(
         `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${apiKey}`
       );
-      if (!response.ok) {
+      if (response.status !== 200) {
         console.log(response);
         return;
       }
-      const data = await response.json();
+      const data = response.data;
       setFeelsLike(Math.floor(data.main.feels_like - 273.15));
       setWindSpeed(Math.floor(data.wind.speed * 3.6));
       setWindDegree(data.wind.deg);

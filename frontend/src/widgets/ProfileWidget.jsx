@@ -16,6 +16,7 @@ import WidgetWrapper from "../components/WidgetWrapper";
 import FlexBetween from "../components/FlexBetween";
 import ImageUpload from "../components/ImageUpload";
 import UserAvatar from "../components/UserAvatar";
+import apiClient from "../utils/apiClient.js";
 
 const ProfileWidget = ({ userImage }) => {
   const [error, setError] = useState(null);
@@ -54,25 +55,24 @@ const ProfileWidget = ({ userImage }) => {
         formData.append(key, value);
       });
       if (file) {
-          formData.append("file", file);
+        formData.append("file", file);
       }
-    
 
-      const response = await fetch(
-        `http://localhost:8080/users/update/${user._id}`,
+      const response = await apiClient.patch(
+        `/users/update/${user._id}`,
+        formData,
         {
-          method: "PATCH",
           headers: {
             Authorisation: token,
           },
-          body: formData,
         }
       );
-      const data = await response.json();
-      if (!response.ok) {
-        setError(data.message);
-      } else {
+      const data = response.data;
+
+      if (response.status === 200) {
         dispatch(setUpdate(data));
+      } else {
+        setError(data.message);
       }
     } catch (error) {
       setError(error.message);
@@ -81,28 +81,25 @@ const ProfileWidget = ({ userImage }) => {
 
   const handleDelete = async () => {
     try {
-      await fetch(`http://localhost:8080/games/delete/${user._id}/games`, {
-        method: "DELETE",
+      await apiClient.delete(`/games/delete/${user._id}/games`, {
         headers: {
           Authorisation: token,
         },
       });
 
-      await fetch(`http://localhost:8080/posts/delete/${user._id}/posts`, {
-        method: "DELETE",
+      await apiClient.delete(`/posts/delete/${user._id}/posts`, {
         headers: {
           Authorisation: token,
         },
       });
-      await fetch(`http://localhost:8080/users/delete/${user._id}`, {
-        method: "DELETE",
+      await apiClient.delete(`/users/delete/${user._id}`, {
         headers: {
           Authorisation: token,
         },
       });
 
-        dispatch(setDelete());
-        navigate("/");
+      dispatch(setDelete());
+      navigate("/");
     } catch (error) {
       console.error(error.message);
     }
@@ -207,7 +204,7 @@ const ProfileWidget = ({ userImage }) => {
             <Button
               fullWidth
               onClick={handleDelete}
-              type="submit"
+              type="button"
               sx={{
                 width: "25%",
                 m: "2rem 0",

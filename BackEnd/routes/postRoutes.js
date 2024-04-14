@@ -19,7 +19,7 @@ router.get("/", verifyToken, getFeedPosts);
 router.get("/:userId/posts", verifyToken, getUserPosts);
 
 // @desc    Update a post
-router.put("/update/:postId/comments", verifyToken, updatePostComments);
+router.patch("/update/:postId/comments", verifyToken, updatePostComments);
 
 //@desc     Like a post
 router.patch("/:postId/like", verifyToken, likePost);

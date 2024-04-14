@@ -3,7 +3,6 @@ import { ManageAccountsOutlined} from "@mui/icons-material";
 import { Box, Typography, Divider, useTheme, IconButton } from "@mui/material";
 import WidgetWrapper from "../components/WidgetWrapper.jsx";
 import FlexBetween from "../components/FlexBetween.jsx";
-import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import UserAvatar from "../components/UserAvatar.jsx";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
@@ -12,7 +11,6 @@ import MonitorWeightIcon from "@mui/icons-material/MonitorWeight";
 import PublishIcon from "@mui/icons-material/Publish";
 
 const UserWidget = ({ editProfile, setEditProfile, isProfile }) => {
-  const navigate = useNavigate();
   const { user } = useSelector((state) => state.user);
   const totalGames = user.totalGames;
   const totalPoints = user.totalPoints;

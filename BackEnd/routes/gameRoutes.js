@@ -22,7 +22,7 @@ router.get("/:userId/games", verifyToken, getUserGames);
 router.get("/:gameId", verifyToken, getOneGame);
 
 //@desc     Add a game comment
-router.put("/update/:gameId/comments", verifyToken, updateGameComments);
+router.patch("/update/:gameId/comments", verifyToken, updateGameComments);
 
 //@desc    Delete a game
 router.delete("/delete/:gameId", verifyToken, deleteGame);

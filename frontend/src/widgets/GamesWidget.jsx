@@ -3,6 +3,7 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setGames } from "../redux/gameSlice.js";
 import GameWidget from "./GameWidget";
+import apiClient from "../utils/apiClient.js"
 
 const GamesWidget = ({ userId, isProfile }) => {
   const dispatch = useDispatch();
@@ -10,23 +11,21 @@ const GamesWidget = ({ userId, isProfile }) => {
   const { games } = useSelector((state) => state.game);
   
   const getGames = async () => {
-    const response = await fetch("http://localhost:8080/games", {
-      method: "GET",
+    const response = await apiClient.get("/games", {
       headers: { Authorisation: token },
     });
-    const data = await response.json();
+    const data = response.data;
     dispatch(setGames({ games: data }));
   };
 
   const getUserGames = async () => {
-    const response = await fetch(
-      `http://localhost:8080/games/${userId}/games`,
+    const response = await apiClient.get(
+      `/games/${userId}/games`,
       {
-        method: "GET",
         headers: { Authorisation: token },
       }
     );
-    const data = await response.json();
+    const data = response.data;
     dispatch(setGames({ games: data }));
   };
 

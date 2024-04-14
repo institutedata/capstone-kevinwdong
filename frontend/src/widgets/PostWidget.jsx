@@ -22,6 +22,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { setPost } from "../redux/postSlice.js";
 import UserAvatar from "../components/UserAvatar";
 import { setPosts } from "../redux/postSlice.js";
+import apiClient from "../utils/apiClient.js";
 
 const PostWidget = ({
   postId,
@@ -40,51 +41,55 @@ const PostWidget = ({
   const isLiked = Boolean(likes[user._id]);
   const likeCount = Object.keys(likes).length;
 
-
   const { palette } = useTheme();
   const dark = palette.neutral.dark;
   const main = palette.neutral.main;
   const medium = palette.neutral.medium;
 
   const patchLike = async () => {
-    const response = await fetch(`http://localhost:8080/posts/${postId}/like`, {
-      method: "PATCH",
-      headers: {
-        Authorisation: token,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ userId: user._id }),
-    });
-    const updatedPost = await response.json();
-    dispatch(setPost({ post: updatedPost }));
-
+    const response = await apiClient.patch(
+      `/posts/${postId}/like`,
+      { userId: user._id },
+      {
+        headers: {
+          Authorisation: token,
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    const updatedPost = response.data;
+    if (response.status === 200) {
+      dispatch(setPost({ post: updatedPost }));
+    } else {
+      console.error(updatedPost.message);
+    }
   };
-  
-  
-  
-  
+
   const addComment = async () => {
     try {
-      const response = await fetch(
-        `http://localhost:8080/posts/update/${postId}/comments`,
+      const response = await apiClient.patch(
+        `/posts/update/${postId}/comments`,
         {
-          method: "PUT",
+          userId: user._id,
+          userImage: user.userImage,
+          comment: commentText,
+          firstName: user.firstName,
+          lastName: user.lastName,
+          postId: postId,
+        },
+        {
           headers: {
             Authorisation: token,
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({
-            userId: user._id,
-            userImage: user.userImage,
-            comment: commentText,
-            firstName: user.firstName,
-            lastName: user.lastName,
-            postId: postId,
-          }),
         }
       );
-      const updatedPost = await response.json();
-      dispatch(setPost({ post: updatedPost }));
+      const updatedPost = response.data;
+      if (response.status === 200) {
+        dispatch(setPost({ post: updatedPost }));
+      } else {
+        console.error(updatedPost.message);
+      }
     } catch (error) {
       console.error(error.message);
     }
@@ -92,17 +97,18 @@ const PostWidget = ({
 
   const handleDelete = async () => {
     try {
-      const response = await fetch(
-        `http://localhost:8080/posts/delete/${postId}`,
-        {
-          method: "DELETE",
-          headers: {
-            Authorisation: token,
-          },
-        }
-      );
-      const data = await response.json();
-      dispatch(setPosts({ posts: data}))
+      const response = await apiClient.delete(`/posts/delete/${postId}`, {
+        headers: {
+          Authorisation: token,
+        },
+      });
+      const data = response.data;
+
+      if (response.status === 200) {
+        dispatch(setPosts({ posts: data }));
+      } else {
+        console.error(data.message);
+      }
     } catch (error) {
       console.error(error.message);
     }
@@ -114,20 +120,18 @@ const PostWidget = ({
         <FlexBetween gap="1rem">
           <UserAvatar userImage={userImage} size="40px" />
           <Box>
-            <Typography
-              color={main}
-              variant="h5"
-              fontWeight="500"
-            >
+            <Typography color={main} variant="h5" fontWeight="500">
               {name}
             </Typography>
           </Box>
         </FlexBetween>
-        {isProfile && (<Box>
-        <IconButton onClick={handleDelete}>
-          <MoreVertIcon />
-        </IconButton>
-        </Box>)}
+        {isProfile && (
+          <Box>
+            <IconButton onClick={handleDelete}>
+              <MoreVertIcon />
+            </IconButton>
+          </Box>
+        )}
       </FlexBetween>
 
       <Typography
@@ -151,8 +155,8 @@ const PostWidget = ({
         <FlexBetween gap="1rem">
           <FlexBetween gap="0.3rem">
             <IconButton onClick={patchLike}>
-              { isLiked ? (
-                <FavoriteOutlined sx={{ color: "#c84117" }} />
+              {isLiked ? (
+                <FavoriteOutlined sx={{ color: palette.primary.main }} fontSize="large" />
               ) : (
                 <FavoriteBorderOutlined fontSize="large" />
               )}
@@ -164,7 +168,7 @@ const PostWidget = ({
 
           <FlexBetween gap="0.3rem">
             <IconButton onClick={() => setIsComments(!isComments)}>
-              <ChatBubbleOutlineOutlined fontSize="large"/>
+              <ChatBubbleOutlineOutlined fontSize="large" />
             </IconButton>
             <Typography color={main} variant="h6" fontWeight="500">
               {comments.length}
